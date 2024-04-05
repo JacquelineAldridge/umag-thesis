@@ -5,3 +5,871 @@
     publisher = {Addison-Wesley},
     address = {Reading, Massachusetts},
 }
+
+@misc{andrews2010fastqc,
+  title={FastQC: a quality control tool for high throughput sequence data},
+  author={Andrews, Simon and others},
+  year={2010},
+  publisher={Babraham Bioinformatics, Babraham Institute, Cambridge, United Kingdom}
+}
+
+@article{chen2018fastp,
+  title={fastp: an ultra-fast all-in-one FASTQ preprocessor},
+  author={Chen, Shifu and Zhou, Yanqing and Chen, Yaru and Gu, Jia},
+  journal={Bioinformatics},
+  volume={34},
+  number={17},
+  pages={i884--i890},
+  year={2018},
+  publisher={Oxford University Press}
+}
+
+@article{ewels2016multiqc,
+  title={MultiQC: summarize analysis results for multiple tools and samples in a single report},
+  author={Ewels, Philip and Magnusson, M{\aa}ns and Lundin, Sverker and K{\"a}ller, Max},
+  journal={Bioinformatics},
+  volume={32},
+  number={19},
+  pages={3047--3048},
+  year={2016},
+  publisher={Oxford University Press}
+}
+
+@article{shen2016seqkit,
+  title={SeqKit: a cross-platform and ultrafast toolkit for FASTA/Q file manipulation},
+  author={Shen, Wei and Le, Shuai and Li, Yan and Hu, Fuquan},
+  journal={PloS one},
+  volume={11},
+  number={10},
+  pages={e0163962},
+  year={2016},
+  publisher={Public Library of Science San Francisco, CA USA}
+}
+
+@article{RODRIGUEZPEREZ20225350,
+title = {NanoRTax, a real-time pipeline for taxonomic and diversity analysis of nanopore 16S rRNA amplicon sequencing data},
+journal = {Computational and Structural Biotechnology Journal},
+volume = {20},
+pages = {5350-5354},
+year = {2022},
+issn = {2001-0370},
+doi = {https://doi.org/10.1016/j.csbj.2022.09.024},
+url = {https://www.sciencedirect.com/science/article/pii/S2001037022004287},
+author = {Héctor Rodríguez-Pérez and Laura Ciuffreda and Carlos Flores},
+keywords = {Pipeline, Sequencing, Nanopore, Real-time, Microbiome},
+abstract = {Background
+The study of microbial communities and their applications have been leveraged by advances in sequencing techniques and bioinformatics tools. The Oxford Nanopore Technologies long-read sequencing by nanopores provides a portable and cost-efficient platform for sequencing assays. While this opens the possibility of sequencing applications outside specialized environments and real-time analysis of data, complementing the existing efficient library preparation protocols with streamlined bioinformatic workflows is required.
+Results
+Here we present NanoRTax, a Nextflow pipeline for nanopore 16S rRNA gene amplicon data that features state-of-the-art taxonomic classification tools and real-time capability. The pipeline is paired with a web-based visual interface to enable user-friendly inspections of the experiment in progress. NanoRTax workflow and a simulated real-time analysis were used to validate the prediction of adult Intensive Care Unit patient mortality based on full-length 16S rRNA sequencing data from respiratory microbiome samples.
+Conclusions
+This constitutes a proof-of-concept simulation study of how real-time bioinformatic workflows could be used to shorten the turnaround times in critical care settings and provides an instrument for future research on early-response strategies for sepsis.}
+}
+
+@article{10.1093/bioinformatics/btaa900,
+    author = {Rodríguez-Pérez, Héctor and Ciuffreda, Laura and Flores, Carlos},
+    title = "{NanoCLUST: a species-level analysis of 16S rRNA nanopore sequencing data}",
+    journal = {Bioinformatics},
+    volume = {37},
+    number = {11},
+    pages = {1600-1601},
+    year = {2020},
+    month = {10},
+    abstract = "{NanoCLUST is an analysis pipeline for the classification of amplicon-based full-length 16S rRNA nanopore reads. It is characterized by an unsupervised read clustering step, based on Uniform Manifold Approximation and Projection (UMAP), followed by the construction of a polished read and subsequent Blast classification. Here, we demonstrate that NanoCLUST performs better than other state-of-the-art software in the characterization of two commercial mock communities, enabling accurate bacterial identification and abundance profile estimation at species-level resolution.Source code, test data and documentation of NanoCLUST are freely available at https://github.com/genomicsITER/NanoCLUST under MIT License.Supplementary data are available at Bioinformatics online.}",
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btaa900},
+    url = {https://doi.org/10.1093/bioinformatics/btaa900},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/37/11/1600/50361068/btaa900.pdf},
+}
+
+
+@article{curry2022emu,
+  title={Emu: species-level microbial community profiling of full-length 16S rRNA Oxford Nanopore sequencing data},
+  author={Curry, Kristen D and Wang, Qi and Nute, Michael G and Tyshaieva, Alona and Reeves, Elizabeth and Soriano, Sirena and Wu, Qinglong and Graeber, Enid and Finzer, Patrick and Mendling, Werner and others},
+  journal={Nature methods},
+  volume={19},
+  number={7},
+  pages={845--853},
+  year={2022},
+  publisher={Nature Publishing Group US New York}
+}
+
+
+@article{10.1093/bioinformatics/btad311,
+    author = {De Coster, Wouter and Rademakers, Rosa},
+    title = "{NanoPack2: population-scale evaluation of long-read sequencing data}",
+    journal = {Bioinformatics},
+    volume = {39},
+    number = {5},
+    pages = {btad311},
+    year = {2023},
+    month = {05},
+    abstract = "{Increases in the cohort size in long-read sequencing projects necessitate more efficient software for quality assessment and processing of sequencing data from Oxford Nanopore Technologies and Pacific Biosciences. Here, we describe novel tools for summarizing experiments, filtering datasets, visualizing phased alignments results, and updates to the NanoPack software suite.The cramino, chopper, kyber, and phasius tools are written in Rust and available as executable binaries without requiring installation or managing dependencies. Binaries build on musl are available for broad compatibility. NanoPlot and NanoComp are written in Python3. Links to the separate tools and their documentation can be found at https://github.com/wdecoster/nanopack. All tools are compatible with Linux, Mac OS, and the MS Windows Subsystem for Linux and are released under the MIT license. The repositories include test data, and the tools are continuously tested using GitHub Actions and can be installed with the conda dependency manager.}",
+    issn = {1367-4811},
+    doi = {10.1093/bioinformatics/btad311},
+    url = {https://doi.org/10.1093/bioinformatics/btad311},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/39/5/btad311/50394865/btad311.pdf},
+}
+
+
+
+@article{di2017nextflow,
+  title={Nextflow enables reproducible computational workflows},
+  author={Di Tommaso, Paolo and Chatzou, Maria and Floden, Evan W and Barja, Pablo Prieto and Palumbo, Emilio and Notredame, Cedric},
+  journal={Nature biotechnology},
+  volume={35},
+  number={4},
+  pages={316--319},
+  year={2017},
+  publisher={Nature Publishing Group}
+}
+
+@article{douglas2020picrust2,
+  title={PICRUSt2 for prediction of metagenome functions},
+  author={Douglas, Gavin M and Maffei, Vincent J and Zaneveld, Jesse R and Yurgel, Svetlana N and Brown, James R and Taylor, Christopher M and Huttenhower, Curtis and Langille, Morgan GI},
+  journal={Nature biotechnology},
+  volume={38},
+  number={6},
+  pages={685--688},
+  year={2020},
+  publisher={Nature Publishing Group US New York}
+}
+
+@article{segata2011metagenomic,
+  title={Metagenomic biomarker discovery and explanation},
+  author={Segata, Nicola and Izard, Jacques and Waldron, Levi and Gevers, Dirk and Miropolsky, Larisa and Garrett, Wendy S and Huttenhower, Curtis},
+  journal={Genome biology},
+  volume={12},
+  pages={1--18},
+  year={2011},
+  publisher={Springer}
+}
+
+  @article{dixon2003vegan,
+  title={VEGAN, a package of R functions for community ecology},
+  author={Dixon, Philip},
+  journal={Journal of vegetation science},
+  volume={14},
+  number={6},
+  pages={927--930},
+  year={2003},
+  publisher={Wiley Online Library}
+}
+
+@article{SHEN2021844,
+title = {TaxonKit: A practical and efficient NCBI taxonomy toolkit},
+journal = {Journal of Genetics and Genomics},
+volume = {48},
+number = {9},
+pages = {844-850},
+year = {2021},
+note = {Special issue on Microbiome},
+issn = {1673-8527},
+doi = {https://doi.org/10.1016/j.jgg.2021.03.006},
+url = {https://www.sciencedirect.com/science/article/pii/S1673852721000837},
+author = {Wei Shen and Hong Ren},
+keywords = {NCBI Taxonomy, TaxonKit, TaxId, Lineage, TaxId changelog},
+abstract = {The National Center for Biotechnology Information (NCBI) Taxonomy is widely applied in biomedical and ecological studies. Typical demands include querying taxonomy identifier (TaxIds) by taxonomy names, querying complete taxonomic lineages by TaxIds, listing descendants of given TaxIds, and others. However, existed tools are either limited in functionalities or inefficient in terms of runtime. In this work, we present TaxonKit, a command-line toolkit for comprehensive and efficient manipulation of NCBI Taxonomy data. TaxonKit comprises seven core subcommands providing functions, including TaxIds querying, listing, filtering, lineage retrieving and reformatting, lowest common ancestor computation, and TaxIds change tracking. The practical functions, competitive processing performance, scalability with different scales of datasets and good accessibility can facilitate taxonomy data manipulations. TaxonKit provides free access under the permissive MIT license on GitHub, Brewsci, and Bioconda. The documents are also available at https://bioinf.shenwei.me/taxonkit/.}
+}
+
+@misc{anaconda,
+  title={Anaconda Software Distribution},
+  url={https://docs.anaconda.com/},
+  journal={Anaconda Documentation},
+  version={Vers. 23.9.0}, 
+  publisher={Anaconda Inc.},
+  year={2024}
+}
+@article{kurtzer2017singularity,
+  title={Singularity: Scientific containers for mobility of compute},
+  author={Kurtzer, Gregory M and Sochat, Vanessa and Bauer, Michael W},
+  journal={PloS one},
+  volume={12},
+  number={5},
+  pages={e0177459},
+  year={2017},
+  publisher={Public Library of Science San Francisco, CA USA}
+}
+
+@inproceedings{bierman2014understanding,
+  title={Understanding typescript},
+  author={Bierman, Gavin and Abadi, Mart{\'\i}n and Torgersen, Mads},
+  booktitle={European Conference on Object-Oriented Programming},
+  pages={257--281},
+  year={2014},
+  organization={Springer}
+}
+
+
+
+@article{patel200116s,
+  title={16S rRNA gene sequencing for bacterial pathogen identification in the clinical laboratory},
+  author={Patel, Jean Baldus},
+  journal={Molecular diagnosis},
+  volume={6},
+  pages={313--321},
+  year={2001},
+  publisher={Springer}
+}
+@article{amarasinghe2020opportunities,
+  title={Opportunities and challenges in long-read sequencing data analysis},
+  author={Amarasinghe, Shanika L and Su, Shian and Dong, Xueyi and Zappia, Luke and Ritchie, Matthew E and Gouil, Quentin},
+  journal={Genome biology},
+  volume={21},
+  number={1},
+  pages={30},
+  year={2020},
+  publisher={Springer}
+}
+
+@article{altvecs2020interaction,
+  title={Interaction of the microbiota with the human body in health and diseases},
+  author={Altve{\c{s}}, Safaa and Yildiz, Hatice K{\"u}bra and Vural, Hasibe Cingilli},
+  journal={Bioscience of microbiota, food and health},
+  volume={39},
+  number={2},
+  pages={23--32},
+  year={2020},
+  publisher={BMFH Press}
+}
+
+@article{hou2022microbiota,
+  title={Microbiota in health and diseases},
+  author={Hou, Kaijian and Wu, Zhuo-Xun and Chen, Xuan-Yu and Wang, Jing-Quan and Zhang, Dongya and Xiao, Chuanxing and Zhu, Dan and Koya, Jagadish B and Wei, Liuya and Li, Jilin and others},
+  journal={Signal transduction and targeted therapy},
+  volume={7},
+  number={1},
+  pages={1--28},
+  year={2022},
+  publisher={Nature Publishing Group}
+}
+@article{grice2012human,
+  title={The human microbiome: our second genome},
+  author={Grice, Elizabeth A and Segre, Julia A},
+  journal={Annual review of genomics and human genetics},
+  volume={13},
+  pages={151--170},
+  year={2012},
+  publisher={Annual Reviews}
+}
+
+@article{janda200716s,
+  title={16S rRNA gene sequencing for bacterial identification in the diagnostic laboratory: pluses, perils, and pitfalls},
+  author={Janda, J Michael and Abbott, Sharon L},
+  journal={Journal of clinical microbiology},
+  volume={45},
+  number={9},
+  pages={2761--2764},
+  year={2007},
+  publisher={Am Soc Microbiol}
+}
+
+@article{pollock2018madness,
+  title={The madness of microbiome: attempting to find consensus “best practice” for 16S microbiome studies},
+  author={Pollock, Jolinda and Glendinning, Laura and Wisedchanwet, Trong and Watson, Mick},
+  journal={Applied and environmental microbiology},
+  volume={84},
+  number={7},
+  pages={e02627--17},
+  year={2018},
+  publisher={Am Soc Microbiol}
+}
+
+@article{pichler201816s,
+  title={A 16S rRNA gene sequencing and analysis protocol for the Illumina MiniSeq platform},
+  author={Pichler, Monica and Coskun, {\"O}mer K and Ortega-Arbul{\'u}, Ana-Sofia and Conci, Nicola and W{\"o}rheide, Gert and Vargas, Sergio and Orsi, William D},
+  journal={Microbiologyopen},
+  volume={7},
+  number={6},
+  pages={e00611},
+  year={2018},
+  publisher={Wiley Online Library}
+}
+
+@article{johnson2019evaluation,
+  title={Evaluation of 16S rRNA gene sequencing for species and strain-level microbiome analysis},
+  author={Johnson, Jethro S and Spakowicz, Daniel J and Hong, Bo-Young and Petersen, Lauren M and Demkowicz, Patrick and Chen, Lei and Leopold, Shana R and Hanson, Blake M and Agresta, Hanako O and Gerstein, Mark and others},
+  journal={Nature communications},
+  volume={10},
+  number={1},
+  pages={5029},
+  year={2019},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{winand2019targeting,
+  title={Targeting the 16s rRNA gene for bacterial identification in complex mixed samples: Comparative evaluation of second (illumina) and third (oxford nanopore technologies) generation sequencing technologies},
+  author={Winand, Raf and Bogaerts, Bert and Hoffman, Stefan and Lefevre, Lo{\"\i}c and Delvoye, Maud and Van Braekel, Julien and Fu, Qiang and Roosens, Nancy HC and De Keersmaecker, Sigrid CJ and Vanneste, Kevin},
+  journal={International journal of molecular sciences},
+  volume={21},
+  number={1},
+  pages={298},
+  year={2019},
+  publisher={MDPI}
+}
+@article{urban2021freshwater,
+  title={Freshwater monitoring by nanopore sequencing},
+  author={Urban, Lara and Holzer, Andre and Baronas, J Jotautas and Hall, Michael B and Braeuninger-Weimer, Philipp and Scherm, Michael J and Kunz, Daniel J and Perera, Surangi N and Martin-Herranz, Daniel E and Tipper, Edward T and others},
+  journal={Elife},
+  volume={10},
+  pages={e61504},
+  year={2021},
+  publisher={eLife Sciences Publications, Ltd}
+}
+
+@article{delahaye2021sequencing,
+  title={Sequencing DNA with nanopores: Troubles and biases},
+  author={Delahaye, Clara and Nicolas, Jacques},
+  journal={PloS one},
+  volume={16},
+  number={10},
+  pages={e0257521},
+  year={2021},
+  publisher={Public Library of Science San Francisco, CA USA}
+}
+
+@article{kim2014towards,
+  title={Towards a taxonomic coherence between average nucleotide identity and 16S rRNA gene sequence similarity for species demarcation of prokaryotes},
+  author={Kim, Mincheol and Oh, Hyun-Seok and Park, Sang-Cheol and Chun, Jongsik},
+  journal={International journal of systematic and evolutionary microbiology},
+  volume={64},
+  number={Pt\_2},
+  pages={346--351},
+  year={2014},
+  publisher={Microbiology Society}
+}
+
+@article{szoboszlay2023nanopore,
+  title={Nanopore is preferable over Illumina for 16S amplicon sequencing of the gut microbiota when species-level taxonomic classification, accurate estimation of richness, or focus on rare taxa is required},
+  author={Szoboszlay, M{\'a}rton and Schramm, Laetitia and Pinzauti, David and Scerri, Jeanesse and Sandionigi, Anna and Biazzo, Manuele},
+  journal={Microorganisms},
+  volume={11},
+  number={3},
+  pages={804},
+  year={2023},
+  publisher={MDPI}
+}
+
+@article{yoon2017introducing,
+  title={Introducing EzBioCloud: a taxonomically united database of 16S rRNA gene sequences and whole-genome assemblies},
+  author={Yoon, Seok-Hwan and Ha, Sung-Min and Kwon, Soonjae and Lim, Jeongmin and Kim, Yeseul and Seo, Hyungseok and Chun, Jongsik},
+  journal={International journal of systematic and evolutionary microbiology},
+  volume={67},
+  number={5},
+  pages={1613--1617},
+  year={2017},
+  publisher={Microbiology Society}
+}
+
+@article{callahan2016dada2,
+  title={DADA2: High-resolution sample inference from Illumina amplicon data},
+  author={Callahan, Benjamin J and McMurdie, Paul J and Rosen, Michael J and Han, Andrew W and Johnson, Amy Jo A and Holmes, Susan P},
+  journal={Nature methods},
+  volume={13},
+  number={7},
+  pages={581--583},
+  year={2016},
+  publisher={Nature Publishing Group US New York}
+}
+
+@article{edgar2016unoise2,
+  title={UNOISE2: improved error-correction for Illumina 16S and ITS amplicon sequencing},
+  author={Edgar, Robert C},
+  journal={BioRxiv},
+  pages={081257},
+  year={2016},
+  publisher={Cold Spring Harbor Laboratory}
+}
+@article{caporaso2011global,
+  title={Global patterns of 16S rRNA diversity at a depth of millions of sequences per sample},
+  author={Caporaso, J Gregory and Lauber, Christian L and Walters, William A and Berg-Lyons, Donna and Lozupone, Catherine A and Turnbaugh, Peter J and Fierer, Noah and Knight, Rob},
+  journal={Proceedings of the national academy of sciences},
+  volume={108},
+  number={supplement\_1},
+  pages={4516--4522},
+  year={2011},
+  publisher={National Acad Sciences}
+}
+
+@article{auer2017analysis,
+  title={Analysis of large 16S rRNA Illumina data sets: Impact of singleton read filtering on microbial community description},
+  author={Auer, Lucas and Mariadassou, Mahendra and O'Donohue, Michael and Klopp, Christophe and Hernandez-Raquet, Guillermina},
+  journal={Molecular ecology resources},
+  volume={17},
+  number={6},
+  pages={e122--e132},
+  year={2017},
+  publisher={Wiley Online Library}
+}
+@article{chao1984nonparametric,
+  title={Nonparametric estimation of the number of classes in a population},
+  author={Chao, Anne},
+  journal={Scandinavian Journal of statistics},
+  pages={265--270},
+  year={1984},
+  publisher={JSTOR}
+}
+
+@article{chao1992estimating,
+  title={Estimating the number of classes via sample coverage},
+  author={Chao, Anne and Lee, Shen-Ming},
+  journal={Journal of the American statistical Association},
+  volume={87},
+  number={417},
+  pages={210--217},
+  year={1992},
+  publisher={Taylor \& Francis}
+}
+
+@article{willis2015estimating,
+  title={Estimating diversity via frequency ratios},
+  author={Willis, Amy and Bunge, John},
+  journal={Biometrics},
+  volume={71},
+  number={4},
+  pages={1042--1049},
+  year={2015},
+  publisher={Oxford University Press}
+}
+
+@article{sanger1975rapid,
+  title={A rapid method for determining sequences in DNA by primed synthesis with DNA polymerase},
+  author={Sanger, Fred and Coulson, Alan R},
+  journal={Journal of molecular biology},
+  volume={94},
+  number={3},
+  pages={441--448},
+  year={1975},
+  publisher={Elsevier}
+}
+
+@article{clarridge2004impact,
+  title={Impact of 16S rRNA gene sequence analysis for identification of bacteria on clinical microbiology and infectious diseases},
+  author={Clarridge III, Jill E},
+  journal={Clinical microbiology reviews},
+  volume={17},
+  number={4},
+  pages={840--862},
+  year={2004},
+  publisher={Am Soc Microbiol}
+}
+
+@article{salipante2014performance,
+  title={Performance comparison of Illumina and ion torrent next-generation sequencing platforms for 16S rRNA-based bacterial community profiling},
+  author={Salipante, Stephen J and Kawashima, Toana and Rosenthal, Christopher and Hoogestraat, Daniel R and Cummings, Lisa A and Sengupta, Dhruba J and Harkins, Timothy T and Cookson, Brad T and Hoffman, Noah G},
+  journal={Applied and environmental microbiology},
+  volume={80},
+  number={24},
+  pages={7583--7591},
+  year={2014},
+  publisher={Am Soc Microbiol}
+}
+
+@article{liu2008accurate,
+  title={Accurate taxonomy assignments from 16S rRNA sequences produced by highly parallel pyrosequencers},
+  author={Liu, Zongzhi and DeSantis, Todd Z and Andersen, Gary L and Knight, Rob},
+  journal={Nucleic acids research},
+  volume={36},
+  number={18},
+  pages={e120--e120},
+  year={2008},
+  publisher={Oxford University Press}
+}
+
+@article{schloss2011reducing,
+  title={Reducing the effects of PCR amplification and sequencing artifacts on 16S rRNA-based studies},
+  author={Schloss, Patrick D and Gevers, Dirk and Westcott, Sarah L},
+  journal={PloS one},
+  volume={6},
+  number={12},
+  pages={e27310},
+  year={2011},
+  publisher={Public Library of Science San Francisco, USA}
+}
+
+@article{he2013comparison,
+  title={Comparison of microbial diversity determined with the same variable tag sequence extracted from two different PCR amplicons},
+  author={He, Yan and Zhou, Ben-Jie and Deng, Guan-Hua and Jiang, Xiao-Tao and Zhang, Hai and Zhou, Hong-Wei},
+  journal={BMC microbiology},
+  volume={13},
+  pages={1--8},
+  year={2013},
+  publisher={Springer}
+}
+@article{claesson2010comparison,
+  title={Comparison of two next-generation sequencing technologies for resolving highly complex microbiota composition using tandem variable 16S rRNA gene regions},
+  author={Claesson, Marcus J and Wang, Qiong and O'Sullivan, Orla and Greene-Diniz, Rachel and Cole, James R and Ross, R Paul and O'Toole, Paul W},
+  journal={Nucleic acids research},
+  volume={38},
+  number={22},
+  pages={e200--e200},
+  year={2010},
+  publisher={Oxford University Press}
+}
+
+@article{human2012framework,
+  title={A framework for human microbiome research},
+  journal={Nature},
+  volume={486},
+  number={7402},
+  pages={215--221},
+  year={2012},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{mchardy2013integrative,
+  title={Integrative analysis of the microbiome and metabolome of the human intestinal mucosal surface reveals exquisite inter-relationships},
+  author={McHardy, Ian H and Goudarzi, Maryam and Tong, Maomeng and Ruegger, Paul M and Schwager, Emma and Weger, John R and Graeber, Thomas G and Sonnenburg, Justin L and Horvath, Steve and Huttenhower, Curtis and others},
+  journal={Microbiome},
+  volume={1},
+  pages={1--19},
+  year={2013},
+  publisher={Springer}
+}
+
+@article{bitton1994role,
+  title={Role of microorganisms in biogeochemical cycles},
+  author={Bitton, G},
+  journal={Wastewater Microbiology.},
+  pages={51--73},
+  year={1994},
+  publisher={A John Wiley and Son's, Inc}
+}
+
+@article{sender2016revised,
+  title={Revised estimates for the number of human and bacteria cells in the body},
+  author={Sender, Ron and Fuchs, Shai and Milo, Ron},
+  journal={PLoS biology},
+  volume={14},
+  number={8},
+  pages={e1002533},
+  year={2016},
+  publisher={Public Library of Science}
+}
+
+@article{fijan2014microorganisms,
+  title={Microorganisms with claimed probiotic properties: an overview of recent literature},
+  author={Fijan, Sabina},
+  journal={International journal of environmental research and public health},
+  volume={11},
+  number={5},
+  pages={4745--4767},
+  year={2014},
+  publisher={Multidisciplinary Digital Publishing Institute}
+}
+
+@article{yan2018municipal,
+  title={Municipal wastewater as a microbial surveillance platform for enteric diseases: a case study for Salmonella and salmonellosis},
+  author={Yan, T and O’brien, P and Shelton, JM and Whelen, AC and Pagaling, E},
+  journal={Environmental science \& technology},
+  volume={52},
+  number={8},
+  pages={4869--4877},
+  year={2018},
+  publisher={ACS Publications}
+}
+
+@article{rackaityte2020human,
+  title={The human microbiome in the 21st century},
+  author={Rackaityte, Elze and Lynch, Susan V},
+  journal={Nature communications},
+  volume={11},
+  number={1},
+  pages={5256},
+  year={2020},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{marco2021defining,
+  title={Defining how microorganisms benefit human health},
+  author={Marco, Maria L},
+  journal={Microbial Biotechnology},
+  volume={14},
+  number={1},
+  pages={35--40},
+  year={2021},
+  publisher={Wiley Online Library}
+}
+
+@article{gougoulias2014role,
+  title={The role of soil microbes in the global carbon cycle: tracking the below-ground microbial processing of plant-derived carbon for manipulating carbon dynamics in agricultural systems},
+  author={Gougoulias, Christos and Clark, Joanna M and Shaw, Liz J},
+  journal={Journal of the Science of Food and Agriculture},
+  volume={94},
+  number={12},
+  pages={2362--2371},
+  year={2014},
+  publisher={Wiley Online Library}
+}
+
+@article{bickel2020soil,
+  title={Soil bacterial diversity mediated by microscale aqueous-phase processes across biomes},
+  author={Bickel, Samuel and Or, Dani},
+  journal={Nature Communications},
+  volume={11},
+  number={1},
+  pages={116},
+  year={2020},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{jiao2021linking,
+  title={Linking phylogenetic niche conservatism to soil archaeal biogeography, community assembly and species coexistence},
+  author={Jiao, Shuo and Chen, Weimin and Wei, Gehong},
+  journal={Global Ecology and Biogeography},
+  volume={30},
+  number={7},
+  pages={1488--1501},
+  year={2021},
+  publisher={Wiley Online Library}
+}
+
+@article{ursell2012interpersonal,
+  title={The interpersonal and intrapersonal diversity of human-associated microbiota in key body sites},
+  author={Ursell, Luke K and Clemente, Jose C and Rideout, Jai Ram and Gevers, Dirk and Caporaso, J Gregory and Knight, Rob},
+  journal={Journal of Allergy and Clinical Immunology},
+  volume={129},
+  number={5},
+  pages={1204--1208},
+  year={2012},
+  publisher={Elsevier}
+}
+
+@article{roslund2020biodiversity,
+  title={Biodiversity intervention enhances immune regulation and health-associated commensal microbiota among daycare children},
+  author={Roslund, Marja I and Puhakka, Riikka and Gr{\"o}nroos, Mira and Nurminen, Noora and Oikarinen, Sami and Gazali, Ahmad M and Cinek, Ond{\v{r}}ej and Kramn{\'a}, Lenka and Siter, Nathan and Vari, Heli K and others},
+  journal={Science advances},
+  volume={6},
+  number={42},
+  pages={eaba2578},
+  year={2020},
+  publisher={American Association for the Advancement of Science}
+}
+
+@article{kates2020household,
+  title={Household pet ownership and the microbial diversity of the human gut microbiota},
+  author={Kates, Ashley E and Jarrett, Omar and Skarlupka, Joseph H and Sethi, Ajay and Duster, Megan and Watson, Lauren and Suen, Garret and Poulsen, Keith and Safdar, Nasia},
+  journal={Frontiers in cellular and infection microbiology},
+  volume={10},
+  pages={73},
+  year={2020},
+  publisher={Frontiers Media SA}
+}
+
+@article{azad2013infant,
+  title={Infant gut microbiota and the hygiene hypothesis of allergic disease: impact of household pets and siblings on microbiota composition and diversity},
+  author={Azad, Meghan B and Konya, Theodore and Maughan, Heather and Guttman, David S and Field, Catherine J and Sears, Malcolm R and Becker, Allan B and Scott, James A and Kozyrskyj, Anita L and CHILD Study Investigators},
+  journal={Allergy, Asthma \& Clinical Immunology},
+  volume={9},
+  pages={1--9},
+  year={2013},
+  publisher={Springer}
+}
+@article{tun2017exposure,
+  title={Exposure to household furry pets influences the gut microbiota of infants at 3--4 months following various birth scenarios},
+  author={Tun, Hein M and Konya, Theodore and Takaro, Tim K and Brook, Jeffrey R and Chari, Radha and Field, Catherine J and Guttman, David S and Becker, Allan B and Mandhane, Piush J and Turvey, Stuart E and others},
+  journal={Microbiome},
+  volume={5},
+  pages={1--14},
+  year={2017},
+  publisher={Springer}
+}
+
+
+@article{ley2006ecological,
+  title={Ecological and evolutionary forces shaping microbial diversity in the human intestine},
+  author={Ley, Ruth E and Peterson, Daniel A and Gordon, Jeffrey I},
+  journal={Cell},
+  volume={124},
+  number={4},
+  pages={837--848},
+  year={2006},
+  publisher={Elsevier}
+}
+
+@article{vorholt2012microbial,
+  title={Microbial life in the phyllosphere},
+  author={Vorholt, Julia A},
+  journal={Nature reviews microbiology},
+  volume={10},
+  number={12},
+  pages={828--840},
+  year={2012},
+  publisher={Nature Publishing Group}
+}
+
+@article{hardoim2015hidden,
+  title={The hidden world within plants: ecological and evolutionary considerations for defining functioning of microbial endophytes},
+  author={Hardoim, Pablo R and Van Overbeek, Leonard S and Berg, Gabriele and Pirttil{\"a}, Anna Maria and Compant, St{\'e}phane and Campisano, Andrea and D{\"o}ring, Matthias and Sessitsch, Angela},
+  journal={Microbiology and molecular biology reviews},
+  volume={79},
+  number={3},
+  pages={293--320},
+  year={2015},
+  publisher={Am Soc Microbiol}
+}
+@article{lemanceau2017let,
+  title={Let the core microbiota be functional},
+  author={Lemanceau, Philippe and Blouin, Manuel and Muller, Daniel and Mo{\"e}nne-Loccoz, Yvan},
+  journal={Trends in Plant Science},
+  volume={22},
+  number={7},
+  pages={583--595},
+  year={2017},
+  publisher={Elsevier}
+}
+
+@article{hu2017probiotic,
+  title={Probiotic Pseudomonas communities enhance plant growth and nutrient assimilation via diversity-mediated ecosystem functioning},
+  author={Hu, Jie and Wei, Zhong and Weidner, Simone and Friman, Ville-Petri and Xu, Yang-Chun and Shen, Qi-Rong and Jousset, Alexandre},
+  journal={Soil Biology and Biochemistry},
+  volume={113},
+  pages={122--129},
+  year={2017},
+  publisher={Elsevier}
+}
+
+@article{COMPANT201929,
+title = {A review on the plant microbiome: Ecology, functions, and emerging trends in microbial application},
+journal = {Journal of Advanced Research},
+volume = {19},
+pages = {29-37},
+year = {2019},
+note = {Special Issue on Plant Microbiome},
+issn = {2090-1232},
+doi = {https://doi.org/10.1016/j.jare.2019.03.004},
+url = {https://www.sciencedirect.com/science/article/pii/S2090123219300700},
+author = {Stéphane Compant and Abdul Samad and Hanna Faist and Angela Sessitsch},
+keywords = {Plant microbiome, Composition, Functionalities, Inoculation, Farming practices, Plant microbiome modulation},
+abstract = {Plants have evolved with a plethora of microorganisms having important roles for plant growth and health. A considerable amount of information is now available on the structure and dynamics of plant microbiota as well as on the functional capacities of isolated community members. Due to the interesting functional potential of plant microbiota as well as due to current challenges in crop production there is an urgent need to bring microbial innovations into practice. Different approaches for microbiome improvement exist. On the one hand microbial strains or strain combinations can be applied, however, field success is often variable and improvement is urgently required. Smart, knowledge-driven selection of microorganisms is needed as well as the use of suitable delivery approaches and formulations. On the other hand, farming practices or the plant genotype can influence plant microbiota and thus functioning. Therefore, selection of appropriate farming practices and plant breeding leading to improved plant-microbiome interactions are avenues to increase the benefit of plant microbiota. In conclusion, different avenues making use of a new generation of inoculants as well as the application of microbiome-based agro-management practices and improved plant lines could lead to a better use of the plant microbiome. This paper reviews the importance and functionalities of the bacterial plant microbiome and discusses challenges and concepts in regard to the application of plant-associated bacteria.}
+}
+
+@article{
+doi:10.1126/science.aac8455,
+author = {Mary Ann Moran },
+title = {The global ocean microbiome},
+journal = {Science},
+volume = {350},
+number = {6266},
+pages = {aac8455},
+year = {2015},
+doi = {10.1126/science.aac8455},
+URL = {https://www.science.org/doi/abs/10.1126/science.aac8455},
+eprint = {https://www.science.org/doi/pdf/10.1126/science.aac8455},
+abstract = {The vast translucent oceans are teeming with microscopic life that drives significant life processes and elemental cycling on Earth. Yet how climate change will affect the functioning of this microbiome is not well understood. Moran reviews progress and the transformative discoveries made recently in marine microbiology that have led environmental, plant, animal, and even human microbiome research. Science, this issue p. 10.1126/science.aac8455 The microbiome of the largest environment on Earth has been gradually revealing its secrets over four decades of study. Despite the dispersed nature of substrates and the transience of surfaces, marine microbes drive essential transformations in all global elemental cycles. Much has been learned about the microbes that carry out key biogeochemical processes, but there are still plenty of ambiguities about the factors important in regulating activity, including the role of microbial interactions. Identifying the molecular “currencies” exchanged within the microbial community will provide key information on microbiome function and its vulnerability to environmental change.}}
+
+@article{banerjee2023soil,
+  title={Soil microbiomes and one health},
+  author={Banerjee, Samiran and Van Der Heijden, Marcel GA},
+  journal={Nature Reviews Microbiology},
+  volume={21},
+  number={1},
+  pages={6--20},
+  year={2023},
+  publisher={Nature Publishing Group UK London}
+}
+@article{bahrndorff2016microbiome,
+  title={The microbiome of animals: implications for conservation biology},
+  author={Bahrndorff, Simon and Alemu, Tibebu and Alemneh, Temesgen and Lund Nielsen, Jeppe and others},
+  journal={International journal of genomics},
+  volume={2016},
+  year={2016},
+  publisher={Hindawi}
+}
+
+@article{berendsen2012rhizosphere,
+  title={The rhizosphere microbiome and plant health},
+  author={Berendsen, Roeland L and Pieterse, Corn{\'e} MJ and Bakker, Peter AHM},
+  journal={Trends in plant science},
+  volume={17},
+  number={8},
+  pages={478--486},
+  year={2012},
+  publisher={Elsevier}
+}
+
+@article{gilbert2018current,
+  title={Current understanding of the human microbiome},
+  author={Gilbert, Jack A and Blaser, Martin J and Caporaso, J Gregory and Jansson, Janet K and Lynch, Susan V and Knight, Rob},
+  journal={Nature medicine},
+  volume={24},
+  number={4},
+  pages={392--400},
+  year={2018},
+  publisher={Nature Publishing Group US New York}
+}
+
+@article{tanner1994impact,
+  title={The impact of 16S ribosomal RNA-based phylogeny on the taxonomy of oral bacteria},
+  author={Tanner, Anne and Maiden, Mark FJ and Paster, Bruce J and Dewhirst, Floyd E},
+  journal={Periodontology 2000},
+  volume={5},
+  number={1},
+  pages={26--51},
+  year={1994},
+  publisher={Wiley Online Library}
+}
+
+@article{woo2008then,
+  title={Then and now: use of 16S rDNA gene sequencing for bacterial identification and discovery of novel bacteria in clinical microbiology laboratories},
+  author={Woo, Patrick CY and Lau, Susanna KP and Teng, Jade LL and Tse, Herman and Yuen, K-Y},
+  journal={Clinical Microbiology and Infection},
+  volume={14},
+  number={10},
+  pages={908--934},
+  year={2008},
+  publisher={Elsevier}
+}
+
+@article{lopez2023determining,
+  title={Determining the most accurate 16S rRNA hypervariable region for taxonomic identification from respiratory samples},
+  author={L{\'o}pez-Aladid, Ruben and Fern{\'a}ndez-Barat, Laia and Alcaraz-Serrano, Victoria and Bueno-Freire, Leticia and V{\'a}zquez, Nil and Pastor-Ib{\'a}{\~n}ez, Roque and Palomeque, Andrea and Oscanoa, Patricia and Torres, Antoni},
+  journal={Scientific reports},
+  volume={13},
+  number={1},
+  pages={3974},
+  year={2023},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{soergel2012selection,
+  title={Selection of primers for optimal taxonomic classification of environmental 16S rRNA gene sequences},
+  author={Soergel, David AW and Dey, Neelendu and Knight, Rob and Brenner, Steven E},
+  journal={The ISME journal},
+  volume={6},
+  number={7},
+  pages={1440--1444},
+  year={2012},
+  publisher={Oxford University Press}
+}
+@article{guo2013taxonomic,
+  title={Taxonomic precision of different hypervariable regions of 16S rRNA gene and annotation methods for functional bacterial groups in biological wastewater treatment},
+  author={Guo, Feng and Ju, Feng and Cai, Lin and Zhang, Tong},
+  journal={PloS one},
+  volume={8},
+  number={10},
+  pages={e76185},
+  year={2013},
+  publisher={Public Library of Science San Francisco, USA}
+}
+
+@article{klindworth2013evaluation,
+  title={Evaluation of general 16S ribosomal RNA gene PCR primers for classical and next-generation sequencing-based diversity studies},
+  author={Klindworth, Anna and Pruesse, Elmar and Schweer, Timmy and Peplies, J{\"o}rg and Quast, Christian and Horn, Matthias and Gl{\"o}ckner, Frank Oliver},
+  journal={Nucleic acids research},
+  volume={41},
+  number={1},
+  pages={e1--e1},
+  year={2013},
+  publisher={Oxford University Press}
+}
+
+@article{mizrahi2013taxonomic,
+  title={Taxonomic classification of bacterial 16S rRNA genes using short sequencing reads: evaluation of effective study designs},
+  author={Mizrahi-Man, Orna and Davenport, Emily R and Gilad, Yoav},
+  journal={PloS one},
+  volume={8},
+  number={1},
+  pages={e53608},
+  year={2013},
+  publisher={Public Library of Science San Francisco, USA}
+}

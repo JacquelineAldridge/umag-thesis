@@ -1,19 +1,22 @@
-\DocumentMetadata{pdfversion=2.0}
+%\DocumentMetadata{pdfversion=2.0}
 \documentclass[letterpaper,10pt,final,spanish,oneside]{umagthesis}
 
+%% control alt b
+%% latexmk -C  
 \usepackage{float}
 \usepackage[acronym,toc]{glossaries}
+\usepackage{soul}
 
-\title{La Inteligencia Artificial}						% título de la tesis o trabajo
-\author{Juan Pérez Gómez}								% autor
+\title{Jacqui Tesis}						% título de la tesis o trabajo
+\author{Jacqueline Aldridge Águila}								% autor
 
-\supervisor{Dr. Carlos Cifuentes}						% supervisor
-\cosupervisor{Ing. Pedro Lagos}							% co-supervisor (opcional)
+\supervisor{Dr. Roberto Uribe-Paredes}						% supervisor
+%\cosupervisor{Ing. Pedro Lagos}							% co-supervisor (opcional)
 
-\degree{Magíster en Ciencias}							% grado o título
+\degree{Magíster en Bioinformática}							% grado o título
 \department{Departamento de Ingeniería en Computación}	% departamento o unidad académica
-\faculty{Facultad de Ciencias}							% facultad
-\degreedate{Enero, 2024}								% fecha de presentación
+\faculty{Facultad de Ingeniería}							% facultad
+\degreedate{Julio, 2024}								% fecha de presentación
 
 % frase de propósito, aparece en la portada
 % \graduationpurpose{Trabajo de aplicación para optar al título de}
@@ -44,7 +47,7 @@
 \include{frontmatter/acknowledgements.tex}
 
 \mainmatter
-
+\include{chapters/0_introduction/index.tex}
 \include{chapters/1_introduction/index.tex}
 \include{chapters/2_description/index.tex}
 \include{chapters/3_discussion/index.tex}

@@ -347,8 +347,8 @@
 
 % spacing and other options
 \OnehalfSpacing
-\captionsetup[table]{font={stretch=1.2}}
-\captionsetup[figure]{font={stretch=1.2}}
+%\captionsetup[table]{font={stretch=1.2}}
+%\captionsetup[figure]{font={stretch=1.2}}
 \setlength{\parskip}{.3\baselineskip}
 \setlength{\parindent}{0pt}
 \renewcommand*{\bibfont}{\normalfont\footnotesize}
