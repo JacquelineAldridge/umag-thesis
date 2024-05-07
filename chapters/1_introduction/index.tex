@@ -1,18 +1,24 @@
 \chapter{Marco teórico y estado del arte}
-\section{biologia}
-\subsection{Microbiota}
-La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos~\cite{gilbert2018current}, animales~\cite{bahrndorff2016microbiome} o plantas~\cite{berendsen2012rhizosphere}, o en ambientes naturales como el océano~\cite{doi:10.1126/science.aac8455} o el suelo~\cite{banerjee2023soil}. Estos organismos presentes en la microbiota se encuentran en un estado de simbiosis junto con el host, contribuyendo en funciones vitales como la homeostasis, regulación del sistema inmune, digestión de alimentos, producción de vitaminas, protección ante enfermedades y agentes patógenos~\cite{marco2021defining,fijan2014microorganisms,altvecs2020interaction,hou2022microbiota}. Sin embargo, una disbiosis o una baja diversidad en la microbiota puede llevar a una desregulación del organismo, incluyendo diversos tipos de enfermedades, fallas en el sistema inmune, falta de vitaminas, trastornos como depresión, estrés, e incluso diferentes tipos de cáncer en el caso del ser humano~\cite{altvecs2020interaction,hou2022microbiota}.
 
-La composición de la microbiota va cambiando dependiendo del área que se está colonizando, pudiéndose econtrar diferentes microorganismos en las cavidades orales, zonas intestinales, genitales, cutáneas o tracto respiratorio~\cite{ursell2012interpersonal}.
+
+Esta tesis busca presentar una nueva alternativa para la caracterización de comunidades microbianas utilizando secuenciación de tercera generación. Para ello se  desarrolló un flujo de trabajo automatizado que permite realizar el procesamiento de los datos de secuenciación, control de calidad, asignación taxonómica, análisis de diversidad, predicción funcional y caracterización de grupos. 
+Se desarrolló también una aplicación web que ejecuta el flujo de trabajo y presenta los resultados en forma de gráficos y tablas en la plataforma. Para usar la plataforma el usuario debe llenar un formulario con la metadata de la secuenciación, subir los archivos e indicar los análisis a realizar, con esto la plataforma web enviará los datos de secuenciación a la plataforma de alto rendimiento y ejectará el flujo de trabajo, una vez finalizado, los resultados se presentarán en la plataforma web.
+
+A continación se presenta el marco teórico y estado del arte de los conceptos necesarios para el desarrollo de esta tesis, como qué es la microbiota, el gen 16S rRNA, tecnologías de secuenciación y sus usos, las diferentes herramientas bioinformáticas para el análisis de datos y herramientas para el desarrollo de la aplicación web.
+\section{Gen 16S para el estudio de comunidades microbioanas /  Estudio de microbiota a traves del gen 16S y tecnologías de secuenciacion}
+\subsection{Microbiota}
+La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos~\cite{gilbert2018current}, animales~\cite{bahrndorff2016microbiome} o plantas~\cite{berendsen2012rhizosphere}, y también en ambientes naturales como el océano~\cite{doi:10.1126/science.aac8455} y el suelo~\cite{banerjee2023soil}. Estos organismos que componen la microbiota se encuentran en un estado de simbiosis junto con el huesped, contribuyendo en funciones vitales como la homeostasis, regulación del sistema inmune, digestión de alimentos, producción de vitaminas, protección ante enfermedades y agentes patógenos~\cite{marco2021defining,fijan2014microorganisms,altvecs2020interaction,hou2022microbiota}. Sin embargo, una disbiosis o una baja diversidad en la microbiota puede llevar a una desregulación en el organismo huesped, incluyendo diversos tipos de enfermedades, fallas en el sistema inmune, falta de vitaminas, trastornos como depresión, estrés, e incluso diferentes tipos de cáncer en el caso del ser humano~\cite{altvecs2020interaction,hou2022microbiota}.
+
+La composición de la microbiota va cambiando dependiendo del área de estudio, pudiéndose encontrar diferentes microorganismos en las cavidades orales, zonas intestinales, genitales, cutáneas o tracto respiratorio~\cite{ursell2012interpersonal}.
 
 Se estima que en el ser humano habitan más de 10 billones de microorganismos~\cite{sender2016revised}, es decir, poseemos cerca de 350 billones de celulas microbioanas~\cite{fijan2014microorganisms,ley2006ecological} , siendo este número al menos 10 veces mayor que el número de células humanas que poseemos.
 
 En la naturaleza los microorganismos cumplen un rol fundamental en los ciclos bioquímicos del nitrógeno, carbono y fósforo~\cite{bitton1994role, gougoulias2014role}, como también en los procesos de desnitrificación, nitrificación y mineralización~\cite{bitton1994role, gougoulias2014role}. 
 Dependiendo del tipo de ambiente, los microorganismos también varian, en el caso del suelo por ejemplo, cambian dependiendo del tipo de suelo en el que están (agrícolas, forestales, humedales, pastos o suelos desérticos~\cite{jiao2021linking}) y de las características de éste como la temperatura, hidaratación, profundidad, cantidad de carbono~\cite{bickel2020soil}.
-En el caso de las plantas, se ha demostrado, que la microbiota presente ayuda a la adquisición de nutrientes~\cite{hu2017probiotic}, al crecimiento, salud de las plantas y resistencia a enfermedaddes~\cite{lemanceau2017let,hardoim2015hidden,vorholt2012microbial,COMPANT201929}.
+En el caso de las plantas, se ha demostrado que la microbiota presente ayuda a la adquisición de nutrientes~\cite{hu2017probiotic}, crecimiento, salud y resistencia a enfermedaddes~\cite{lemanceau2017let,hardoim2015hidden,vorholt2012microbial,COMPANT201929}.
 
 
-La microbiota humana se puede ver afectada por diferentes factores, como los hábitos alimenticios, estilo de vida, uso de antibióticos, la edad, estrés, entre otros~\cite{altvecs2020interaction}. La interacción con el medio ambiente influye notoriamente también, habiendo estudios que identifican cambios en la microbiota intestinal y cutánea en niños que interactuan con la naturaleza, plantas o suelo, identificando también un aumento de vías inmunoreguladoras en comunidades microbianas cercanas a la naturaleza~\cite{roslund2020biodiversity}. También se han identificado cambios en la microbiota de recién nacidos, infantes y adultos que viven con animales~\cite{tun2017exposure, azad2013infant,kates2020household}.
+La microbiota humana se puede ver afectada por diferentes factores, como los hábitos alimenticios, estilo de vida, uso de antibióticos, edad, estrés, entre otros~\cite{altvecs2020interaction}. La interacción con el medio ambiente influye notoriamente también, habiendo estudios que identifican cambios en la microbiota intestinal y cutánea en niños que interactuan con la naturaleza, plantas o suelo, identificando aumento en las vías inmunoreguladoras en comunidades microbianas cercanas a la naturaleza~\cite{roslund2020biodiversity}, como también se han identificado cambios en la microbiota de recién nacidos, infantes y adultos que viven con animales~\cite{tun2017exposure, azad2013infant,kates2020household}.
 
 
 % https://www.frontiersin.org/articles/10.3389/fcimb.2012.00104/full?portfolio-raia-drogasil=1
@@ -22,39 +28,71 @@ La microbiota humana se puede ver afectada por diferentes factores, como los há
 
 % microbioma: Colección de genomas de todos estos microorganismos en el ambiente (no solo las comunidades, elementos de su estructura microbial, metabolitos.)
 Conocer la diversidad microbiana asociada a organismos multicelulares permite conocer microorganismos patógenos que causan enfermedades infecciosas,lo cual ayudaría al diagnóstico y permitiría tomar acciones oportunas~\cite{yan2018municipal,rackaityte2020human}. 
-
+\hl{Un mejor cierre}
 \subsection{ARN Ribosomal 16S}
-El gen 16S rRNA es el marcador molecular más utilizado para la identificación de bacterias y comunidades microbianas~\cite{janda200716s,lopez2023determining}. Posee caracteristicas únicas, como su presencia en todas las bacterias, su alto grado de conservación (debido a que su función no cambia a través del tiempo) y su tamaño, el cuál permite ser lo suficientemente largo y preciso para la asignación taxónomica, y abordable para análisis bioinformáticos ~\cite{janda200716s, patel200116s}.
+El ARN ribosomal 16S es un gen perteneciente a la subunidad menor 30S que codifica el rRNA bacteriano y se encuentra en todas las bacterías. 
+Esta compuesto por 1542 pares de bases aproximadamente, divididas en 9 regiones hipervariables entrelazadas con regiones constantes~\cite{clarridge2004impact}.
+Las regiones constantes son compartidas por todas las bacterias, mientras las regiones variables presentan cierto grado de variabilidad cambiando dependiendo de la especie. 
 
-El gen 16S rRNA esta compuesto de aproximadamente 1542 pares de bases divididas en 10 regiones conservadas y 9 regiones hipervariables~\cite{clarridge2004impact}.%, las cuales permiten llevar a cabo la  identificación de los organismos. 
+
+%%https://www.elsevier.es/es-revista-enfermedades-infecciosas-microbiologia-clinica-28-articulo-identificacion-bacteriana-mediante-secuenciacion-del-13059055#:~:text=El%20ARN%20ribos%C3%B3mico%20(ARNr)%2016S,la%20d%C3%A9cada%20de%2019702.
+
+%El gen 16S rRNA esta compuesto de aproximadamente 1542 pares de bases divididas en 10 regiones conservadas y 9 regiones hipervariables.%, las cuales permiten llevar a cabo la  identificación de los organismos. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{images/16S.png}
-    \caption{Estructura de las regiones variables e hipervariables del gen 16S rRNA}
+    \caption{Estructura de las regiones constantes e hipervariables del gen 16S rRNA}
     \label{fig:16S_structure}
 \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{images/16S_2.png}
-    \caption{Estructura de las regiones variables e hipervariables del gen 16S rRNA}
-    \label{fig:16S_structure2}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\linewidth]{images/16S_2.png}
+%     \caption{Estructura de las regiones variables e hipervariables del gen 16S rRNA}
+%     \label{fig:16S_structure2}
+% \end{figure}
 
 \hl{hacer denuevo la figura}
 
-Las regiones hipervariables permiten llevar a cabo la caracterización de los microorganismos. Diversos estudios se han llevado a cabo para determinar los efectos de la selección de la región a utilizar para la identificación, llegandose a determinar que la región hipervariable ha utilizar influye en los resultados de la comunidad y en la diversidad de organismos que se caracteriza~\cite{klindworth2013evaluation,mizrahi2013taxonomic,guo2013taxonomic,soergel2012selection}, y también que ciertas regiones hipervariables permiten identificar mejor ciertos grupos taxonómicos~\cite{buscar}.
+El uso de la macromolécula del ARN ribosomal  16S para el estudio de relaciones filogenéticas y de bacterias fue propuesto por Carl Woese a principios de 1970~\cite{olsen1993ribosomal}.
+Sus caracteristicas únicas como su presencia en todas las bacterias, su alto grado de conservación (debido a que su función no cambia a través del tiempo) y su tamaño (el cuál permite ser lo suficientemente largo y preciso para la asignación taxónomica, y abordable para análisis bioinformáticos) hacen que hoy en día sea el marcador molecular más utilizado para la identificación de bacterias y comunidades microbianas~\cite{reller2007detection,janda200716s,lopez2023determining,patel200116s}.
+
+
+Las regiones hipervariables permiten llevar a cabo la caracterización de los microorganismos, siendo la metodología más utilizada el secuenciar parcialmente el gen 16S, es decir, secuenciar una o dos regiones y realizar la asignación taxónomica en base a la región secuenciada. Diversos estudios se han llevado a cabo para determinar los efectos de la selección de la región a utilizar para la identificación, llegandose a determinar que la región hipervariable ha secuenciar influye en los resultados de la comunidad y en la diversidad de microorganismos que se caracteriza~\cite{klindworth2013evaluation,mizrahi2013taxonomic,guo2013taxonomic,soergel2012selection}, y también que ciertas regiones hipervariables permiten identificar mejor ciertos grupos taxonómicos~\cite{buscar}.
 
 %\hl{Evaluation of general 16S ribosomal RNA gene PCR primers for classical and next-generation sequencing-based diversity studies} \hl{The impact of DNA polymerase and number of rounds of amplification in PCR on 16S rRNA gene sequence data, mSphere, vol. 4, 2019}
 
 
 
-Con el desarrollo de las tecnologías de secuenciación masiva, su bajo costo y alto througput, la forma de caracterizar bacterias se ha vuelto más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. El estudio de comunidades microbianas mediante el gen 16S rRNA se ha vuelto una herramienta poderosa tanto en ambientes clínicos, como ambientales, \hl{incluso llegandose a secuenciar en el espacio}, permite obtener información de la diversidad de una muestra de manera mucho más rápida y económica que los métodos tradicionales~\cite{buscar}.
+El gold standard para la identifición de bacterias durante muchos años fue el cultivo convencional en laboratorio, sin embargo, el cultivo puede durar desde dias a semanas o incluso meses, y en algunos casos, hay bacterias que se logra cultivar en laboratorio~\cite{didelot2012transforming}. Es por esto, que las tecnolgías de secuenciación de próoxima generación se presentarn como un método novedoso, rápido y preciso que se empezo a usar masivamente para la identidicacion de bacterias mediante la secuenciación del gen 16s~\cite{reller2007detection}.
+Con el desarrollo de las tecnologías de secuenciación masiva, su bajo costo y alto througput (cantidad de información que secuencian), la forma de caracterizar bacterias se ha vuelto más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. El estudio de comunidades microbianas mediante el gen 16S rRNA se ha vuelto una herramienta poderosa tanto en ambientes clínicos como ambientales, permitiendo obtener información de la diversidad de una muestra de manera más rápida y económica que con los métodos tradicionales~\cite{buscar}.
 %Las tecnologías de secuenciación  permiten la identificación de bacterias a través de  \hl{signatures/firmas} únicas 
+
+Existen diferentes bases de datos que contienen la información de las secuencias del gen 16S para las diferentes bacterias, como 16S en bases de datos como RDP (Ribosomal Database Project~\cite{cole2014ribosomal}), 16S RefSeq~\cite{}, Greengenes~\cite{desantis2006greengenes}, Silva~\cite{} y el proyecto de microbioma humano (HMP)~\cite{}.
 \subsection{Secuenciación de ADN}
+Todo ser vivo cuenta con una molécula de ADN que contiene toda la información genética del individuo, esta información se códifica a través de bases nitrogenadas: adenina (A),timina (T), citosina (C) y guanina (G)~\cite{watson1953molecular}. Al día de hoy se han desarrollado diferentes técnicas que permiten determinar la secuencia de nucleótidos en una molecula de ADN, este conjunto de técnicas se conocen como secuenciación de ADN.
 
-\hl{que es la secuenciaciónd de adn}
-Mediante la secuencación de ADN se puede caracterizar genomas completos, 
+Las tecnologías de secuenciación se pueden dividir en tres generaciones, cada una con diferentes características, como los largos de las moleculas a secuenciar, porcentaje de error, costo y cantidad de información que secuencian (throughput). Debido a las diferentes caracterisitcas de cada generación, al analizar las secuencias los análisis bioinformáticos y herramientas a utilizar también cambian~\cite{bierman2014understanding}.
 
+La precisión de estas tecnologías se puede medir mediante la precisión de la lectura raw (precisión al leer un sólo fragmento de ácido nucleico a la vez) o la precisión de los ensamblajes mediante consensos (reconstrucción de genomas completos).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/DNA-Sequencing.jpg}
+    \caption{Comparativa tecnologías de secuenciación}
+    \label{fig:DNA_sequencing}
+\end{figure}
+
+
+Frederick Sanger introdujó la primera generación de tecnologías de secuenciación en el año 1977 a través del método Sanger, el cuál utiliza el método de terminación de cadena para secuenciar~\cite{sanger1975rapid}. 
+%Esta técnica replica el ADN utilizan nucleotidos modificados marcados con fluorescencia que detienen el proceso de replicación.
+Durante la PCR se añaden nucleótidos modificados (dNTPs) marcados con fluorescencia que al ser incorporados en la cadena de ADN detiene la elongación de la cadena y por ende, la replicación del ADN. Una vez que la reacción ha terminado, se realiza una electroforesis en gel que mediante una aplicación de electricidad que separa las moleculas de ADN por tamaño para luego poder determinar la secuencia de la cadena.
+Ester método permite secuenciar moleculas de hasta \hl{900pb} con una precisión de 99.9\%~\cite{}.  
+
+Sanger se utiliza ampliamente para secuenciar fragmentos individuales de adn (), pero es un método costoso e ineficiente al trabajar en proyectos de secuenciación de gran escala como por ejemplo genomas completos o metagenómica, por lo que para este tipo de proyectos se utilizan tecnologías de secuenciación de segunda y tercera generación.
+ 
+Las tecnologías de secuenciación de segunda generación como Illumina, IonTorrent, Roche 454 y SOLiD,  utilizaron como base la metodología de interrumpción de cadena propuesta por Sanger. Las tecnlogias de proxima generación secuencian simultaneamente millones de fragmentos cortos de ADN de manera paralela (fragmentos de de hasta \hl{300?} pares de bases) con una precisión de \hl{99.9}\%~\cite{}. 
+
+Sanger permite la caracterización de bacterias mediante el gen 16S a nivel de especie debido a su alta precisión, sin embargo, permite solo secuenciar muestras aisladas donde solo este presente una bacteria a la vez, por lo que no es útil para la caracterización de comunidades microbianas completas.\hl{muy util en la identidicacion de patogenos clinico}
 
 Con la aparición de las tecnologías de secuenciación de segunda y tercera generación~\cite{janda200716s,pollock2018madness}, la secuenciación del gen 16S rRNA se convirtió en es una técnica masiva hoy en día para la caracterización de comunidades microbioanas e identificación tanto de patogenos o aislamiento de bacterias clínicas~\cite{patel200116s}.
 
@@ -62,24 +100,25 @@ Estos métodos requieren la amplificación y secuenciación del gen 16S rRNA y e
 
 Con la secuenciación del gen 16S rRNA se obtiene un conjunto de lecturas de ADN, donde cada lectura pertenece a una bacteria presente en la muestra. Estas lecturas se procesan y se comparán con bases de datos existentes para poder realizar la asignación taxonómica y poder identificar la bacteria. Finalmente lo que se obtiene es un perfil de toda la comunidad bacteriana de la muestra, todas las bacterias presentes que las herramientas bioinformáticas pudieron detectar, junto con su abundancia relativa.
 
-Existen diferentes tecnologías de secuenciación cada una de ellas con diferentes largos de las lecturas a secuenciar,diferente porcentaje de error, costo y througput. Cada una de ellas tiene sus ventajas y desventajas, y los análisis bioinformáticos a realizar cambian dependiendo de la tecnología a utilizar~\cite{bierman2014understanding}.
-La precisión de estas tecnologías se puede medir mediante la precisión de la lectura raw (precisión al leer un sólo fragmento de ácido nucleico a la vez) o la precisión de los ensamblajes mediante consensos (reconstrucción de genomas completos ) 
+
+Las tecnologías de secuenciación de próxima generación permiten la secuenciación de multiples fragmentso de ADN al mismo tiempo, permitiendo una secuenciación rápida  y de bajo costo compada con la Sanger.
 
 El umbral para distinguir especies bacterianas utilizando el gen 16S rRNA es de mínimo 97\% de similitud~\cite{kim2014towards}
 \hl{LEEER} https://www.microbiologyresearch.org/content/journal/ijsem/10.1099/ijs.0.059774-0
 
 
-diversidad, riquesa y composición de la comunidad microbiana
-\subsubsection{Sanger}
-Incialmente el gen 16S completo se seucenciaba mediante sanger ~\cite{sanger1975rapid} pero debido a su alto costo y complejidad de llevar a cabo en laboratorio
+Las tecnologías de secuenciacin de próxima generación presentan ventajas sobre Sanger a la hora de identificación de patogenos, permitiendo la identificacin en pararelo de bacterias en muestras complejas~\cite{peker2019comparison}, como también presenta ventajas tanto en resolución taxonómica como en precisión~\cite{motro2017next}.
 \subsubsection{Illumina}
-\hl{como funciona illumina}
-Ultra-high-throughput microbial community analysis on the Illumina HiSeq and MiSeq platforms
-Las tecnologías de secuenciación de segunda generación, como Illumina e IonTorrent permiten secuenciar solo una parte del gen 16S rRNA, debido a que las lecturas son cortas (300-400pb)~\cite{salipante2014performance}. Esto conlleva a que se deba decidir que región del gen secuenciar, para poder obtener la mayor diversidad posible presente en la muestra. Diversos estudios se han realizado para analizar que región permite obtener esta diversidad de manera precisa~\cite{liu2008accurate,schloss2011reducing}, llegando a descubrirse que ciertos grupos taxonómicos se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}.
+\hl{Intrduccion de que es illumina y como funciona illumina}
 
-Illumina se ha convertido hoy en día en el estándar más utilizado para la secuenciación del gen 16S debido a su bajo costo, alta precisión (99.9\%) y througput~\cite{pichler201816s}. Sin embargo, esta tecnología esta limitada por el largo de las lecturas, debido a que al secuenciar con illumina solo se puede secuenciar una o dos regiones del gen 16S (de las 9 regiones hipervariables), lo que límita la resolución taxónomica, permitiendo asignar correctamente solo a nivel de genero~\cite{johnson2019evaluation}
+Ultra-high-throughput microbial community analysis on the Illumina HiSeq and MiSeq platforms.
 
-Existen diferentes metodologías pensadas para trabajar con illumina,debido a que se sabe que existe presencia de ruido, como la eliminación de quimeras, la eliminación de singleton y otus raros son recomendasos~\cite{caporaso2011global,auer2017analysis}, realizar denoising con dada~\cite{callahan2016dada2} y unoise~\cite{edgar2016unoise2}, pero todas estas metodologías no esgtan disponibles para usarse con annopore, debido al porcentaje de error y al secuenciar todo el gen 16s.
+
+Las tecnologías de secuenciación de segunda generación, como Illumina e IonTorrent permiten secuenciar solo una parte del gen 16S rRNA, debido al tamaño de las moleculas que secuencian(lecturas de 200-400pb)~\cite{salipante2014performance}. Esto conlleva a que se deba decidir que región del gen secuenciar, para poder obtener la mayor diversidad posible presente en la muestra. 
+
+Illumina se ha convertido hoy en día en el estándar más utilizado para la secuenciación del gen 16S debido a su bajo costo, alta precisión (99.9\%) y cantidad de información que secuencian (throughput)~\cite{pichler201816s}. Sin embargo, esta tecnología esta limitada por el largo de las moléculas que secuencia, debido a que al secuenciar con illumina solo se puede secuenciar una o dos regiones del gen 16S (de las 9 regiones hipervariables), lo que límita la resolución taxónomica, permitiendo asignar correctamente solo a nivel de género~\cite{johnson2019evaluation}.Diversos estudios se han realizado para analizar que región permite obtener esta diversidad de manera precisa~\cite{liu2008accurate,schloss2011reducing}, llegando a descubrirse que ciertos grupos taxonómicos se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}.
+
+Al secuenciar el gen 16S con Illumina se sabe que existe presencia de ruido, por lo que se deben realizar filtros como la eliminación de quimeras, eliminación de secuencias singleton y otus raros~\cite{caporaso2011global,auer2017analysis}, realizar denoising con dada~\cite{callahan2016dada2} y unoise~\cite{edgar2016unoise2}. Todas estos filtros y metodologias de trabajo no están disponibles para usarse con TGS como Nanopore y PacBio, debido al porcentaje de error y al tamaño de las lecturas.
 Mientras algunos estudios han demostrado, que Nanopore presenta un porcentaje de ruido muy bajo, casi nulo~\cite{szoboszlay2023nanopore}, y a su vez, al secuenciar el gen completo, y no contar con OTUs, o ASV, permite mejorar el rendimiento de los estimadores de riqueza que se basan en estas metodologias, como los índices de chao1~\cite{chao1984nonparametric}, ACE~\cite{chao1992estimating}, o brakaway~\cite{willis2015estimating}
 
 
@@ -89,6 +128,7 @@ Es por esto, que las tecnologías de tercera generación como Oxford Nanopore y 
 
 % \hl{ESTOY VIENDO ACA } https://www.mdpi.com/2076-2607/11/3/804#B1-microorganisms-11-00804
 \subsubsection{Oxford Nanopore}
+\hl{incluso llegandose a secuenciar en el espacio},
 Debido a su capacidad de secuenciar lecturas desde unas pocas kilobases hasta megabases~\cite{amarasinghe2020opportunities}, permite obtener información genómica más completa y contigua que las tecnologías de secuenciación de segunda generación, como Illumina.
 
 Su bajo costo y su portabilidad, que permiten secuenciar 
@@ -97,12 +137,14 @@ En sus inicios, la mayor limitante de utilizar Oxford Nanopore era su alto porce
 
 
 \section{Herramientas}
+El desarrollo de un flujo de trabajo automatizado para la caracterización de comunidades microbionas requiere el uso de diferentes herramientas bioinformáticas para el procesamiento de las secuencias, control de calidad, asignación taxonómica con base de datos, análisis de diversidad, caracterización funcional, etc. Por otro lado, el desarrollo de la aplicación web que estará enlazada al flujo de trabajo, requiere del uso diferentes tecnologías web, librerías y de bases de datos para el almacenamiento de la información, generación de gráficos, y procesamiento de información. A continuación se presentan las principales herramientas a utilizar durante esta tesis.
 \subsection{Asignación taxónomica}
-Existen diferentes herramientas para hacer asignación taxonómica de secuencias, algunas incluyen una asignación taxonómica directa a los datos luego del control de calidad, mientras otras herramientas buscan minimizar el error de Oxford Nanopore mediante metodologías de clustering o de algoritmos de maximización de expectativas. Algunas de las más utilizadas para datos de Oxford Nanopore se presentan a continuación:
+La asignación taxónomica en el contexto de secuenciación del gen 16S, es el proceso donde dada una secuencia de ADN, se busca identificar a qué organismo pertenece.
+La metodología a utilizar para realizar la asignación va a depender de la tecnología de secuenciación que se haya utilizado,% para Sanger se suele realizar una asignación directa de la lectura que se obtuvo con alguna base de datos como refseq, mientras que para las tecnologías de segunda generación al ser secuencias parciales del gen 16S
+para las tencologías de tercera generación lo más común es utilizar la base de datos de RefSeq para buscar la secuencia más parecida en la base de datos mediante alguna herramienta de alineamiento como blast. Algunas metodologias exploran también la corrección de errores de estas secuencias y el clustering de las mismas para mejorar la asignación taxonómica. 
+Existen diferentes herramientas para hacer asignación taxonómica de secuencias, algunas incluyen una asignación taxonómica directa a los datos luego del control de calidad, mientras otras herramientas buscan minimizar el error de Oxford Nanopore mediante metodologías de clustering o de algoritmos de maximización de expectativas. 
+Algunas de las más utilizadas para trabajar con datos de Oxford Nanopore se presentan a continuación:
 
-\hl{es posible ponerle numeritos a las subsubsection?}
-
-Hoy en día no hay establecidas buenas practicas para el procesamiento del gen 16S rRNA secuenciado mediante Oxford Nanopore, tanto al hablar de la herramienta para hacer asignación taxonómica, como al hablar de la base de datos al utilizar.\hl{leer para ver si citar https://academic.oup.com/femsec/article/97/3/fiab001/6098400}
 \subsubsection{Epi2me}
 Plataforma desarrollada por Oxford Nanopore para el análisis de datos secuenciación obtenidos mediante sus dispositivos. 
 Integra flujos de trabajo para realizar basecalling y demultiplexación, alineamiento, ensamblaje de SARS-CoV-2, asignación taxonómica de gen 16S, 18S, ITS, y metagenómca, variant calling, entre otros.
@@ -123,14 +165,14 @@ Para la asignación taxónomica del gen 16S utiliza la herramienta blast con la 
 %     \item Porcentaje de identidad mínimo: 77\%
 %     \item max target sequences:
 % \end{itemize}
-El output de esta herramienta es un archivo en formato CSV con la información de la lectura, asignación taxonómica a nivel de especie, porcentaje de identidad de la asignación, entre otras.
+Esta herramienta entrega un archivo en formato CSV con la información de la lectura, asignación taxonómica a nivel de especie, porcentaje de identidad de la asignación, entre otras.
 \subsubsection{NanoCLUST}
 Nanoclust~\cite{10.1093/bioinformatics/btaa900} es un flujo de trabajo desarrollado en Nextflow para la clasificación de amplicones del gen 16s obtenidos mediante secuenciación de Oxford Nanopore. Incluye pasos previos a la asignación taxonomica, como el basecalling, demultiplexación y control de calidad. Destaca por utilizar un clustering no supervisado (UMAP) y un paso exhaustivo de corrección de lecturas basada en los clusters obtenidos previo a la asignación taxonómica.
 Utiliza la base de datos de Genbank para realizar la asignación taxonómica.
 
 Cabe destacar que este flujo de trabajo se encuentra descontinuado ya que fue desarrollado utiilzando Nextflow DSL1 (estándar deprecado en la version 22.10.x). Además, debido a que la herramienta ha dejado de recibir soporte por parte de los desarrolladores, no se han actualizado pasos claves, como el basecalling y demultiplexación (pasos opcionales).
 
-El output de esta herramienta es un archivo csv por cada categoría taxonómica (filo, clase, orden, familia, género, especie) con la cantidad de lecturas asignadas a cada taxonomía. De igual forma, se generan graficos de barra con las asignaciones, y un gráfico de la separación de los clusters. \hl{mejorar}. 
+Esta herramienta entrega un archivo csv por cada categoría taxonómica (filo, clase, orden, familia, género, especie) con la cantidad de lecturas asignadas a cada taxonomía. De igual forma, se generan graficos de barra con las asignaciones, y un gráfico de la separación de los clusters. \hl{mejorar}. 
 \subsubsection{NanoRTax}
 
 NanoRTax~\cite{RODRIGUEZPEREZ20225350} es un flujo de trabajo desarrollado en Nextflow que cuenta con una interfaz web que permite al usuario visualizar el progreso y resultados del pipeline.
@@ -147,6 +189,9 @@ El output de esta herramienta es un archivo en formato TSV con los perfiles taxo
 \subsubsection{EzBioCloud Microbial Taxonomic Profiling (MTP) pipeline and the PKSSU4.0 database}
 En algunos estudios se ha utilizado % https://www.mdpi.com/2076-2607/11/3/804#B1-microorganisms-11-00804 , 
 \subsubsection{VSEARCH [35] against the EzBioCloud 16S database.?}
+
+Hoy en día no hay establecidas buenas practicas para el procesamiento del gen 16S rRNA secuenciado mediante Oxford Nanopore, tanto al hablar de la herramienta para hacer asignación taxonómica, como al hablar de la base de datos al utilizar.\hl{leer para ver si citar https://academic.oup.com/femsec/article/97/3/fiab001/6098400}
+
 \subsection{Herramientas bioinformáticas}
 Existen diferentes herramientas bioinformáticas que se pueden utilizar para el análisis y manipulación de datos de secuenciación, a continuación se presentan algunas de las más relevantes para este trabajo:
 
@@ -156,18 +201,21 @@ Guppy es una suite de herramientas provista por Oxford Nanopore para realizar pr
 FastQC\cite{andrews2010fastqc} permite visualizar la calidad de los datos mediante métricas estándar de calidad, contenido GC, distribución de tamaños, niveles de duplicación  y contenido de adaptadores.
 
 
-Genera un reporte en formato html de fácil visualización separado por módulos, donde cada módulo presenta un estado de Aprobado, Fallido o Advertencia (dependiendo de la calidad de los datos). Se desarrollo pensando en tecnología de secuenciación de lecturas cortas, las cuales poseen un porcentaje de error mucho más bajo que las tecnologías de secuenciación de tercera generación y en análisis de genoma completo, por lo que algunos módulos pueden mostrarse como fallidos debido a la naturaleza de los datos de Oxford Nanopore, sin ser datos de baja calidad.
+Genera un reporte en formato html de fácil visualización separado por módulos, donde cada módulo presenta un estado de Aprobado, Fallido o Advertencia (dependiendo de la calidad de los datos). Se desarrollo pensando en tecnología de secuenciación de lecturas cortas, las cuales poseen un porcentaje de error mucho más bajo (menor al 0.1\%) que las tecnologías de secuenciación de tercera generación (entre \hl{xx y xx} \%) y en análisis de genoma completo, por lo que algunos módulos pueden mostrarse como fallidos debido a la naturaleza de los datos de Oxford Nanopore, sin ser datos de baja calidad.
 \subsubsection{NanoPlot}
 NanoPlot~\cite{10.1093/bioinformatics/btad311} es una herramienta para la evaluación de calidad de datos de secuenciación de lecturas largas, permite visualizar la información de calidad, largo de lecturas y distribución de estas mediantes gráficos interactivos.
 
 Genera un reporte en formato html y gráficos interáctivos que permiten visualizar la calidad de los datos, longitud de las lecturas, distribución de la calidad y longitud, entre otros.
 \subsubsection{Fastp}
 
-Fastp\cite{chen2018fastp} es una herramienta de alto rendimiento diseñada para el procesamiento de archivos fastq, permite realizar filtrado de secuencias (por calidad, largo), recortar extremos de baja calidad, recortar adaptadores, eliminar colas polyA, etc.
+Fastp\cite{chen2018fastp} es una herramienta de alto rendimiento diseñada para el procesamiento de archivos de secuenciación con calidad (fastq), permite realizar filtrado de secuencias (por calidad, largo), recortar extremos de baja calidad, recortar adaptadores, eliminar colas polyA, etc.
 \subsubsection{MultiQC}
 MultiQC \cite{ewels2016multiqc} es una herramienta que permite resumir la información obtenida por diferentes herramientas bioinformaticas en un solo informe final. También permite integrar varias muestras en un solo reporte, y multiples pasos de analisis en un solo archivo html.
 
 % Permite una visualización interactiva de los graficos, mediante la cual se puede hacer zoom o quitar muestras de los 
+
+\subsubsection{Seqkit}
+
 \subsubsection{PICRUSt2}
 PICRUSt2~\cite{douglas2020picrust2} es una herramienta para la predicción funcional utilizando secuencias marcadoras de genes.
 Generalmente se utiliza el gen 16S rRNApara realizar la predicción, pero también se pueden usar otros genes marcadores.
@@ -183,7 +231,7 @@ Vegan~\cite{dixon2003vegan} es un paquete desarrollado para R que permite realiz
 
 
 \subsubsection{Taxonkit}
-Taxonkit~\cite{SHEN2021844} permite la manipulación de información taxónomica de NCBI de una manera comprensiva y eficiente. Dado un identificador taxonómico o un nombre de especie se puede obtener el linage completo de esta.
+Taxonkit~\cite{SHEN2021844} permite la manipulación de información taxónomica de registros de NCBI de una manera eficiente. Dado un identificador taxonómico o un nombre de especie se puede obtener el linage completo de esta.
 
 \subsubsection{csvtk}
 csvtk es una herramienta multiplataforma, eficiente y practica para la manipulación de archivos en formato CSV y TSV. Esta herramienta esta desarrollada para utilizarse en conjunto con otras suites de herramientas como TaxonKit, permitiendo obtener resultados de taxonómia de fácil visualización y manipulación para la integración en flujos de trabajo o scripts.
@@ -206,15 +254,15 @@ Cuenta con una comunidad llamada nf-core que se encarga de desarrollar flujos de
 Framework rápido  y ligero para el desarrollo de APIs modernas de manera ágil utilizando Python y basado en sus anotaciones de tipo estandar.
 Utiliza pydantic para la validación de los datos de entrada y salida y starlette para el manejo de las peticiones HTTP. \hl{no estoy 100\% segura}
 \subsubsection{SQLalchemy}
-ORM (Object-Relational Mapping) para Python que permite la comunicación entre el back end y la base de datos SQL de manera sencilla, transformando los resultados de la base de datos en estructuras utilizables mediante Python. Gestiona la creación de modelos y consultas de forma sencilla.
+Librería de Python que permite la comunicación con base de datos no relacionales de manera sencilla, transformando los registros de la base de datos en objetos utilizables mediante Python. Gestiona la creación de modelos y consultas de forma sencilla.
 \subsubsection{Vue.js}
 Vue es un framework para la construcción de interfaces de usuario. Se basa en JavaScript, HTML y CSS para proporcionar un modelo de programación declarativo y basado en componentes que permite desarrollar interfaces de manera eficiente.
-\subsubsection{TypeScript}
+\subsubsection{TypeScript}  
 TypeScript~\cite{bierman2014understanding} es un lenguaje de programación basado en JavaScript, el cual añade sintaxis adicional a JavaScript (o frameworks basados en JS) para soportar la integración de tipado de datos. Al especificar los tipos de datos, TypeScript tiene la capacidad de validarlos e informar errores cuando estos no correspondan.
 \subsubsection{Vuetify}
 Vuetify es un proyecto de código abierto para la construcción de interfaces utilizando los componentes de Vue. Permite la personalización de los componentes con SASS y SCSS, cuenta con un diseño responsivo, y una gran cantidad de componentes ya predefinidos.
 \subsubsection{PostgreSQL}
-PostgreSQL es un sistema de gestión de bases de datos relacionales de código abierto basado en POSTGRES. Permite el uso de tipos de datos complejos realizar consultas tanto relacionales (SQL) y no relacionales (JSON).
+PostgreSQL es un sistema de gestión de bases de datos relacionales de código abierto que se presentó como la continuación de POSTGRES. Permite el uso de tipos de datos complejos realizar consultas tanto relacionales (SQL) y no relacionales (JSON).
 
 \subsection{Gestores de paquetes}
 \subsubsection{Conda}
@@ -225,10 +273,23 @@ Apptainer (antes llamado Singularity~\cite{kurtzer2017singularity}) simplifica l
 \hl{Creo que no es necesario}
 
 \subsection{Métricas para la evaluación de la diversidad microbiana}
-La diversidad microbiana 
+\hl{que es la diversidad microbioana}
 
-Los índices de diversidad se dividen en índices de riqueza o uniformidad/divergencia
-\subsubsection{Indice de simpson}
-\subsubsection{Indice de shannon}
-\subsubsection{Indice de chao2}
+Los índices de diversidad permiten evaluar diferentes aspectos de la biodiversidad en una comunidad, como la riqueza, dominancia, y uniformidad de los diferentes individuos en una comunidad microbiana. 
+Existen diferentes índices de diversidad, los cuales se pueden dividir en índices de riqueza y de \hl{uniformidad/divergencia}.
+ Los índices de riqueza permiten evaluar la cantidad de especies presentes en una muestra, mientras que los índices de \hl{uniformidad/divergencia} permiten evaluar la distribución de las especies en la muestra. A continuación se presentan algunos de los índices de diversidad más utilizados en la caracterización de comunidades microbianas.   
 
+Los índices de diversidad se dividen en índices de riqueza o uniformidad/divergencia.
+
+
+Riqueza: Número de especies presentes en una comunidad, sin importar la cantidad de orgenismos presentes por cada especie.
+
+Uniformidad: Abundancia relativa de estas especies.
+
+\subsubsection{Diversidad alfa}
+La diversidad alfa 
+\subsubsection{Indice de Simpson}
+ Mide la probabilidad de que al seleccionar dos individuos aleatorios de una meustra, ambos pertenezcan a la misma especie
+
+\subsubsection{Indice de Shannon}
+El índice de Shannon permite medir la uniformidad de una muestra, Conceptualmente representa el grado de incertidumbre al seleccionar un individuo aleatorio en una comunidad. Este índice suele expresarse mediante su complemento (1-D) donde valores cercanos 0 indican baja diversdiad, es decir alta dominancia de algunas especies en especifico, y valores cercanos a 1 indican alta diversidad, es decir una distribución homogenea entre las especies.
