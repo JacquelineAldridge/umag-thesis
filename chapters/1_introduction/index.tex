@@ -32,7 +32,7 @@ Conocer la diversidad microbiana asociada a organismos multicelulares permite co
 \subsection{ARN Ribosomal 16S}
 El ARN ribosomal 16S es un gen perteneciente a la subunidad menor 30S que codifica el rRNA bacteriano y se encuentra en todas las bacterías. 
 Esta compuesto por 1542 pares de bases aproximadamente, divididas en 9 regiones hipervariables entrelazadas con regiones constantes~\cite{clarridge2004impact}.
-Las regiones constantes son compartidas por todas las bacterias, mientras las regiones variables presentan cierto grado de variabilidad cambiando dependiendo de la especie. 
+Las regiones constantes son compartidas por todas las bacterias, mientras las regiones variables presentan cierto grado de variabilidad y cambian dependiendo de la especie. 
 
 
 %%https://www.elsevier.es/es-revista-enfermedades-infecciosas-microbiologia-clinica-28-articulo-identificacion-bacteriana-mediante-secuenciacion-del-13059055#:~:text=El%20ARN%20ribos%C3%B3mico%20(ARNr)%2016S,la%20d%C3%A9cada%20de%2019702.
@@ -63,8 +63,8 @@ Las regiones hipervariables permiten llevar a cabo la caracterización de los mi
 
 
 
-El gold standard para la identifición de bacterias durante muchos años fue el cultivo convencional en laboratorio, sin embargo, el cultivo puede durar desde dias a semanas o incluso meses, y en algunos casos, hay bacterias que se logra cultivar en laboratorio~\cite{didelot2012transforming}. Es por esto, que las tecnolgías de secuenciación de próoxima generación se presentarn como un método novedoso, rápido y preciso que se empezo a usar masivamente para la identidicacion de bacterias mediante la secuenciación del gen 16s~\cite{reller2007detection}.
-Con el desarrollo de las tecnologías de secuenciación masiva, su bajo costo y alto througput (cantidad de información que secuencian), la forma de caracterizar bacterias se ha vuelto más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. El estudio de comunidades microbianas mediante el gen 16S rRNA se ha vuelto una herramienta poderosa tanto en ambientes clínicos como ambientales, permitiendo obtener información de la diversidad de una muestra de manera más rápida y económica que con los métodos tradicionales~\cite{buscar}.
+El gold standard para la identifición de bacterias durante muchos años fue el cultivo convencional en laboratorio, sin embargo, el cultivo puede durar desde días a semanas o incluso meses, y en algunos casos, hay bacterias que no se logran cultivar en laboratorio~\cite{didelot2012transforming}. Es por esto, que las tecnologías de secuenciación de próxima generación se presentaron como una buena alternativa y se empezaron a usar masivamente para secuenciar el gen 16S y caracterizar comunidades al entregar resultados con la suficiente precisión, permitir secuenciar muestras complejas y no solo aislados, y al permitir también secuenciar millones de lecturas al mismo tiempo~\cite{reller2007detection}, haciendo que la forma de caracterizar bacterias sea más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. 
+%El estudio de comunidades microbianas mediante el gen 16S rRNA se ha vuelto una herramienta poderosa tanto en ambientes clínicos como ambientales, permitiendo obtener información de la diversidad de una muestra de manera más rápida y económica que con los métodos tradicionales~\cite{buscar}.
 %Las tecnologías de secuenciación  permiten la identificación de bacterias a través de  \hl{signatures/firmas} únicas 
 
 Existen diferentes bases de datos que contienen la información de las secuencias del gen 16S para las diferentes bacterias, como 16S en bases de datos como RDP (Ribosomal Database Project~\cite{cole2014ribosomal}), 16S RefSeq~\cite{}, Greengenes~\cite{desantis2006greengenes}, Silva~\cite{} y el proyecto de microbioma humano (HMP)~\cite{}.
@@ -82,41 +82,35 @@ La precisión de estas tecnologías se puede medir mediante la precisión de la 
     \label{fig:DNA_sequencing}
 \end{figure}
 
-
-Frederick Sanger introdujó la primera generación de tecnologías de secuenciación en el año 1977 a través del método Sanger, el cuál utiliza el método de terminación de cadena para secuenciar~\cite{sanger1975rapid}. 
+\subsubsection{Primera generación: Sanger}
+Frederick Sanger introdujó la primera generación de tecnologías de secuenciación en el año 1977. El método Sanger utiliza el principio de ''terminación de cadena'' para secuenciar material genético~\cite{sanger1975rapid}. 
 %Esta técnica replica el ADN utilizan nucleotidos modificados marcados con fluorescencia que detienen el proceso de replicación.
-Durante la PCR se añaden nucleótidos modificados (dNTPs) marcados con fluorescencia que al ser incorporados en la cadena de ADN detiene la elongación de la cadena y por ende, la replicación del ADN. Una vez que la reacción ha terminado, se realiza una electroforesis en gel que mediante una aplicación de electricidad que separa las moleculas de ADN por tamaño para luego poder determinar la secuencia de la cadena.
-Ester método permite secuenciar moleculas de hasta \hl{900pb} con una precisión de 99.9\%~\cite{}.  
+Durante la PCR se añaden nucleótidos modificados (ddNTPs) marcados con fluoroforo que al ser incorporados en la cadena de ADN detienen la elongación de la cadena. Una vez que la reacción ha terminado, se realiza una electroforesis capilar que separa las moleculas de ADN por tamaño y con alta resolución para poder determinar la secuencia de la cadena, generando una única secuencia de como máximo 800 pares de bases por corrida.
 
-Sanger se utiliza ampliamente para secuenciar fragmentos individuales de adn (), pero es un método costoso e ineficiente al trabajar en proyectos de secuenciación de gran escala como por ejemplo genomas completos o metagenómica, por lo que para este tipo de proyectos se utilizan tecnologías de secuenciación de segunda y tercera generación.
+La principal ventaja de este método es su alta precisión, siendo ampliamente utilizado en diagnóstico el clínico para la detección de mutaciones puntuales. Además de no requerir capacidad de cómputo ni conocimientos bioinformáticos para la generación de la secuencia.~\cite{BUSCAR}.  
+Entre sus principales desventajas se encuentras que es un método laborioso, costoso e ineficiente al trabajar en proyectos de secuenciación de gran escala como por ejemplo genomas completos o metagenómica.
  
-Las tecnologías de secuenciación de segunda generación como Illumina, IonTorrent, Roche 454 y SOLiD,  utilizaron como base la metodología de interrumpción de cadena propuesta por Sanger. Las tecnlogias de proxima generación secuencian simultaneamente millones de fragmentos cortos de ADN de manera paralela (fragmentos de de hasta \hl{300?} pares de bases) con una precisión de \hl{99.9}\%~\cite{}. 
 
-Sanger permite la caracterización de bacterias mediante el gen 16S a nivel de especie debido a su alta precisión, sin embargo, permite solo secuenciar muestras aisladas donde solo este presente una bacteria a la vez, por lo que no es útil para la caracterización de comunidades microbianas completas.\hl{muy util en la identidicacion de patogenos clinico}
+\hl{Sanger y el gen 16s}
 
-Con la aparición de las tecnologías de secuenciación de segunda y tercera generación~\cite{janda200716s,pollock2018madness}, la secuenciación del gen 16S rRNA se convirtió en es una técnica masiva hoy en día para la caracterización de comunidades microbioanas e identificación tanto de patogenos o aislamiento de bacterias clínicas~\cite{patel200116s}.
-
-Estos métodos requieren la amplificación y secuenciación del gen 16S rRNA y el uso de herramientas biofinformáticas para la identificación y comparación con bases de datos.
-
-Con la secuenciación del gen 16S rRNA se obtiene un conjunto de lecturas de ADN, donde cada lectura pertenece a una bacteria presente en la muestra. Estas lecturas se procesan y se comparán con bases de datos existentes para poder realizar la asignación taxonómica y poder identificar la bacteria. Finalmente lo que se obtiene es un perfil de toda la comunidad bacteriana de la muestra, todas las bacterias presentes que las herramientas bioinformáticas pudieron detectar, junto con su abundancia relativa.
+\subsubsection{Segunda generación: Secuenciación de lecturas cortas}
+Las tecnologías de secuenciación de segunda generación como Illumina, IonTorrent, Roche 454 y SOLiD,  utilizaron como base la metodología de interrupción de cadena propuesta por Sanger donde el ADN se fragmenta y cada base se reconoce mediante la emisión de \hl{una señal fluorescente?} al unirse con la hebra complementaria. Con esta generación de secuenciadores se integró el uso de arreglos (que reemplazan la electroforesis capilar), los cuales permiten amplificar el número de copías de cada fragmento de ADN mediante amplificación clonal mediante PCR o un puente PCR \hl{??}, y gracias a esto se logra tener una secuenciación en paralelo de millones de fragmentos cortos de ADN, llegando a una precisión de \hl{99.9}\%, mediante una secuenciación rápida y de bajo costo~\cite{buscar}.
 
 
-Las tecnologías de secuenciación de próxima generación permiten la secuenciación de multiples fragmentso de ADN al mismo tiempo, permitiendo una secuenciación rápida  y de bajo costo compada con la Sanger.
-
-El umbral para distinguir especies bacterianas utilizando el gen 16S rRNA es de mínimo 97\% de similitud~\cite{kim2014towards}
-\hl{LEEER} https://www.microbiologyresearch.org/content/journal/ijsem/10.1099/ijs.0.059774-0
-
-
-Las tecnologías de secuenciacin de próxima generación presentan ventajas sobre Sanger a la hora de identificación de patogenos, permitiendo la identificacin en pararelo de bacterias en muestras complejas~\cite{peker2019comparison}, como también presenta ventajas tanto en resolución taxonómica como en precisión~\cite{motro2017next}.
-\subsubsection{Illumina}
-\hl{Intrduccion de que es illumina y como funciona illumina}
-
-Ultra-high-throughput microbial community analysis on the Illumina HiSeq and MiSeq platforms.
+Estas tecnologías de secuenciación utilizan la metodologia denominaada \hl{secuenciación pareada} donde cada fragmento de ADN se secuencia en ambas direcciones, lo que permite obtener fragmentos de hasta \hl{}, siendo el tamaño común para Illumina \hl{}.
+Principalmente existen dos metodologías de secuenciación de segunda generación, la secuenciación por síntesis utilizada principalmente por Illumina, y la secuenciación por ligación utilizada por Roche 454 y SOLiD~\cite{mardis2008next}.
+La plataforma de secuenciación más utilizada hoy en día es Illumina, la cual en la secuenciación por síntesis luego de fragmentar y añadir los adaptadores, los fragmentos de ADN se unen a la superficie de la celda y se amplifican localmente para formar clusters de cada fragmento de ADN. En cada ciclo de la secuenciación se añaden nucleótidos marcados con fluoróforos, los cuales luego de registrarse se remueven para continuar con el siguiente ciclo. 
 
 
-Las tecnologías de secuenciación de segunda generación, como Illumina e IonTorrent permiten secuenciar solo una parte del gen 16S rRNA, debido al tamaño de las moleculas que secuencian(lecturas de 200-400pb)~\cite{salipante2014performance}. Esto conlleva a que se deba decidir que región del gen secuenciar, para poder obtener la mayor diversidad posible presente en la muestra. 
+Dentro de sus principales ventajas se encuentra su bajo porcentaje de error y costo,y la gran cantidad de herramientas bioinformáticas ya desarrolladas para trabajar con este tipo de datos. Por otro lado, el tamaño de los fragmentos secuenciados es  de su mayor limitante, haciendo más complejos análisis como el ensamblaje de genomas, resolución de regiones repetitivas, etc.
 
-Illumina se ha convertido hoy en día en el estándar más utilizado para la secuenciación del gen 16S debido a su bajo costo, alta precisión (99.9\%) y cantidad de información que secuencian (throughput)~\cite{pichler201816s}. Sin embargo, esta tecnología esta limitada por el largo de las moléculas que secuencia, debido a que al secuenciar con illumina solo se puede secuenciar una o dos regiones del gen 16S (de las 9 regiones hipervariables), lo que límita la resolución taxónomica, permitiendo asignar correctamente solo a nivel de género~\cite{johnson2019evaluation}.Diversos estudios se han realizado para analizar que región permite obtener esta diversidad de manera precisa~\cite{liu2008accurate,schloss2011reducing}, llegando a descubrirse que ciertos grupos taxonómicos se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}.
+
+
+La caracterización de comunidades microbianas con Illumina se ha convertido en el estandar hoy en día, debido a su bajo costo, cantidad de información a secuenciar y alta precisión. Sin embargo las tecnologías de lecturas cortas permiten secuenciar solo una parte del gen 16S rRNA, debido al tamaño de las moleculas que secuencian(lecturas de 200-400pb)~\cite{salipante2014performance}. Esto conlleva a que se deba decidir que región del gen secuenciar, para poder obtener la mayor diversidad posible presente en la muestra, limitando la resolución taxonómica a nivel de género~\cite{buscar} 
+
+
+%https://sampled.com/short-read-sequencing-vs-long-read-sequencing/#:~:text=Short%2Dread%20sequencing%2C%20as%20the,these%20pieces%20through%20a%20sequencer.
+Diversos estudios se han realizado para analizar que región permite obtener esta diversidad de manera precisa~\cite{liu2008accurate,schloss2011reducing}, llegando a descubrirse que ciertos grupos taxonómicos se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}.
 
 Al secuenciar el gen 16S con Illumina se sabe que existe presencia de ruido, por lo que se deben realizar filtros como la eliminación de quimeras, eliminación de secuencias singleton y otus raros~\cite{caporaso2011global,auer2017analysis}, realizar denoising con dada~\cite{callahan2016dada2} y unoise~\cite{edgar2016unoise2}. Todas estos filtros y metodologias de trabajo no están disponibles para usarse con TGS como Nanopore y PacBio, debido al porcentaje de error y al tamaño de las lecturas.
 Mientras algunos estudios han demostrado, que Nanopore presenta un porcentaje de ruido muy bajo, casi nulo~\cite{szoboszlay2023nanopore}, y a su vez, al secuenciar el gen completo, y no contar con OTUs, o ASV, permite mejorar el rendimiento de los estimadores de riqueza que se basan en estas metodologias, como los índices de chao1~\cite{chao1984nonparametric}, ACE~\cite{chao1992estimating}, o brakaway~\cite{willis2015estimating}
@@ -125,6 +119,32 @@ Mientras algunos estudios han demostrado, que Nanopore presenta un porcentaje de
 Illumina sobrerepresenta el numero de especies debido al ruido? \hl{Nanopore is preferable over ...}
 
 Es por esto, que las tecnologías de tercera generación como Oxford Nanopore y PacBio se presentan como opciones prometedoras para la secuenciación del gen 16S rRNA, debido a su bajo costo y su capacidad de secuenciar el gen completo en una sola lectura, lo que permite una mayor resolución taxonómica a nivel de especie o incluso de strain~\cite{szoboszlay2023nanopore}~\cite{urban2021freshwater,delahaye2021sequencing}. \hl{revisar estas citas}
+
+\subsubsection{Tercera generación: Secuenciación de lecturas largas}
+
+
+
+
+\subsection{xxx}
+
+El umbral para distinguir especies bacterianas utilizando el gen 16S rRNA es de mínimo 97\% de similitud~\cite{kim2014towards}
+\hl{LEEER} https://www.microbiologyresearch.org/content/journal/ijsem/10.1099/ijs.0.059774-0
+
+
+Las tecnologías de secuenciacin de próxima generación presentan ventajas sobre Sanger a la hora de identificación de patogenos, permitiendo la identificacin en pararelo de bacterias en muestras complejas~\cite{peker2019comparison}, como también presenta ventajas tanto en resolución taxonómica como en precisión~\cite{motro2017next}.
+
+Con la aparición de las tecnologías de secuenciación de segunda y tercera generación~\cite{janda200716s,pollock2018madness}, la secuenciación del gen 16S rRNA se convirtió en es una técnica masiva hoy en día para la caracterización de comunidades microbioanas e identificación tanto de patogenos o aislamiento de bacterias clínicas~\cite{patel200116s}.
+Estos métodos requieren la amplificación y secuenciación del gen 16S rRNA y el uso de herramientas biofinformáticas para la identificación y comparación con bases de datos.
+
+\subsubsection{Aplicación tecnologías de secuenciación para la caracterización de comunidades}
+Sanger permite la caracterización de bacterias mediante el gen 16S a nivel de especie debido a su alta precisión, sin embargo, permite solo secuenciar muestras aisladas donde solo este presente una bacteria a la vez, por lo que no es útil para la caracterización de comunidades microbianas completas.\hl{muy util en la identidicacion de patogenos clinico}
+Con la secuenciación del gen 16S rRNA se obtiene un conjunto de lecturas de ADN, donde cada lectura pertenece a una bacteria presente en la muestra. Estas lecturas se procesan y se comparán con bases de datos existentes para poder realizar la asignación taxonómica y poder identificar la bacteria. Finalmente lo que se obtiene es un perfil de toda la comunidad bacteriana de la muestra, todas las bacterias presentes que las herramientas bioinformáticas pudieron detectar, junto con su abundancia relativa.
+
+
+\hl{Intrduccion de que es illumina y como funciona illumina}
+
+Ultra-high-throughput microbial community analysis on the Illumina HiSeq and MiSeq platforms.
+
 
 % \hl{ESTOY VIENDO ACA } https://www.mdpi.com/2076-2607/11/3/804#B1-microorganisms-11-00804
 \subsubsection{Oxford Nanopore}
@@ -269,27 +289,18 @@ PostgreSQL es un sistema de gestión de bases de datos relacionales de código a
 Conda~\cite{anaconda}  es una herramienta de código abierto, multiplataforma  que permite la gestión de paquetes, dependencias y entornos de desarrollo de manera sencilla. Permite aislar entornos virtuales con caracteristicas especificas, lo que facilita la reproducibilidad de los análisis y la portabilidad de los mismos. \hl{já}
 \subsubsection{Apptainer}
 Apptainer (antes llamado Singularity~\cite{kurtzer2017singularity}) simplifica la creación y ejecución de contenedores, asegurando el encapsulamiento de los componentes de softwares necesarios para su reproducibilidad y portabilidad.  
-\subsubsection{Docker}
-\hl{Creo que no es necesario}
 
 \subsection{Métricas para la evaluación de la diversidad microbiana}
-\hl{que es la diversidad microbioana}
 
-Los índices de diversidad permiten evaluar diferentes aspectos de la biodiversidad en una comunidad, como la riqueza, dominancia, y uniformidad de los diferentes individuos en una comunidad microbiana. 
-Existen diferentes índices de diversidad, los cuales se pueden dividir en índices de riqueza y de \hl{uniformidad/divergencia}.
- Los índices de riqueza permiten evaluar la cantidad de especies presentes en una muestra, mientras que los índices de \hl{uniformidad/divergencia} permiten evaluar la distribución de las especies en la muestra. A continuación se presentan algunos de los índices de diversidad más utilizados en la caracterización de comunidades microbianas.   
+Los índices de diversidad permiten evaluar diferentes aspectos de la biodiversidad en una comunidad, como la riqueza, dominancia, y uniformidad de los diferentes individuos en una comunidad. 
+Existen diferentes índices de diversidad, los cuales se pueden dividir en índices de riqueza y de \hl{uniformidad/divergencia}, entendiendo la riqueza como el número de especies presentes en una comunidad (sin importar la cantidad de organismos presentes por cada especie) y la uniformidad como la distribución de las abundancias relativas de cada especies.
 
-Los índices de diversidad se dividen en índices de riqueza o uniformidad/divergencia.
+%Los índices de riqueza permiten evaluar la cantidad de especies presentes en una muestra, mientras que los índices de \hl{uniformidad/divergencia} permiten evaluar la distribución de las especies en la muestra. 
+A continuación se presentan algunos de los índices de diversidad más utilizados en la caracterización de comunidades microbianas.   
+\subsubsection{Índice de Simpson}
+El índice de Simpson mide dominancia y representa la probabilidad de que al seleccionar dos individuos aleatorios de una muestra, ambos pertenezcan a la misma especie. Valores cercanos a 0 indican una alta diversidad y una baja dominancia de algunas especies en especifico
 
-
-Riqueza: Número de especies presentes en una comunidad, sin importar la cantidad de orgenismos presentes por cada especie.
-
-Uniformidad: Abundancia relativa de estas especies.
-
-\subsubsection{Diversidad alfa}
-La diversidad alfa 
-\subsubsection{Indice de Simpson}
- Mide la probabilidad de que al seleccionar dos individuos aleatorios de una meustra, ambos pertenezcan a la misma especie
-
-\subsubsection{Indice de Shannon}
+\subsubsection{Índice de Shannon}
 El índice de Shannon permite medir la uniformidad de una muestra, Conceptualmente representa el grado de incertidumbre al seleccionar un individuo aleatorio en una comunidad. Este índice suele expresarse mediante su complemento (1-D) donde valores cercanos 0 indican baja diversdiad, es decir alta dominancia de algunas especies en especifico, y valores cercanos a 1 indican alta diversidad, es decir una distribución homogenea entre las especies.
+
+\subsubsection{Índice de Chao1}
