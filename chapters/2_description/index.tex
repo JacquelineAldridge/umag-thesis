@@ -211,21 +211,290 @@ Picrust2 + aldex + Lefse
     \caption{Tabla de Resultados}
     \label{tab:db-results}
     \end{table}
-\section{Aplicación Web}
-Se desarrollo una aplicación web mediante Vue3 y FastAPI que permite al usuario subir sus archivos de secuenciación y metadata. Con esto el usuario puede abstraerse de tener conocimiento en línea de comando o ejecución de herrsamientas bioinformaticas o flujos de trabajo, ya que mediante la interfaz web el usuario selecciona los análisis que desea realizar.
-La información ingresada por el usuario es guardada en la base de datos y la misma \hl{plataforma/bd/script} se encarga de ejecutar el pipeline de manera automatica.
-Una vez el pipeline termina de ejecutarse se escriben todos los resultados (\hl{o durante la ejecución}) en la base de datos. La plataforma lee esta información en la base de datos y despliega los resultados en el menu de proyectos y analisis.
 
-\subsection{Middleware}
-\subsection{Security}
+\newpage
+\section{Aplicación Web}
+Se desarrollo una aplicación web mediante Vue3 y FastAPI que permite al usuario subir sus archivos de secuenciación y metadata. 
+Con esto el usuario puede abstraerse de tener conocimiento en línea de comando o ejecución de heramientas bioinformaticas y/o flujos de trabajo, 
+ya que mediante la interfaz web el usuario solo debe seleccionar los análisis que desea realizar.
+La información ingresada por el usuario es guardada en la base de datos y mediante un script se generan los parámetros necesarios para la ejecución del flujo de trabajo.
+Una vez el pipeline termina de ejecutarse se escriben los resultados en la base de datos. 
+La plataforma lee esta información directa de la base de datos y despliega los resultados en forma de tablas y gráficos en la sección de análisis.
+
+A continuación se detalla cada una de las vistas de la aplicación web y su funcionalidad.
+% \subsection{Middleware}
+% \subsection{Security}
 
 \subsection{Login}
-Al ingresar en la página de Login, el usuario deberá ingresar su nombre de usuario y contraseña. En caso de que los datos sean correctos será redireccionado a la página de proyectos (Ver sección \hl{siguiente.}). En caso de que los datos sean incorrectos se mostrará un mensaje de error con el mensaje 
-\textit{“Usuario o contraseña incorrectos”} y deberá ingresar sus credenciales nuevamente.
-\hl{Debo añadir que la gente pueda crear su propia cuenta D;}
+Al ingresar en la página de Login, el usuario deberá ingresar su nombre de usuario y contraseña.
+En caso de que los datos sean correctos será redireccionado a la página de proyectos (Ver sección \ref{projects}).
+En caso de que los datos sean incorrectos se mostrará un mensaje de error \textit{“Usuario o contraseña incorrectos”} y deberá ingresar sus credenciales nuevamente.
+
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/login.png}
+        \caption{Vista de inicio de sesión por defecto \newline}
+        \label{fig:app-login_default}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/login-error.png}
+        \caption{Vista de inicio de sesión con mensaje de error al ingresar credenciales inválidas}
+        \label{fig:app-login_error}
+    \end{subfigure}
+    \caption{Vista de Inicio de sesión}
+    \label{fig:app-login}
+\end{figure}
+
+\hl{Registrarse - vista}
+\subsection{Navbar?}
+
 \subsection{Cambio de contraseña}
-En el caso de que el usuario desee cambiar su contraseña puede hacerlo en esta sección. Para ello deberá escribir su contraseña actual y su nueva contraseña dos veces. En caso de que la contraseña actual sea incorrecta se mostrará un mensaje de error con el mensaje \textit{“Contraseña actual incorrecta”}. En caso de que las contraseñas nuevas no coincidan se mostrará un mensaje de error con el mensaje \textit{“Las contraseñas no coinciden”}. En caso de que la contraseña sea cambiada con éxito se mostrará un mensaje de éxito con el mensaje \textit{“Contraseña cambiada con exito“}.
-\subsection{Resultados/Proyectos}
+Una vez que el usuario validó sus credenciales va a poder acceder a la vista de cambio de contraseña a través de la barra de navegación (Figura~\ref{fig:app-change-psw_default}).
+
+
+
+Para realizar el cambio de contraseña, deberá ingresar su contraseña actual y su nueva contraseña dos veces.
+En caso de que la contraseña sea cambiada con éxito se mostrará el mensaje \textit{“Contraseña cambiada con exito“} (Figura~\ref{fig:app-change-psw-success}).
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/change-psw-def.png}
+        \caption{Vista de cambio de contraseña por defecto \newline}
+        \label{fig:app-change-psw_default}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/change-psw-sucess.png}
+        \caption{Vista de cambio de contraseña realizado con exito}
+        \label{fig:app-change-psw-success}
+    \end{subfigure}
+    % \caption{Vista de Cambio de contraseña (I)}
+    \label{fig:app-change-psw-1}
+\end{figure}
+En caso de que la contraseña actual sea incorrecta se mostrará el mensaje de error  \textit{“Contraseña incorrecta”} (Figura~\ref{fig:app-change-psw_error-1}).
+En caso de que las contraseñas nuevas no coincidan se mostrará el mensaje de error \textit{“Las contraseñas no coinciden”} (Figura~\ref{fig:app-change-psw_error-2})
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/change-psw-error1.png}
+        \caption{Vista de cambio de contraseña al ingresar contraseña incorrecta}
+        \label{fig:app-change-psw_error-1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/change-psw-error2.png}
+        \caption{Vista de cambio de contraseña al ingresar contraseñas que no coinciden}
+        \label{fig:app-change-psw_error-2}
+    \end{subfigure}
+    % \caption{Vista de Cambio de contraseña (II)}
+    \label{fig:app-change-psw-2}
+\end{figure}
+
+En el caso de que la nueva contraseña no cumpla los críterios de seguridad (longitud mínima de 8 caracteres y al menos un número) se mostrará el mensaje de error  \textit{“La contraseña debe tener al menos 8 caracteres / La contraseña debe tener al menos un número”} (Figura~\ref{fig:app-change-psw_error-1}).
+\begin{figure}[H]
+    \includegraphics[width=0.45\linewidth]{images/app/change-psw-error3.png}
+    \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Vista de cambio de contraseña al ingresar una nueva contraseña que no cumple con los críterios de seguridad}
+    \label{fig:app-change-psw_error-3}
+\end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{images/app/chage-psw-def.png}
+%         \caption{a}
+%         \label{fig:subfig1}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{images/app/chage-psw-sucess.png}
+%         \caption{b}
+%         \label{fig:subfig2}
+%     \end{subfigure}
+
+%     \vskip\baselineskip
+
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{images/app/chage-psw-error1.png}
+%         \caption{c}
+%         \label{fig:subfig3}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{images/app/chage-psw-error2.png}
+%         \caption{d}
+%         \label{fig:subfig4}
+%     \end{subfigure}
+
+%     \vskip\baselineskip
+
+%     \begin{subfigure}[b]{0.4\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{images/app/chage-psw-error3.png}
+%         \caption{e}
+%         \label{fig:subfig5}
+%     \end{subfigure}
+    
+%     \caption{Título de la figura principal}
+%     \label{fig:main}
+% \end{figure}
+
+
+\subsection{Nuevo análisis}
+En esta sección el usuario deberá ingresar la información del proyecto, datos de secuenciación, y metadata para poder realizar los análisis. 
+El usuario deberá rellenar la información básica del proyecto como, nombre, descripción, tipo de archivos y mediante un archivo en formato (XLXS) deberá ingresar la información de las muestras. %, como nombre de archivo, nombre de la muestra, barcode (opcional) y grupo (opcional).
+Los datos de secuenciación se debe subir a algún directorio del drive del usuario y se debe dar acceso a la cuenta \textit{nanotax.catg@gmail.com}.
+La figura~\ref{fig:app-new-analysis-def} presenta la vista inicial de la sección de Nuevo análisis.
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/newAnalysis/new-analysis-def.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Vista por defecto de Nuevo análisis}
+    \label{fig:app-new-analysis-def}
+\end{figure}
+
+
+A continuación se describen los datos que el usuario debe rellenar:
+
+\begin{itemize}
+    \item Nombre: Nombre del proyecto a utilizar en la plataforma (sección de visualización de proyectos y resultados).
+    \item Descripción (opcional): Descripción del proyecto, campo opcional.
+    \item Tipo de archivo a subir (POD5, FASTQ): Archivos de secuenciación que se procesarán:
+    \begin{itemize}
+        \item POD5: En caso de querer comenzar desde el proceso de basecalling y demultiplexación de las muestras.
+        \item FASTQ: En caso de querer saltarse el paso de basecalling y demultiplexación e iniciar directamente con el control de calidad y asignación taxonómica.
+    \end{itemize}
+    \item Archivo de metadata en formato XLXS con las siguientes columnas para cada muestra:
+    \begin{itemize}
+        \item file: nombre del archivo subido al drive (obligatorio)
+        \item sample: identificador de la muestra (obligatorio)
+        \item barcode (opcional): barcode que identifica la muestra (en caso de querer realizar basecalling y demultiplexación)
+        \item group (opcional): groupo al que pertenece cada muestra (en caso de querer hacer diferenciación entre grupos)
+        \item \hl{subgroup: subgrupo al que pertenece cada muestra (en caso de querer hacer diferenciación entre subgrupos)}
+    \end{itemize}
+    \item Análisis a realizar:
+    \begin{itemize}
+        \item Basecalling y demultiplexacion
+        \item Asignación taxonomica
+        \item Indices de diversidad
+        \item Predicción funcional
+    \end{itemize}
+\end{itemize}
+
+
+En el lado derecho de la vista se puede visualizar una sección de opciones avanzadas, donde el usuario puede modificar los parámetros por defecto en caso de que quiera modificar el comportamiento del pipeline (gigura~\ref{fig:app-new-analysis-def}). Esta información es seleccionados desde la base de datos la cual almacena los parámetros por defecto del flujo de trabajo.
+
+\hl{Cabe destacar que en caso de que el directorio del drive no contenga la información necesaria, el proyecto se subirá correctamente y luego pasara a un estado de datos inválidos }
+Los filtros y control de calidad se realizan siempre por lo que no aparecerá la opción en la lista de análisis.
+Por defecto basecalling y demuliplexación se encuentra deshabilitado, en caso de que el usuario desee realizar este análisis deberá seleccionarlo, y al hacerlo se desbloqueará la sección de configuración de este análisis (Figura~\ref{fig:app-new-analysis-basecallingON}).
+
+
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/newAnalysis/new-analysis-basecallingON.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Vista de Nuevo análisis habilitando la opción de basecalling y demultiplexación}
+    \label{fig:app-new-analysis-basecallingON}
+\end{figure}
+% La plataforma se encarga de verificar si el archivo de metadata cuenta con la información necesaria para realizar cada analisis. En caso de que el archivo de metadata no cuente con la información necesaria y el usuario desee realizar uno de esos analisis, se desplegara un mensaje de error al lado del análisis indicando que información se debe añadir en el archivo de metadata. Los parámetros que se pueden modificar son los siguientes:
+% \begin{itemize}
+%     \item Basecalling y demultiplexacion: Flowcell, kit de ligación y kit de barcoding utilizados durante la secuenciación. Modelo a utilizar para realizar el basecalling
+%     \item QC: Longitud mínima y máxima en pares de bases de las lecturas, calidad mínima de las lecturas y cantidad de lecturas a utilizar para los análisis posteriores(subsampleo).
+%     \item Predicción funcional: \hl{completar}
+% \end{itemize}
+
+% En la parte derecha del componente el usuario puede visualizar los parámetros por defecto y modificarlos en caso de que lo desee. 
+
+
+Una vez que el usuario presione al botón \textit{Subir proyecto}, la plataforma realiza un proceso de validación para verificar que toda la información subida por el usuario sea correcta. En caso de no serla, la plataforma no permitirá subir el proyecto y podrá presentar alguno de los siguientes mensajes de error:
+\begin{itemize}
+    \item En caso de no completar el nombre del proyecto o el enlace al directorio del drive ambos campos pasarán a estar en color rojo (figura ~\ref{fig:app-new-analysis-type-file-error}).
+    \item En caso de no seleccionar el tipo de archivo a subir, este campo pasará a estar en color rojo y se presentará el siguiente mensaje: \textit{Debe seleccionar el formato de los archivos de entrada} (figura ~\ref{fig:app-new-analysis-type-file-error}).
+    \item En caso de seleccionar el formato de archivo \textit{POD5} y no haber seleccionado el proceso de basecalling y demultiplexación como inicio se presentará el mensaje: \textit{Al iniciar con basecalling debe subir los archivos POD5} (figura ~\ref{fig:app-new-analysis-type-file-error}).
+    \item En caso de seleccionar el formato de archivo \textit{FASTQ} y haber seleccionado el proceso de basecalling y demultiplexación como inicio se presentará el mensaje: \textit{Al iniciar con QC o asignación taxonómica debe subir los archivos FASTQ} (figura ~\ref{fig:app-new-analysis-type-file-error}).
+    \item En caso de que el archivo de metadata no cuente con todas las columnas necesarias se pueden presentar los siguientes mensajes de errores (figura ~\ref{fig:app-new-analysis-type-file-error}) \hl{no todos, solo lo que falte}:
+    \begin{itemize}
+        \item \textit{El archivo de metadata le falta la columna file}
+        \item \textit{El archivo de metadata le falta la columna sample}
+        \item \textit{El archivo de metadata le falta la columna barcode}: Solo en caso de seleccionar basecalling y demultiplexación como inicio del pipeline.
+        \item \textit{El archivo de metadata le falta la columna group}: Solo en caso de querer realizar análisis por grupos (índices de diversidad).
+
+    \end{itemize}
+\end{itemize}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/newAnalysis/pod5-error.png}
+        \caption{Vista de nuevo análisis: Error al seleccionar el tipo del archivo}
+        \label{fig:app-new-analysis-pod5-error}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/newAnalysis/fastq.png}
+        \caption{Vista de nuevo análisis: Error al seleccionar el tipo del archivo}
+        \label{fig:app-new-analysis-fastq-error}
+    \end{subfigure}
+    \caption{Vista de nuevo análisis: Error al seleccionar el tipo del archivo}
+    \label{fig:app-new-analysis-type-file-error}
+\end{figure}
+
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/newAnalysis/errors1.png}
+        \caption{Vista de nuevo análisis: Errores por falta de información}
+        \label{fig:app-new-analysis-nodata-error}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/app/newAnalysis/metadata-error-1.png}
+        \caption{Vista de nuevo análisis: Errores en el archivo de metadata}
+        \label{fig:app-new-analysis-metadata-error}
+    \end{subfigure}
+    \caption{Vista de nuevo análisis: Errores }
+    \label{fig:app-new-analysis-metadata-nodata-error}
+\end{figure}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Resultados/Proyectos} \label{projects}
 Una vez que el usuario valida sus credenciales en la plataforma será redireccionado a la sección de Resultados. En esta sección se mostraran los proyectos que el usuario ha subido a la plataforma, estos proyectos pueden estar en ejecución, finalizados o finalizados con errores. 
 Por cada proyecto se desplegará la información básica en una tarjeta:
 \begin{itemize}
@@ -235,40 +504,7 @@ Por cada proyecto se desplegará la información básica en una tarjeta:
     \item Estado del proyecto (upload\_data / running / failed / finish)
     \item En caso de que el proyecto haya finalizado el usuario podrá acceder a la sección especifica de resultados del proyecto mediante el botón de Ver resultados.
 \end{itemize}
-\subsection{Nuevo análisis}
-En esta sección el usuario podrá ingresar información de un proyecto de secuenciación al cual se le desea realizar los análisis.
 
-El usuario deberá rellenar la información básica del proyecto como, Nombre del proyecto y descripción. El usuario puede subir la información en diferentes formatos, dependiendo del análisis que desee realizar.
-\begin{itemize}
-    \item POD5: En caso de querer comenzar desde el basecalling.
-    \item FASTQ: En caso de querer saltarse el paso de basecalling y demultiplexación e iniciar directamente con el control de calidad o asignación taxonómica.
-\end{itemize}
-
-A continuación el usuario deberá subir un archivo de metadata en formato (XLXS) que deberá contener la información de la muestras:
-\begin{itemize}
-    \item sample: identificador de la muestra (obligatorio)
-    \item barcode: barcode que identifica la muestra (en caso de querer realizar basecalling demultiplexación)
-    \item group: groupo al que pertenece cada muestra (en caso de querer hacer diferenciación entre grupos)
-    \item subgroup: subgrupo al que pertenece cada muestra (en caso de querer hacer diferenciación entre subgrupos)
-\end{itemize}
-
-A continuación el usuario deberá seleccionar los análisis que desea realizar. Cabe destacar que el usuario puede seleccionar todos los análisis o solo algunos de ellos. Los análisis disponibles son:
-\begin{itemize}
-    \item Basecalling y demultiplexacion
-    \item Filtros y control de calidad
-    \item Asignación taxonomica
-    \item Indices de diversidad
-    \item Predicción funcional
-\end{itemize}
-
-La plataforma se encarga de verificar si el archivo de metadata cuenta con la información necesaria para realizar cada analisis. En caso de que el archivo de metadata no cuente con la información necesaria y el usuario desee realizar uno de esos analisis, se desplegara un mensaje de error al lado del análisis indicando que información se debe añadir en el archivo de metadata. Los parámetros que se pueden modificar son los siguientes:
-\begin{itemize}
-    \item Basecalling y demultiplexacion: Flowcell, kit de ligación y kit de barcoding utilizados durante la secuenciación. Modelo a utilizar para realizar el basecalling
-    \item QC: Longitud mínima y máxima en pares de bases de las lecturas, calidad mínima de las lecturas y cantidad de lecturas a utilizar para los análisis posteriores(subsampleo).
-    \item Predicción funcional: \hl{completar}
-\end{itemize}
-
-En la parte derecha del componente el usuario puede visualizar los parámetros por defecto y modificarlos en caso de que lo desee. 
 
 
 En la parte inferior del componente se encuentra el botón de Subir data, el cual al hacer click en el, ingresará la información a la base de datos y copiará los archivos a la plataforma de computo. Una vez que el usuario presionar el botón de subir data, la plataforma se encarga de verificar que se cuente con toda la información necesaria para correr el pipeline.

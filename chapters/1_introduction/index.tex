@@ -1,13 +1,18 @@
 \chapter{Marco teórico y estado del arte}
+%% leer https://www.cd-genomics.com/blog/introduce-to-16s-rrna-and-16s-rrna-sequencing/
 
+Esta tesis busca presentar una nueva alternativa para la caracterización de comunidades microbianas utilizando secuenciación de tercera generación. Para ello se  desarrolló un flujo de trabajo automatizado que permite realizar el procesamiento de los datos de secuenciación (control de calidad, asignación taxonómica, análisis de diversidad, predicción funcional y caracterización de grupos). 
 
-Esta tesis busca presentar una nueva alternativa para la caracterización de comunidades microbianas utilizando secuenciación de tercera generación. Para ello se  desarrolló un flujo de trabajo automatizado que permite realizar el procesamiento de los datos de secuenciación, control de calidad, asignación taxonómica, análisis de diversidad, predicción funcional y caracterización de grupos. 
-Se desarrolló también una aplicación web que ejecuta el flujo de trabajo y presenta los resultados en forma de gráficos y tablas en la plataforma. Para usar la plataforma el usuario debe llenar un formulario con la metadata de la secuenciación, subir los archivos e indicar los análisis a realizar, con esto la plataforma web enviará los datos de secuenciación a la plataforma de alto rendimiento y ejectará el flujo de trabajo, una vez finalizado, los resultados se presentarán en la plataforma web.
+Debido a que la ejecución de pipelines bioinformaticos requiere conocimiento de línea de comando y contar con recursos computacionales, se desarrolló una aplicación que permite al usuario abstraerse del conocimiento computacional requerido al analizar datos. Una vez que el usuario sube sus datos a la plataforma web, ésta envia los datos, ejecuta el flujo de trabajo y presenta los resultados en forma de gráficos y tablas en la plataforma.
+
+% Para usar la plataforma el usuario debe llenar un formulario con la metadata de la secuenciación, subir los archivos e indicar los análisis a realizar, con esto la plataforma web enviará los datos de secuenciación a la plataforma de alto rendimiento y ejectará el flujo de trabajo, una vez finalizado, los resultados se presentarán en la plataforma web.
 
 A continación se presenta el marco teórico y estado del arte de los conceptos necesarios para el desarrollo de esta tesis, como qué es la microbiota, el gen 16S rRNA, tecnologías de secuenciación y sus usos, las diferentes herramientas bioinformáticas para el análisis de datos y herramientas para el desarrollo de la aplicación web.
-\section{Gen 16S para el estudio de comunidades microbioanas /  Estudio de microbiota a traves del gen 16S y tecnologías de secuenciacion}
+\section{Estudio de microbiota a traves del gen 16S y tecnologías de secuenciacion}
 \subsection{Microbiota}
-La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos~\cite{gilbert2018current}, animales~\cite{bahrndorff2016microbiome} o plantas~\cite{berendsen2012rhizosphere}, y también en ambientes naturales como el océano~\cite{doi:10.1126/science.aac8455} y el suelo~\cite{banerjee2023soil}. Estos organismos que componen la microbiota se encuentran en un estado de simbiosis junto con el huesped, contribuyendo en funciones vitales como la homeostasis, regulación del sistema inmune, digestión de alimentos, producción de vitaminas, protección ante enfermedades y agentes patógenos~\cite{marco2021defining,fijan2014microorganisms,altvecs2020interaction,hou2022microbiota}. Sin embargo, una disbiosis o una baja diversidad en la microbiota puede llevar a una desregulación en el organismo huesped, incluyendo diversos tipos de enfermedades, fallas en el sistema inmune, falta de vitaminas, trastornos como depresión, estrés, e incluso diferentes tipos de cáncer en el caso del ser humano~\cite{altvecs2020interaction,hou2022microbiota}.
+La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos~\cite{gilbert2018current}, animales~\cite{bahrndorff2016microbiome} o plantas~\cite{berendsen2012rhizosphere}, y también en ambientes naturales como el océano~\cite{doi:10.1126/science.aac8455} y el suelo~\cite{banerjee2023soil}. 
+Estos organismos que componen la microbiota se encuentran en un estado de simbiosis junto con el huesped, contribuyendo en funciones vitales como la homeostasis, regulación del sistema inmune, digestión de alimentos, producción de vitaminas, protección ante enfermedades y agentes patógenos~\cite{marco2021defining,fijan2014microorganisms,altvecs2020interaction,hou2022microbiota}. 
+Sin embargo, una disbiosis o una baja diversidad en la microbiota se puede asociar a una desregulación en el organismo huesped, incluyendo diversos tipos de enfermedades, fallas en el sistema inmune, falta de vitaminas, trastornos como depresión, estrés, e incluso diferentes tipos de cáncer en el caso del ser humano~\cite{altvecs2020interaction,hou2022microbiota}.
 
 La composición de la microbiota va cambiando dependiendo del área de estudio, pudiéndose encontrar diferentes microorganismos en las cavidades orales, zonas intestinales, genitales, cutáneas o tracto respiratorio~\cite{ursell2012interpersonal}.
 
@@ -27,14 +32,15 @@ La interacción con el medio ambiente también influye, habiendo estudios que id
 % Microbiota: Microorganismos vivos encontrados en un ambiente definido (como por ejmplo en los tejidos orales o intestinales)
 
 % microbioma: Colección de genomas de todos estos microorganismos en el ambiente (no solo las comunidades, elementos de su estructura microbial, metabolitos.)
-Conocer la diversidad microbiana asociada a organismos multicelulares permite ahondar en la relación existente entre microbios y la salud de los seres vivos, asi como conocer microorganismos patógenos que causan enfermedades infecciosas, ayuda al diagnóstico y permite tomar acciones oportunas. Este conocimiento ayuda modular la nutrición, salud y enfermedades a través del estudio del microbioma tomando en consideración los distintos factores asociados al estilo de vida.
+Conocer la diversidad microbiana asociada a organismos multicelulares permite ahondar en la relación existente entre microbios y la salud de los seres vivos, asi como conocer microorganismos patógenos que causan enfermedades infecciosas, ayuda al diagnóstico y permite tomar acciones oportunas. 
+Este conocimiento ayuda modular nutrición, salud y enfermedad a través del estudio del microbioma tomando en consideración los distintos factores asociados al estilo de vida.
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6009232/
 \subsection{ARN Ribosomal 16S}
 %% seleccion region
 %% https://search.brave.com/search?q=16s+gene+what+are+constant+and+variables+reigon&source=desktop
 El ARN ribosomal 16S es un gen perteneciente a la subunidad menor 30S que codifica el rRNA bacteriano y se encuentra en todas las bacterías. 
 Esta compuesto por 1542 pares de bases aproximadamente, divididas en 9 regiones hipervariables entrelazadas con regiones constantes~\cite{clarridge2004impact}.
-Las regiones constantes son compartidas por todas las bacterias, mientras las regiones variables presentan cierto grado de variabilidad entre las especie. 
+Las regiones constantes son compartidas por todas las bacterias, mientras las regiones variables presentan cierto grado de variabilidad entre las especies. 
 
 
 %%https://www.elsevier.es/es-revista-enfermedades-infecciosas-microbiologia-clinica-28-articulo-identificacion-bacteriana-mediante-secuenciacion-del-13059055#:~:text=El%20ARN%20ribos%C3%B3mico%20(ARNr)%2016S,la%20d%C3%A9cada%20de%2019702.
@@ -42,7 +48,7 @@ Las regiones constantes son compartidas por todas las bacterias, mientras las re
 %El gen 16S rRNA esta compuesto de aproximadamente 1542 pares de bases divididas en 10 regiones conservadas y 9 regiones hipervariables.%, las cuales permiten llevar a cabo la  identificación de los organismos. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{images/16S.png}
+    \includegraphics[width=1\linewidth]{images/16s_diagram-2.pdf}
     \caption{Estructura de las regiones constantes e hipervariables del gen 16S rRNA}
     \label{fig:16S_structure}
 \end{figure}
@@ -53,20 +59,19 @@ Las regiones constantes son compartidas por todas las bacterias, mientras las re
 %     \label{fig:16S_structure2}
 % \end{figure}
 
-\hl{hacer denuevo la figura}
 
 El uso de la macromolécula del ARN ribosomal  16S para el estudio de relaciones filogenéticas y de bacterias fue propuesto por Carl Woese a principios de 1970~\cite{olsen1993ribosomal}.
 Sus caracteristicas únicas como su presencia en todas las bacterias, su alto grado de conservación (debido a que su función no cambia a través del tiempo) y su tamaño (el cuál permite ser lo suficientemente largo y preciso para la asignación taxónomica, y abordable para análisis bioinformáticos) hacen que hoy en día sea el marcador molecular más utilizado para la identificación de bacterias y comunidades microbianas~\cite{reller2007detection,janda200716s,lopez2023determining,patel200116s}.
 
 
-Las regiones hipervariables permiten llevar a cabo la caracterización de los microorganismos, siendo la metodología más utilizada el secuenciar parcialmente el gen 16S, es decir, secuenciar una o dos regiones y realizar la asignación taxónomica en base a la región secuenciada. Diversos estudios se han llevado a cabo para determinar los efectos de la selección de la región a utilizar para la identificación, llegandose a determinar que la región hipervariable ha secuenciar influye en los resultados de la comunidad y en la diversidad de microorganismos que se caracteriza~\cite{klindworth2013evaluation,mizrahi2013taxonomic,guo2013taxonomic,soergel2012selection}.
+Las regiones variables permiten llevar a cabo la caracterización de los microorganismos, siendo la metodología más utilizada el secuenciar parcialmente el gen 16S, es decir, secuenciar una o dos regiones y realizar la asignación taxónomica en base a la región secuenciada. Diversos estudios se han llevado a cabo para determinar los efectos de la selección de la región a utilizar para la identificación, llegandose a determinar que la región hipervariable ha secuenciar influye en los resultados de la comunidad y en la diversidad de microorganismos que se caracteriza~\cite{klindworth2013evaluation,mizrahi2013taxonomic,guo2013taxonomic,soergel2012selection}.
 
 %\hl{Evaluation of general 16S ribosomal RNA gene PCR primers for classical and next-generation sequencing-based diversity studies} \hl{The impact of DNA polymerase and number of rounds of amplification in PCR on 16S rRNA gene sequence data, mSphere, vol. 4, 2019}
 
 
 
 El gold standard para la identifición de bacterias durante muchos años fue el cultivo convencional en laboratorio, sin embargo, el cultivo puede durar desde días a semanas o incluso meses, y en algunos casos, hay bacterias que no se logran cultivar en laboratorio~\cite{didelot2012transforming}. 
-Es por esto, que las tecnologías de secuenciación de próxima generación se presentaron como una buena alternativa y se empezaron a usar masivamente para secuenciar el gen 16S y caracterizar comunidades al permitir secuenciar comunidades complejas (y no solo aislados) y al permitir secuenciar millones de lecturas al mismo tiempo~\cite{reller2007detection}, haciendo que la forma de caracterizar bacterias sea más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. 
+Es por esto, que las tecnologías de secuenciación de nueva generación se presentaron como una buena alternativa y se empezaron a usar masivamente para secuenciar el gen 16S y caracterizar comunidades al permitir secuenciar comunidades complejas (y no solo aislados) y al permitir secuenciar millones de lecturas al mismo tiempo~\cite{reller2007detection}, haciendo que la forma de caracterizar bacterias sea más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. 
 %El estudio de comunidades microbianas mediante el gen 16S rRNA se ha vuelto una herramienta poderosa tanto en ambientes clínicos como ambientales, permitiendo obtener información de la diversidad de una muestra de manera más rápida y económica que con los métodos tradicionales~\cite{buscar}.
 %Las tecnologías de secuenciación  permiten la identificación de bacterias a través de  \hl{signatures/firmas} únicas 
 
@@ -74,15 +79,15 @@ Es por esto, que las tecnologías de secuenciación de próxima generación se p
 
 
 
-añadir: GEN 16S RRNA ES el gold standar para analisis filogeneticos~\cite{boers2019understanding}.
+%añadir: GEN 16S RRNA ES el gold standar para analisis filogeneticos~\cite{boers2019understanding}.
 
-Las regiones constantes se utilizan para el diseño de primers a utilizar durante la amplificación (PCR), LAS REGIONES hipervariales se utilizan para la identificación de diversidad en procariontes~\cite{chakravorty2007detailed}.
+%Las regiones constantes se utilizan para el diseño de primers a utilizar durante la amplificación (PCR), LAS REGIONES hipervariales se utilizan para la identificación de diversidad en procariontes~\cite{chakravorty2007detailed}.
 \subsection{Secuenciación de ADN}
 Todo ser vivo cuenta con una molécula de ADN que contiene la información genética del individuo. Ésta información se códifica a través de bases nitrogenadas: adenina (A),timina (T), guanina (G) y citosina (C)~\cite{watson1953molecular}. 
 Para determinar esta secuencia de nucleótidos se han desarrollado diferentes técnicas las que se conocen como secuenciación de ADN. 
 
 Las tecnologías de secuenciación se pueden dividir en tres generaciones, cada una con diferentes características, como los largos de las moleculas a secuenciar, porcentaje de error, costo y cantidad de información que secuencian (\textit{throughput}).
-Las tecnologías de secuenciación de nueva generación (NGS) involucran las tecnologías de segunda y tercera generación (short reads y long reads respectivamente) y se diferencian de la primera generación de secuenciación por la cantidad de información que permiten obtener en la secuenciación, y por haber reducido notablemente los costos y tiempos de secuenciación, pero presentando un porcentaje de error mayor~\cite{kumar2024next}. 
+Las tecnologías de secuenciación de nueva generación (NGS) involucran las tecnologías de segunda y tercera generación (short-reads y long-reads respectivamente) y se diferencian de la primera generación de secuenciación por la cantidad de información que permiten obtener en la secuenciación, y por haber reducido notablemente los costos y tiempos de secuenciación, pero presentando un porcentaje de error mayor~\cite{kumar2024next}. 
 
 Independiente de la tecnología de secuenciación a utilizar, el proceso de secuenciación de ADN se puede dividir en tres etapas: preparación de librería, secuenciación y análisis de las datos. Durante la preparación de las librerias el ADN se fragmenta en tamaños manejables para el secuenciador que luego son secuenciados. El resultado de la secuenciación es un conjunto de secuencias de nucleótidos conocidas como \textit{read} o lectura.
 Debido a las diferentes caracterisitcas de cada generación, al analizar las secuencias los análisis bioinformáticos y herramientas a utilizar también cambian dependiendo principalmente de la precisión del secuenciador utilizado y el tamaño de las lecturas producidas~\cite{bierman2014understanding}.
@@ -105,7 +110,8 @@ Durante la PCR se añaden nucleótidos modificados (ddNTPs) marcados con fluorof
 La principal ventaja de este método es su alta precisión (99.999\%), siendo ampliamente utilizado en diagnóstico clínico para la detección de mutaciones puntuales. Además de no requerir capacidad de cómputo ni conocimientos bioinformáticos para la generación de la secuencia.  
 Entre sus principales desventajas se encuentras que es un método laborioso, costoso e ineficiente al trabajar en proyectos de secuenciación de gran escala como por ejemplo genomas completos o metagenómica debido a la cantidad de información que se puede obtener en la secuenciación, ya que permite obtener una sola secuencia por corrida.
  
-Debido a su alta precisión, al secuenciar el gen 16S con Sanger se permite la caracterización a nivel de especie, pero también se pueden encontrar algunas limitantes, como por ejemplo que esta técnica permite detectar una sola especie a la vez. En caso de tener una muestra aislada, la secuenciación permitirá determinar la especie asociada al aíslado, pero en el caso de que la muestra presente más de una bacteria, la señal que se obtendra será una mezcla de las diferentes bacterias, por lo que será imposible realizar una caracterización. Esto limita su uso en comunidades complejas o infecciones polibacterianas ~\cite{lamoureux2022prospective}, donde para identificar la comunidad se deben usar tecnologías de secuenciación de proxima generación.
+Debido a su alta precisión, al secuenciar el gen 16S con Sanger se permite la caracterización a nivel de especie, pero también se pueden encontrar algunas limitantes, como por ejemplo que esta técnica permite detectar una sola especie a la vez. En caso de tener una muestra aislada, la secuenciación permitirá determinar la especie asociada al aíslado, pero en el caso de que la muestra presente más de una bacteria, la señal que se obtendra será una mezcla de las diferentes bacterias, por lo que será imposible realizar una caracterización. 
+Esto limita su uso en comunidades complejas o infecciones polibacterianas ~\cite{lamoureux2022prospective}, donde para identificar la comunidad se deben usar tecnologías de secuenciación de nueva generación.
 \subsubsection{Segunda generación: Secuenciación de lecturas cortas}
 Las tecnologías de secuenciación de segunda generación más importantes son Illumina, IonTorrent y Roche 454. Éstas utilizan el principio de síntesis de cadena complementaria y una señal asociada al nucleótido incorporado (que puede ser fluorescencia, iones cargados, entre otros). %al unirse con la hebra complementaria. 
 Esta generación de secuenciadores se caracteriza por ser rápida, de bajo costo, y por permitir obtener simultaneamente millones de moleculas de ADN mediante amplificación clonal o \textit{bridge} PCR, generado en paralelo millones de fragmentos cortos de ADN, de entre 35 a 600 pares de bases, con una precisión de 99.9\%.%, mediante una secuenciación rápida y de bajo costo~\cite{kumar2024next}.
@@ -126,7 +132,7 @@ Dentro de las principales ventajas de las tecnologías de lecturas cortas se enc
 La caracterización de comunidades microbianas con Illumina se ha convertido en el estándar, debido a su bajo costo,througput y alta precisión. Sin embargo las tecnologías de lecturas cortas permiten secuenciar solo una parte del gen 16S rRNA, debido al tamaño de las moleculas que secuencian (lecturas de entre 200 a 400pb)~\cite{salipante2014performance}. 
 Diversos estudios se han realizado para analizar qué región permite obtener la mayor diversidad posible y de manera más precisa~\cite{liu2008accurate,schloss2011reducing}. También se ha determinado que existen grupos taxonómicos que se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}. De igual forma se ha determinado que al realizar una secuenciación parcial del gen 16S la resolución taxonómica es menor, llegandose a identificar solo hasta el nivel de género~\cite{liu2008accurate}.
  
-Es por esto, que las tecnologías de tercera generación, Oxford Nanopore y PacBio se presentan como opciones prometedoras para la secuenciación del gen 16S rRNA, debido a su bajo costo y su capacidad de secuenciar el gen completo en un solo \textit{read}, lo que permite una mayor resolución taxonómica a nivel de especie o incluso de cepa~\cite{szoboszlay2023nanopore}.%~\cite{urban2021freshwater,delahaye2021sequencing}. \hl{revisar estas citas}
+Es por esto, que las tecnologías de tercera generación, Oxford Nanopore y PacBio se presentan como opciones prometedoras para la secuenciación del gen 16S rRNA, debido a su bajo costo y su capacidad de secuenciar el gen completo en un solo \textit{read}, lo que permite una mayor resolución taxonómica a nivel de especie o incluso de cepa~\cite{szoboszlay2023nanopore,10.1186/s13742}.%~\cite{urban2021freshwater,delahaye2021sequencing}. \hl{revisar estas citas}
 
 %-----------------
 
@@ -153,8 +159,7 @@ Oxford Nanopore secuencia mediante la medición de las variaciones de corriente 
 Su principal ventaja frente a las tecnologías de primera y segunda generación es la obtención de lecturas largas de mas de 1kb, llegando incluso a obtener lecturas de 1.5Mb en el caso de Oxford Nanopore y 200kb en el caso de PacBio, lo que permite la resolución de regiones repetitivas o complejas, como también la identificación de variantes estructurales e identificación de modificaciones epigeneticas de manera mucho más sencilla que al utilizar \textit{short-reads}. 
 Dentro de sus principales desventajas se encuentra el porcentaje de error generado por estas plataformas, qué mediante mejoras en la química ha ido disminuyendo pasando de cerca de un 15\% ~\cite{deamer2016three} a menos 1\% para Oxford Nanopore con su nueva química Q20+\footnote{https://nanoporetech.com/accuracy}~\cite{cuber2023comparing} y menor a 0.1\% para PacBio~\cite{cuber2023comparing}.
 
-Las tecnologías de secuenciación de lecturas largas permiten secuenciar el amplicon completo del gen 16S, con esto se logra una mayor resolución taxonómica, permitiendo la identificación de especies y cepas de manera precisa~\cite{szoboszlay2023nanopore}. 
-Debido a que las tecnologías de tercera generación generan lecturas más largas que las tecnologías de segunda generación, las herramientas utilizadas para caracterizar las comunidades microbianas con las tecnologías cortas son diferentes, ya que no se deben realizar el mismo procesamientos de las secuencias. \hl{completar}
+%Debido a que las tecnologías de tercera generación generan lecturas más largas que las tecnologías de segunda generación, las herramientas utilizadas para caracterizar las comunidades microbianas con las tecnologías cortas son diferentes, ya que no se deben realizar el mismo procesamientos de las secuencias. 
 %La cantidad de reads en una posición determinada (ya sea en una referencia o alineadas entre las mismas lecturas) de conoce como \textit{depth} o profundidad, y permite determinar la confianza o precisión de la secuencia~\cite{kumar2024next}.
 
 Con la aparición de las tecnologías de secuenciación de segunda y tercera generación~\cite{janda200716s,pollock2018madness}, la secuenciación del gen 16S rRNA se convirtió en  una técnica masiva para la identificación y caracterización de comunidades microbioanas y de patógenos o aislamiento de bacterias clínicas~\cite{patel200116s}.
@@ -184,6 +189,64 @@ Con la aparición de las tecnologías de secuenciación de segunda y tercera gen
 %En sus inicios, la mayor limitante de utilizar Oxford Nanopore era su alto porcentaje de error. En el 2019 estudios reportaban que llegar a una resolución de especie no era aún posible con Nanopore~\cite{winand2019targeting}. Estudios posteriores, determinaron que la precisión de secuenciación se encontraba entre el 92\% al cerca del 96\%~\cite{urban2021freshwater,delahaye2021sequencing}, siendo aún inviable para la asignación taxonómica a nivel de especie \hl{creo que deberia tener cuidado con esto, ya que este paper lo dice, pero otros no}. Sin embargo, con la introducción de la nueva química a finales del 2021, el porcentaje de error reportado por nanopore disminuye notablemente, llegando a un 99.9\% de precisión, permitiendo la resolución taxónomica de especie~\cite{yoon2017introducing}.\hl{buscar más citas}
 
 
+\subsection{Métricas para la evaluación de la diversidad microbiana}
+Los índices de diversidad permiten cuantificar y describir propiedades generales de las comunidades, como la riqueza, dominancia, y uniformidad.  %de los diferentes individuos en una comunidad. 
+Existen diferentes índices de diversidad, los cuales se pueden dividir en índices de riqueza y de uniformidad, entendiendo la riqueza como el número de especies presentes en una comunidad (sin importar la cantidad de organismos presentes por cada especie) y la uniformidad como la distribución de las abundancias relativas de cada especies.
+
+%Los índices de riqueza permiten evaluar la cantidad de especies presentes en una muestra, mientras que los índices de \hl{uniformidad/divergencia} permiten evaluar la distribución de las especies en la muestra. 
+A continuación se presentan algunos de los índices de diversidad más utilizados en la caracterización de comunidades microbianas.   
+
+
+%dominancia: grado en que uba especie es más abundante que las demás
+\subsubsection{Índice de Simpson}
+El índice de Simpson mide dominancia y representa la probabilidad de que al seleccionar dos individuos aleatorios de una muestra, ambos pertenezcan a la misma especie. 
+
+Este índice varía entre 0 y 1.  
+Valores cercanos a 0 indican una alta diversidad y una baja dominancia de algunas especies en especifico, es decir, al seleccionar dos individuos al azar, la probabilidad de que pertenezcan a la misma especie es baja. 
+Valores cercanos a 1 indican una baja diversidad y alta dominancia, es decir una distribución más homogenea. (alta probablidad de que al seleccionar dos individuos al azar sean de la misma especie).
+\begin{center}
+\begin{math}
+D = \sum_{i=1}^{S} \left( \frac{n_i (n_i - 1)}{N (N - 1)} \right)
+\end{math}
+\end{center}
+
+donde: 
+\begin{itemize}
+    \item $S$ es el número total de especies
+    \item $n_i$ es el número de individuos de la especie $i$
+    \item $N$ es el número total de individuos en la muestra
+\end{itemize}
+Este índice suele expresarse mediante su complemento (1-D) o su inverso (1/D), donde valores cercanos a 1 indican mayor diversidad de especies.
+
+\subsubsection{Índice de Shannon}
+Este índice permite cuantificar la variedad de especies, tomando en consideración sus abundancias relativas.
+
+\begin{center}
+    \begin{math}
+H' = - \sum_{i=1}^{S} p_i \ln(p_i)
+\end{math}
+\end{center}
+donde:
+\begin{itemize}
+    \item $S$ es el número total de especies
+    \item $p_i$ es la proporción de individuos de la especie $i$ respecto al total de individuos
+\end{itemize}
+
+
+Valores mayores a 3 indican una diversidad muy alta, valores entre 2 y 3 indican que las especies estan en equilibrio y valores inferiores a 2 indican baja diversidad.
+\subsubsection{Índice de Chao1}
+El índice de Chao1 es un estimador de ríqueza que permite obtener un estimado del número total de especies (incluyendo aquellas no detectadas debido a un muestreo insuficiente).
+\begin{center}
+    \begin{math}
+\hat{S}_{Chao1} = S_{obs} + \frac{F_1^2}{2F_2}
+\end{math}
+\end{center}
+donde:
+\begin{itemize}
+    \item $S_{obs}$ es el número de especies observadas.
+    \item $F_1$ es el número de especies observadas que solo se encuentran una vez (singletons).
+    \item $F_2$ es el número de especies observadas que se encuentran exactamente dos veces (doubletons).
+\end{itemize}
 \section{Herramientas}
 El desarrollo de un flujo de trabajo automatizado para la caracterización de comunidades microbionas requiere el uso de diferentes herramientas bioinformáticas para el procesamiento de las secuencias, control de calidad, asignación taxonómica con base de datos, análisis de diversidad, caracterización funcional, etc. Por otro lado, el desarrollo de la aplicación web que estará enlazada al flujo de trabajo, requiere del uso diferentes tecnologías web, librerías y de bases de datos para el almacenamiento de la información, generación de gráficos, y procesamiento de información. A continuación se presentan las principales herramientas a utilizar durante esta tesis.
 \subsection{Asignación taxónomica}
@@ -317,61 +380,3 @@ Conda~\cite{anaconda}  es una herramienta de código abierto, multiplataforma  q
 \subsubsection{Apptainer}
 Apptainer (antes llamado Singularity~\cite{kurtzer2017singularity}) simplifica la creación y ejecución de contenedores, asegurando el encapsulamiento de los componentes de softwares necesarios para su reproducibilidad y portabilidad.  
 
-\subsection{Métricas para la evaluación de la diversidad microbiana}
-Los índices de diversidad permiten cuantificar y describir propiedades generales de las comunidades, como la riqueza, dominancia, y uniformidad.  %de los diferentes individuos en una comunidad. 
-Existen diferentes índices de diversidad, los cuales se pueden dividir en índices de riqueza y de \hl{uniformidad/divergencia}, entendiendo la riqueza como el número de especies presentes en una comunidad (sin importar la cantidad de organismos presentes por cada especie) y la uniformidad como la distribución de las abundancias relativas de cada especies.
-
-%Los índices de riqueza permiten evaluar la cantidad de especies presentes en una muestra, mientras que los índices de \hl{uniformidad/divergencia} permiten evaluar la distribución de las especies en la muestra. 
-A continuación se presentan algunos de los índices de diversidad más utilizados en la caracterización de comunidades microbianas.   
-
-
-%dominancia: grado en que uba especie es más abundante que las demás
-\subsubsection{Índice de Simpson}
-El índice de Simpson mide dominancia y representa la probabilidad de que al seleccionar dos individuos aleatorios de una muestra, ambos pertenezcan a la misma especie. 
-
-Este índice varía entre 0 y 1.  
-Valores cercanos a 0 indican una alta diversidad y una baja dominancia de algunas especies en especifico, es decir, al seleccionar dos individuos al azar, la probabilidad de que pertenezcan a la misma especie es baja. 
-Valores cercanos a 1 indican una baja diversidad y alta dominancia, es decir una distribución más homogenea. (alta probablidad de que al seleccionar dos individuos al azar sean de la misma especie).
-\begin{center}
-\begin{math}
-D = \sum_{i=1}^{S} \left( \frac{n_i (n_i - 1)}{N (N - 1)} \right)
-\end{math}
-\end{center}
-
-donde: 
-\begin{itemize}
-    \item $S$ es el número total de especies
-    \item $n_i$ es el número de individuos de la especie $i$
-    \item $N$ es el número total de individuos en la muestra
-\end{itemize}
-Este índice suele expresarse mediante su complemento (1-D) o su inverso (1/D), donde valores cercanos a 1 indican mayor diversidad de especies.
-
-\subsubsection{Índice de Shannon}
-Este índice permite cuantificar la variedad de especies, tomando en consideración sus abundancias relativas.
-
-\begin{center}
-    \begin{math}
-H' = - \sum_{i=1}^{S} p_i \ln(p_i)
-\end{math}
-\end{center}
-donde:
-\begin{itemize}
-    \item $S$ es el número total de especies
-    \item $p_i$ es la proporción de individuos de la especie $i$ respecto al total de individuos
-\end{itemize}
-
-
-Valores mayores a 3 indican una diversidad muy alta, valores entre 2 y 3 indican que las especies estan en equilibrio y valores inferiores a 2 indican baja diversidad.
-\subsubsection{Índice de Chao1}
-El índice de Chao1 es un estimador de ríqueza que permite obtener un estimado del número total de especies (incluyendo aquellas no detectadas debido a un muestreo insuficiente).
-\begin{center}
-    \begin{math}
-\hat{S}_{Chao1} = S_{obs} + \frac{F_1^2}{2F_2}
-\end{math}
-\end{center}
-donde:
-\begin{itemize}
-    \item $S_{obs}$ es el número de especies observadas.
-    \item $F_1$ es el número de especies observadas que solo se encuentran una vez (singletons).
-    \item $F_2$ es el número de especies observadas que se encuentran exactamente dos veces (doubletons).
-\end{itemize}
