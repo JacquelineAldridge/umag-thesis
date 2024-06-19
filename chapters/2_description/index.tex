@@ -7,15 +7,105 @@
     \label{fig:16S_workflow}
 \end{figure}
 \section{Flujo de trabajo}
-Se desarrolló un flujo de trabajo automatizado en Nextflow que permite el análisis y caracterización de secuencias del gen 16S obtenidas mediante Oxford Nanopore. El flujo de trabajo está desarrollo de manera modular permitiendo que el usuario pueda personalizar su ejecución, agregando o quitando subworkflows o módulos según sus necesidades. Cuenta con los siguientes módulos:
+Se desarrolló un flujo de trabajo automatizado en Nextflow que permite el análisis y caracterización de secuencias del gen 16S obtenidas mediante Oxford Nanopore. 
+El pipeline cuenta con los siguientes módulos: Basecalling y demultiplexación (\textit{basecalling}), Control de calidad (\textit{qc}), Asignación taxonómica (\textit{taxonomic\_assignament}), Indices de diversidad (\textit{diversity}) y Predicción funcional (\textit{functional\_predicction}).
+El flujo de trabajo está desarrollo de manera modular permitiendo que el usuario pueda personalizar su ejecución, agregando o quitando módulos de análisis mediante un archivo de configuración. 
+
+\subsection{Archivo de configuración}
+Este archivo permite activar o desactivar cada módulo de manera individual y pasar parámetros específicos para modificar su ejecución. 
+Además, el archivo de configuración incluye información sobre los archivos de entrada del flujo de trabajo, nombre de las muestras y grupos asociados en un formato de diccionario.
+Para la ejecución del flujo de trabajo se requiere un archivo de configuración en formato YAML que contiene los parámetros necesarios para la ejecución del pipeline. 
+A continuación se presenta un ejemplo de archivo de configuración:
+
+
+
+\subsection{Estructura del flujo de trabajo}
+\subsubsection{Basecalling y demultiplexación}
+\hl{hacer}
+\subsubsection{Control de calidad}
+Este módulo siempre se ejecuta  \hl{excepto que..} y es el encargado de realizar los filtros y control de calidad de las muestras.
+La entrada de este módulo son archivos en formato \textit{Fastq}, que pueden ser provenientes del módulo anterior (\textit{basecalling y demultiplexación}) o pueden ser indicados por el usuario a través del archivo de configuración.
+El control de calidad se realiza mediante la herramienta NanoPlot (antes y después de los filtros).
+Los filtros de calidad son llevados a cabo con la herramienta Fastp, utilizando los siguientes parámetros:
 \begin{itemize}
-    \item Basecalling y demultiplexacion:
-    \item Control de calidad:
-    \item Asignación taxonómicas:
-    \item Caracterización de la comunidad microbiana:
+    \item calidad mínima: por defecto 10 o valor ingresado en el archivo de configuración qc.min\_qscore (\textit{-q 10})
+    \item \textit{--cut\_front} 
+    \item \textit{--cut\_tail} 
+    \item \textit{--cut\_mean\_quality 10} 
+    \item longitud mínima requerida: por defecto 1000 o valor ingresado en el archivo de configuración qc.min\_length (\textit{--length\_required 1000}) 
+    \item longitud máxima permitida: por defecto 2000 o valor ingresado en el archivo de configuración qc.max\_length (\textit{--length\_limit 2000})
+    \item deshabilitar la eliminación de adaptadores (\textit{--disable\_adapter\_trimming}) (no modificable)
+    \item deshabilitar la eliminación de colas poly g (\textit{--disable\_trim\_poly\_g}) (no modificable)
 \end{itemize}
-%para el preprocesamiento de las secuencias, la identificación de las secuencias mediante BLAST/mmseqs, la identificación de comunidades microbianas mediante la base de datos de 16S de Genbank, el calculo de índices de diversidad, la identificación de genes funcionales mediante PICRUSt2, y el análisis estadístico de los resultados funcionales mediante Aldex2 y Lefse. También cuenta con un modulo de visualización de las asignaciones taxonómicas mediante el uso de script personalizados hechos en python.
+
+A demás, este módulo cuenta con un script desarrollado en Python que permite graficar la longitud promedio versus la calidad promedio de las muestras después de los filtros \hl{se demora mucho y lo comente, descomentar y ver que onda el plot}.
+
+El output de este módulo es una carpeta llamada \textit{QC} que contiene los siguientes directorios:
+\begin{itemize}
+    \item \textit{fastq\_filtered}: Directorio con archivos FASTQ de las secuencias filtradas (obtenidos con fastp).
+    \item \textit{fastp\_reports}: Directorio con los reportes de los filtros de calidad en formato JSON y HTML (obtenidos con fastp).
+    \item \textit{nanoplot\_reports}: Directorio con los reportes de control de calidad de las muestras antes y después de los filtros (obtenidos con NanoPlot).
+    \item \hl{multiqc}
+    \item \hl{quality plot}
+\end{itemize}
+
+\subsubsection{Asignación taxonómica}
+Este módulo se ejecuta siempre que el parámetro de asignación taxonómica sea ``ON'' en el archivo de configuración.\hl{deberia ser siempre no xD}.
+La entrada de este módulo son archivos en formato \textit{FASTQ} que provienen del módulo anterior (\textit{control de calidad}).
+
+Previo a la asignación taxonómica, se realiza un subsampleo de las muestras con la herramienta Seqkit para evitar sesgos en la caracterización de la comunidad microbiana debido a alguna desproporción en la cantidad de lecturas de las muestra.
+La cantidad de lecturas utilizadas para el subsampling por defecto es 100.000 o el valor ingresado por el usuario en el archivo de configuración \textit{qc.subsampling}.
+Posterior a ello se convierten los archivos FASTQ a formato FASTA mediante la herramienta Seqkit.
+
+La asignación taxonómica se realiza mediante la herramienta BLAST con la base de datos de 16S de Genbank.\hl{parámetros}
+
+Posterior a la asignación taxonómica, mediante la herramienta TaxonKit se obtiene el linaje completo de todas las especies asignadas con Blast, este resultado se formatea mediante la herramienta CSVTk. 
+Esto se realiza con el objetivo de poder graficar todas las categorías taxonómicas tanto en los gráficos de barras apilas como en el gráfico circular jerárquico.
+
+Mediante un script en python se realiza un resumen de la asignación taxonómica obtenida con BLAST de todas las muestras y los linajes asociados a cada especie en un solo archivo. Además, se generan archivos por cantidad de lecturas y porcentaje, por cada categoría taxonómica y por muestra y grupo (en caso de ingresarse).
+Estos archivos son utilizandos como entradas para los scripts que generan los gráficos de barras apiladas y  el gráfico circular jerárquico.
+
+
+
+se utiliza un script en python que recibe como input el archivo generado en el proceso \textit{merge\_blast\_out} que contiene el porcentaje y cantidad de lecturas asignadas a cada taxonomía en cada muestra junto con todas las categorias taxonómicas.
+\hl{Para realizar este gráfico se buscan todas las taxonomías compartidas entre las muestras, una vez que se identifican, se suman las lecturas asignadas a cada taxonomía en todas las muestra del grupo y se grafica el porcentaje de lecturas asignadas a cada taxonomía en todas las muestras del grupo como un valor único}
+
+
+El output de este módulo es una carpeta llamada \textit{taxonomic\_assignament} que contiene los siguientes directorios:
+\begin{itemize}
+\item blast\_out
+\item plots: Este directorio contiene los siguientes directorios:
+\begin{itemize}
+    \item taxonomy\_plots: Directorio con los gráficos de barras apiladas de las taxonomías. Contiene cuatro tipos de graficos: 
+    \begin{itemize}
+        \item barras apiladas por muestra utilizando el valor porcentual.
+        \item barras apiladas por muestra utilizando la cantidad de lecturas.
+        \item barras apiladas por grupos utilizando el valor porcentual.
+        \item barras apiladas por grupos utilizando la cantidad de lecturas.
+    \end{itemize}
+    \item core\_plot: Directorio con los gráficos circulares jerárquicos de las taxonomías compartidas entre las muestras utilizando el número de lecturas. Habrá un gráfico general que busca las similitudes en todas las muestras, y un gráfico por cada grupo ingresado (en caso de ingresar grupos)
+\end{itemize}
+\subsubsection{Indices de diversidad}
+Este módulo solo se ejecutara si el parámetro \textit{diversity.run} es ``ON'' en el archivo de configuración. 
+Para poder ejecutarlo se requiere que el usuario haya ingreado grupos asociados a las muestras en el archivo de metadata.
+
+El cálculo de los índices de diversidad se realizará utilizando el paquete \texit{vegan} de R.
+La entrada de este módulo es el archivo resumen de blastn obtenido en el módulo anterior (\textit{merge\_blast\_out}) que contiene en las columnas las muestras y en las filas las especies, y la cantiadad de lecturas asociadas.
+Además del archivo resumen de blast, este módulo requiere los grupos asociados a las muestras en formato diccionario.
+
+Mediante la función \textit{diversity} se calculan los índices de Simpson y Shannon, y mediante la función \textit{estimateR} se calcula el índice de Chao1.
+El output de este módulo es una carpeta llamada \textit{diversity} que contiene un archivo csv con los valores de los índices de diversidad calculados para cada muestra y grupo ingresado (\textit{diversity\_index.csv}). 
+Mediante ggplot se representa la información de los índices de diversidad en un gráfico de cajas y bigotes (\textit{boxplot.pdf}).
+
+\subsubsection{Predicción funcional}
+Este módulo solo se ejecutara si el parámetro \textit{functional\_prediction.run} es ``ON'' en el archivo de configuración. 
+Para poder ejecutar la diferenciación entre grupos se requiere que el usuario haya ingreado esta información en el archivo de metadata.
+
+
+\subsubsection{Escritura en la base de datos}
+
 \hl{Desarrollo de contenedores o conda enviroments}
+Para la reproducibilidad del flujo de trabajo se cuenta con dos \hl{executers}: Conda y \hl{Singularity}    .
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{images/pipeline.pdf}
@@ -220,6 +310,8 @@ ya que mediante la interfaz web el usuario solo debe seleccionar los análisis q
 La información ingresada por el usuario es guardada en la base de datos y mediante un script se generan los parámetros necesarios para la ejecución del flujo de trabajo.
 Una vez el pipeline termina de ejecutarse se escriben los resultados en la base de datos. 
 La plataforma lee esta información directa de la base de datos y despliega los resultados en forma de tablas y gráficos en la sección de análisis.
+
+\hl{script que genera los parametros de ejecución del flujo de trabajo} 
 
 A continuación se detalla cada una de las vistas de la aplicación web y su funcionalidad.
 % \subsection{Middleware}
@@ -495,6 +587,7 @@ Una vez que el usuario presione al botón \textit{Subir proyecto}, la plataforma
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Resultados/Proyectos} \label{projects}
+\hl{hacer}
 Una vez que el usuario valida sus credenciales en la plataforma será redireccionado a la sección de Resultados. En esta sección se mostraran los proyectos que el usuario ha subido a la plataforma, estos proyectos pueden estar en ejecución, finalizados o finalizados con errores. 
 Por cada proyecto se desplegará la información básica en una tarjeta:
 \begin{itemize}
@@ -509,57 +602,167 @@ Por cada proyecto se desplegará la información básica en una tarjeta:
 
 En la parte inferior del componente se encuentra el botón de Subir data, el cual al hacer click en el, ingresará la información a la base de datos y copiará los archivos a la plataforma de computo. Una vez que el usuario presionar el botón de subir data, la plataforma se encarga de verificar que se cuente con toda la información necesaria para correr el pipeline.
 \subsection{Resultados de un proyecto en especifico}
-Una vez que el pipeline haya finalizado su ejecución, la plataforma leerá los resultados desde la base de datos y desplegará la información en la sección de resultados de un proyecto en especifico. Esta sección cuenta con 5 subsecciones, cada una con información específica del análisis realizado. En caso de que al ingresar el proyecto el usuario no seleccione todos los análisis a ejecutar, solo se mostrarán las secciones indicadas por el usuario.
+Una vez que el pipeline haya finalizado su ejecución, la plataforma permitirá al usuario acceder a los resultados de cada proyecto leyendo los resultados desde la base de datos y desplegando la información en la sección de resultados de cada proyecto.
+Esta sección cuenta con 5 subsecciones, cada una con información específica del análisis realizado. 
+En caso de que al ingresar el proyecto el usuario no seleccione todos los análisis, solo se mostrarán las secciones indicadas por el usuario.
 
-\hl{De que muestras puedo poner información en mi tesis?}
-\subsubsection{Informacion Basica de las muestras}
-Esta sección se mostrará siempre que el usuario empiece con archivos POD5 o FastQ, es decir, ya sea comenzando el análisis desde el basecalling o desde el control de calidad. \hl{Igual si es que solo se hace asignaicón taxonomica}.
-
-Al lado izquiero del componente se puede visualizar una tabla con la información básica de cada muestra:
+\subsubsection{Información básica de las muestras}
+%Esta sección se mostrará siempre que el usuario empiece con archivos POD5 o FastQ, es decir, ya sea comenzando el análisis desde el basecalling o desde el control de calidad. \hl{Igual si es que solo se hace asignaicón taxonomica}.
+\hl{Esta sección se desplegará siempre en la plataforma} y cuenta en el lado izquierdo con una tabla con información básica de las muestras y en el lado derecho un gráfico que representa la calidad y tamaño promedio de las lecturas.
+La tabla esta compuesta por los siguientes elementos:
 \begin{itemize}
-    \item Nombre de la muestra
-    \item Total de lecturas
-    \item Calidad promedio
-    \item Largo promedio
-    \item Total de lecturas después del control de calidad
-    \item Nota (en caso de que la muestra haya sido descartada se indica en esta columna)
+    \item Nombre de la muestra: Nombre indicado en el archivo de metadata al ingresar el proyecto.
+    \item \hl{Grupo}: Grupo asociado a la muestra en el archivo de metadata (en caso de ingresar grupo).
+    \item Total de lecturas: Cantidad de lecturas previo a los filtros de calidad.
+    \item Calidad promedio: Calidad promedio en formato phred \hl{antes/despues} de los filtros de calidad.
+    \item Largo promedio: Largo promdio \hl{antes/despues} de los filtros de calidad
+    \item Lecturas después de los filtros: Cantidad de lecturas luego de los filtros de calidad.
+    \item Nota: Si la muestra fue descartada por no contar con la cantidad suficiente de lecturas se informará en esta columna.
 \end{itemize}
-En la parte inferior de la tabla hay una nota que indica la cantidad de lecturas que se consideraron para los análisis posteriores (subsampleo).
+En la parte inferior de la tabla hay una nota que indica la cantidad de lecturas que se consideraron para los análisis posteriores, este valor por defecto es \hl{100.000}, pudiendo ser modificado por el usuario en las opciones avanzadas al ingresar el proyecto.
 
-En la parte derecha de la sección se puede visualizar un heatmap donde en el eje X se encuentra el tamaño de las lecturas, y en el eje Y la calidad. El color indica la cantidad de lecturas que se encuentran en esa intersección, mientras más azul, más lecturas tienen la calidad y tamaño indicado.
-Para este grafico se consideraron todas las muestras con sus lecturas \hl{antes de los filtros de calidad o después?}.
+En la parte derecha de la sección se puede visualizar un \hl{heatmap} donde en el eje X se encuentra el tamaño de las secuencias, y en el eje Y la calidad. 
+El color indica la cantidad de lecturas que se encuentran en esa intersección, mientras más intenso el azul, más secuebcias tienen la calidad y tamaño indicado.
+Para este grafico se consideraron todas las muestras con sus lecturas después de los filtros de calidad.
 
-En la parte inferior del gráfico hay una nota que indica la cantidad de lecturas que se encuentran en un rango especifico. \hl{Este valor es variable ......}
+En la parte inferior del gráfico hay una nota que indica en que rangos de tamaño se encuentran la mayoria de las lecturas\hl{Muy generico?}. 
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Estadisticas básicas (resultados)}
+    \label{fig:app-results-basicStatistics}
+\end{figure}
+
 \subsection{Asignación taxonómica}
-La sección de assignación taxonómica cuenta con un gráfico de barras apiladas y una tabla por cada categoría taxonómica (especie, genero,  familia, orden, clase y filo).
-En la leyenda del gráfico de barras apiladas solo se muestran las 10 taxonomías con mayor abundancia. El usuario puede moverse através del gráfico y posicionarse en las barras para poder visualizar el nombre de la taxonomía y el porcentaje o cantidad de lecturas en una muestra en especifico. Todas aquellas taxonomías que tienen un porcentaje menor a un 1\% (valor por defecto) son agrupadas en una nueva taxonomia llamada \textit{Otros}.
-En la parte superior de la tabla se encuentra un campo de texto donde el usuario puede buscar una taxonomía en especifico y visualizar su abundancia o cantidad de lecturas en todas las muestras.
+En la parte superior de esta sección se pueden visualizar pestañas que representan cada categoría taxonómica (especie, género, familia, orden, clase y filo), las cuales permiten ajustar la información presentada en esta  sección (gráfico de barras apiladas y tabla). Por defecto se presenta la información para la categoría de especie.
 
-El usuario puede visualizar la información en porcentaje o en cantidad de lecturas manipulando el boton de la parte inferior del gráfico. Asi también puede modificar el porcentaje utilizado para generar la taxonomía Otros.
+Debajo de las pestañas en el lado izquierdo hay un gráfico de barras apiladas que permite visualizar la abundancia de las taxonomías en cada muestra.
+El usuario puede interactuar con el gráfico modificando la visualización a través de los botones que se encuentran en la parte inferior, pudiendo visualizar la información en porcentaje o en cantidad de lecturas, como también pudiendo modificar el porcentaje mínimo para crear la categoria \textit{Otros}.
+En caso de que el usuario hubiera ingresado información de grupos asociados a las muestras, se podrá visualizar un nuevo grupo de botones que permite al usuario visualizar la información de las taxonomías por grupo o por muestra.
+La leyenda del gráfico de barras apiladas presenta solo las 10 taxonomías con mayor abundancia. 
+Por defecto, todas aquellas taxonomías que tienen un porcentaje menor a un 1\%  son agrupadas en una nueva taxonomia llamada \textit{Otros}.
 
-En caso de que el usuario al crear el proyecto hubiera ingresado información de los grupos asociados a las muestras, se podrá visualizar un nuevo grupo de botones que permiten al usuario visualizar la información de las taxonomías por grupo o por muestra.
+
+
+En el lado derecho, hay una tabla que permite visualizar el detalle de la información presentada en el gráfico. Se puede visualizar además un campo de texto que permite al usuario buscar una taxonomía en especifico y visualizar su abundancia o cantidad de lecturas en todas las muestras.
+
+
+Ambos componentes, la tabla y el gráfico de barras apiladas se ajustan automáticamente para presentar la información requerida por el usuario, es decir, cada vez que el usuario selecciona una nueva categoría taxonómica en las pestañas, se vuelve a generar la información proporcionando una visualización clara y detallada de los datos.
+
+
+\begin{figure}[H]
+    \includegraphics[width=0.6\linewidth, heigth=1]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Estadisticas básicas (resultados)}
+    \label{fig:app-results-taxonomicAssig-sample-nreads}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Estadisticas básicas (resultados)}
+    \label{fig:app-results-taxonomicAssig-sample-perc}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Estadisticas básicas (resultados)}
+    \label{fig:app-results-taxonomicAssig-group-nreads}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Estadisticas básicas (resultados)}
+    \label{fig:app-results-taxonomicAssig-group-perc}
+\end{figure}
 \subsection{Similitud entre las muestras}
-En esta sección se puede visualizar un gráfico Sunburst el cual representa las taxonomías compartidas entre una cantidad de muestras especificas. Mientras más grande el anillo en el gráfico, indica que la presencia de esa taxonomía es mayor. Cada nivel de anillo representa una categoria taxonomica, siendo la más interna especie y la más externa filo.
-En caso de que el usuario haya ingresado grupos asociados a las muestras, se podrán visualizar más gráficos de Sunburst en la sección, un gráfico por cada grupo. En el caso de que el usuario no haya ingresado grupos, podrá visualizar solamente un gráfico que mostrará las taxomías compartidas entre todas las muestras.
+\hl{la info es la suma de todo?}
 
-En caso de que un grupo no tenga taxonomías compartidas entre si, se desplegará un mensaje indicando esto.
+
+Esta sección representa las taxonomías compartidas por las muestras mediante un gráfico circular de anillos jerarquicos. 
+Cada nivel del gráfico representa una categoría taxonómica, siendo la más interna especie, y la más externa filo.
+Mientras más grande el diamentro del anillo en el gráfico, mayor es la presencia de esa taxonomía en las muestras.
+
+En esta sección se puede presentar un solo gráfico de las taxonomías compartidas entre todas las muestras, y en el caso de que el usuario haya ingresado grupos, se desplegaran además los gráficos por cada grupo.
 En la parte inferior del gráfico, al lado derecho de la leyenda se puede visualizar un icono, el cual al posicionarse sobre el, va a mostrar las muestras utilizadas para generar el gráfico.
-\subsubsection{Indices de diversidad}
-En caso de que el usuario hubiera ingresado grupos al inicio del proyecto, se podrá visualizar tres gráficos boxplot, uno por cada indice de diversidad (Shannon, Simpson y Chao2). En caso de que el usuario no haya ingresado grupos, esta sección no se desplegará en la plataforma.
-\subsubsection{Predicción funcional}
-En esta sección se presenta una tabla con la información de la predicción funcional obtenida mediante PICRUSt2 (EC, KO y Pathways) para cada muestra. En la parte superior se puede visualizar un campo de texto de búsqueda con el cual el usuario puede filtrar la información de la tabla.
 
-En el lado derecho de la sección, en caso de que el usuario hubiera ingresado grupos, se puede ver un gráfico de barras horizontales que muestra los pathways con diferencias significativas entre los grupos (información obtenida mediante Lefse). En caso de que no se haya ingresado información de grupos, solo se desplegará la tabla.
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Gráfico de similitud  (resultados)}
+    \label{fig:app-results-core}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Gráfico de similitud: Tooltip asociado a las muestras (resultados)}
+    \label{fig:app-results-core-tooltip}
+\end{figure}
+
+\hl{En caso de que un grupo no tenga taxonomías compartidas entre si, se desplegará un mensaje indicando esto.}
+\subsubsection{Indices de diversidad}
+\hl{hacer}
+
+En caso de que el usuario hubiera ingresado grupos al inicio del proyecto, se podrá visualizar tres gráficos boxplot, uno por cada indice de diversidad (Shannon, Simpson y Chao2). En caso de que el usuario no haya ingresado grupos, esta sección no se desplegará en la plataforma.
+
+
+\subsubsection{Predicción funcional}
+Al igual que en la sección de asignación taxonómica, en la parte superior se pueden visualizar tres pestañas \textit{EC, KO y Pathways} que representan cada categoría funcional. Por defecto se presenta la información para la categoría de \textit{Pathways}.
+
+En la parte inferior izquierda se puede visualizar una tabla con la información de la predicción funcional obtenida mediante PICRUSt2 (EC, KO y Pathways) para cada muestra. 
+En la parte superior de la tabla se puede visualizar un campo de texto de búsqueda con el cual el usuario puede filtrar la información de la tabla.
+
+En el lado derecho de la sección, en caso de que el usuario hubiera ingresado grupos, se puede ver un gráfico de barras horizontales que muestra los pathways con diferencias significativas entre los grupos (información obtenida mediante \hl{Lefse}). 
+En caso de que no se haya ingresado información de grupos, solo se desplegará la tabla.
+
+Al igual que en la sección de asignación taxonómica el usuario puede interactuar con las pestañas modificando el contenido de las tablas mediante la selección de las pestañas.
+
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/basicStatistics.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Gráfico de similitud: Tooltip asociado a las muestras (resultados)}
+    \label{fig:app-results-functional}
+\end{figure}
 \subsubsection{Descarga de los resultados}
-En la parte superior derecha de la sección de resultados, se encuentra un botón con el texto Download data. Al hacer click en este botón se descargará un archivo comprimido con toda los resultados generados por el pipeline.
+En la parte superior derecha de la sección de resultados, se encuentra un botón con el texto \textit{Download data}. 
+Al hacer click en este botón se descargará un archivo comprimido con toda los resultados generados por el pipeline.
+A continuación se detallan los archivos:
 \begin{itemize}
     \item CSV de asignación taxonomica por muestra y por grupo (en caso de ingresarse), y por porcentaje y cantidad de lecturas
-    \item CSV de predicción funcional (EC, KO y pathways)
-    \item CSV con los valores del calculo de los indices de diversidad
+    \item CSV de predicción funcional (EC, KO y pathways), en caso dehaber seleccionado predicción funcional dentro de los análisis.
+    \item CSV con los valores del cálculo de los indices de diversidad
     \item \hl{PDF con los gráficos de barras apiladas, Sunburst y boxplot}
     \item \hl{Archivo de texto con la información del pipeline (versión, parámetros, etc)}
 \end{itemize}
-\hl{graficos, csv, información de las bds y versión del pipeline}
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/downloadbutton.png}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Botón de descarga de resultados(resultados)}
+    \label{fig:app-results-download}
+\end{figure}
 \subsection{Documentación}
 En esta sección se despliega la documentación del pipeline, la cual cuenta con la información de los módulos, parámetros y herramientas utilizadas en el pipeline. La documentación se encuentra dividida por cada módulo, donde se muestra la versión de la herramienta utilizada y los parámetros por defecto y modificables por el usuario.
 \subsubsection{Basecalling y demultiplexación}
