@@ -7,14 +7,16 @@
     \label{fig:16S_workflow}
 \end{figure}
 \section{Flujo de trabajo}
-Se desarrolló un flujo de trabajo automatizado en Nextflow que permite el análisis y caracterización de secuencias del gen 16S obtenidas mediante Oxford Nanopore. 
+Se desarrolló un flujo de trabajo automatizado en Nextflow que permite el análisis y la caracterización de secuencias del gen 16S obtenidas mediante dispositivos de secuenciación de Oxford Nanopore. 
 El pipeline cuenta con los siguientes módulos: Basecalling y demultiplexación (\textit{basecalling}), Control de calidad (\textit{qc}), Asignación taxonómica (\textit{taxonomic\_assignament}), Indices de diversidad (\textit{diversity}) y Predicción funcional (\textit{functional\_predicction}).
-El flujo de trabajo está desarrollo de manera modular permitiendo que el usuario pueda personalizar su ejecución, agregando o quitando módulos de análisis mediante un archivo de configuración. 
+
+El flujo de trabajo está diseñado de manera modular permitiendo que el usuario pueda personalizar su ejecución, agregando o quitando módulos de análisis mediante un archivo de configuración. 
 
 \subsection{Archivo de configuración}
-Este archivo permite activar o desactivar cada módulo de manera individual y pasar parámetros específicos para modificar su ejecución. 
-Además, el archivo de configuración incluye información sobre los archivos de entrada del flujo de trabajo, nombre de las muestras y grupos asociados en un formato de diccionario.
-Para la ejecución del flujo de trabajo se requiere un archivo de configuración en formato YAML que contiene los parámetros necesarios para la ejecución del pipeline. 
+Este archivo permite activar o desactivar cada módulo de manera individual y especificar parámetros para modificar su ejecución. 
+Además, el archivo de configuración incluye información sobre los archivos de entrada del flujo de trabajo, nombres de las muestras y grupos asociados, todo en un formato de diccionario.
+
+Para ejecutar el flujo de trabajo se requiere un archivo de configuración en formato YAML que contenga los parámetros necesarios para la ejecución del pipeline. 
 A continuación se presenta un ejemplo de archivo de configuración:
 
 
@@ -66,10 +68,8 @@ Mediante un script en python se realiza un resumen de la asignación taxonómica
 Estos archivos son utilizandos como entradas para los scripts que generan los gráficos de barras apiladas y  el gráfico circular jerárquico.
 
 
-
-se utiliza un script en python que recibe como input el archivo generado en el proceso \textit{merge\_blast\_out} que contiene el porcentaje y cantidad de lecturas asignadas a cada taxonomía en cada muestra junto con todas las categorias taxonómicas.
-\hl{Para realizar este gráfico se buscan todas las taxonomías compartidas entre las muestras, una vez que se identifican, se suman las lecturas asignadas a cada taxonomía en todas las muestra del grupo y se grafica el porcentaje de lecturas asignadas a cada taxonomía en todas las muestras del grupo como un valor único}
-
+En el caso del gráfico circular, se buscan todas las taxonomías compartidas entre las muestras que tengan una abundance mayor al 1\% en al menos una muestra. 
+Una vez que se identifican, se suman las lecturas asignadas a cada taxonomía en todas las muestra del grupo y se grafica el porcentaje de lecturas asignadas a cada taxonomía en todas las muestras del grupo como un valor único.
 
 El output de este módulo es una carpeta llamada \textit{taxonomic\_assignament} que contiene los siguientes directorios:
 \begin{itemize}
@@ -83,15 +83,24 @@ El output de este módulo es una carpeta llamada \textit{taxonomic\_assignament}
         \item barras apiladas por grupos utilizando el valor porcentual.
         \item barras apiladas por grupos utilizando la cantidad de lecturas.
     \end{itemize}
-    \item core\_plot: Directorio con los gráficos circulares jerárquicos de las taxonomías compartidas entre las muestras utilizando el número de lecturas. Habrá un gráfico general que busca las similitudes en todas las muestras, y un gráfico por cada grupo ingresado (en caso de ingresar grupos)
+    \item core\_plot: Directorio con los gráficos circulares jerárquicos de las taxonomías compartidas entre las muestras utilizando el número de lecturas. Habrá un gráfico general que busca las similitudes en todas las muestras, y un gráfico por cada grupo ingresado (en caso de ingresar grupos)(Figura~\ref{fig:pipeline-core}).
 \end{itemize}
+ \end{itemize}
+
+ \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/pipeline/core_Impactadas.pdf}
+    \caption{Gráfico jerárquico generado para el grupo de muestras categorizadas como No impactadas}
+    \label{fig:pipeline-core}
+\end{figure}
+
 \subsubsection{Indices de diversidad}
 Este módulo solo se ejecutara si el parámetro \textit{diversity.run} es ``ON'' en el archivo de configuración. 
 Para poder ejecutarlo se requiere que el usuario haya ingreado grupos asociados a las muestras en el archivo de metadata.
 
-El cálculo de los índices de diversidad se realizará utilizando el paquete \texit{vegan} de R.
-La entrada de este módulo es el archivo resumen de blastn obtenido en el módulo anterior (\textit{merge\_blast\_out}) que contiene en las columnas las muestras y en las filas las especies, y la cantiadad de lecturas asociadas.
-Además del archivo resumen de blast, este módulo requiere los grupos asociados a las muestras en formato diccionario.
+El cálculo de los índices de diversidad se realizará utilizando el paquete \textit{vegan} de R.
+La entrada de este módulo es el archivo resumen de blastn obtenido en el módulo anterior (\textit{merge\_blast\_out}) que contiene en las columnas las muestras y en las filas las especies, y  en la intersección la cantiadad de lecturas asociadas.
+Además del archivo resumen de blast, este módulo requiere los grupos asociados a las muestras en formato diccionario (proveniente del archivo de configuración).
 
 Mediante la función \textit{diversity} se calculan los índices de Simpson y Shannon, y mediante la función \textit{estimateR} se calcula el índice de Chao1.
 El output de este módulo es una carpeta llamada \textit{diversity} que contiene un archivo csv con los valores de los índices de diversidad calculados para cada muestra y grupo ingresado (\textit{diversity\_index.csv}). 
@@ -101,206 +110,143 @@ Mediante ggplot se representa la información de los índices de diversidad en u
 Este módulo solo se ejecutara si el parámetro \textit{functional\_prediction.run} es ``ON'' en el archivo de configuración. 
 Para poder ejecutar la diferenciación entre grupos se requiere que el usuario haya ingreado esta información en el archivo de metadata.
 
+La predicción funcinoal se realizará mediante la herramienta PICRUSt2. 
+Para disminuir los tiempos de ejecucción, se realizará la predicción por muestra y luego mediante un script en python se unirán los resultados en un solo archivo.
+Para la búsqueda de vías metabólicas que presenten diferencias significativas entre grupos se utilizará la herramienta Lefse (\hl{valor de normalización}).
+
+El output de este módulo es una carpeta llamada \textit{functional\_prediction} que contiene los siguientes directorios:
+\begin{itemize}
+    \item \textit{picrust2\_out}: Directorio con los resultados de la predicción funcional por muestra. Contiene los siguientes directorios:
+    \begin{itemize}
+        \item \textit{EC\_metagenome\_out}: Directorio con los resultados de la predicción de las enzimas EC.
+        \item \textit{KO\_metagenome\_out}: Directorio con los resultados de la predicción de los genes KO.
+        \item \textit{Pathways\_out}: Directorio con los resultados de la predicción de las vías metabólicas.
+    \end{itemize}
+    \item \textit{KO.csv}: Archivo resumen con los resultados de la predicción de los genes KO para todas las muestras.
+    \item \textit{EC.csv}: Archivo resumen con los resultados de la predicción de las enzimas EC para todas las muestras.
+    \item \textit{Pathways.csv}: Archivo resumen con los resultados de la predicción de las vías metabólicas para todas las muestras.
+    \item Gráfico de barras con vías metabólicas que presentan diferencias significativas entre grupos
+    \end{itemize}
+\subsubsection{Ejecución del flujo de trabajo}
 
 \subsubsection{Escritura en la base de datos}
+archivo que hace params
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\linewidth]{images/pipeline.pdf}
+%     \caption{Bioinformatics pipeline}
+%     \label{fig:pipeline}
+% \end{figure}
+
 
 \hl{Desarrollo de contenedores o conda enviroments}
 Para la reproducibilidad del flujo de trabajo se cuenta con dos \hl{executers}: Conda y \hl{Singularity}    .
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{images/pipeline.pdf}
-    \caption{Bioinformatics pipeline}
-    \label{fig:pipeline}
-\end{figure}
-El flujo de trabajo cuenta con parámetros generales que son independientes de los módulos:
-\begin{itemize}
-    \item stage: Subworkflow a ejecutar. Puede contener los siguientes valores:
-          \begin{itemize}
-              \item All\_without\_basecalling: Ejecutar todo el flujo de trabajo sin incluir basecalling y demultiplexación.
-              \item All\_with\_basecalling: Ejecutar todo el flujo de trabajo incluyendo el proceso de basecalling y demultiplexacion.
-              \item Preprocessing: Ejecutar solo el subworflow de preprocesamiento
-              \item TaxonomyAssignament: Ejecutar el modulo de asignación taxonomca.
-              \item Visualization: Ejecutar solo el subworkflow de visualización de gráficos
-              \item Functional: Ejecutar solo el subworkflow de predicion funcional
-              \item Diversity: Ejecutar solo los modulos de indices de diversidad
-
-          \end{itemize}
-    \item input:
-    \item samples.csv:
-\end{itemize}
-
-\subsection{Ejecución de flujo de trabajo completo}
-\hl{hacer un esquema de los casos del uso, que el usuario puede comenzar con fastq, pod5, o hacer solo los graficos, etc}
-\subsection{Control de calidad}
-Este módulo primero se encarga de realizar un control de calidad a las secuencias mediante las herramientas FastQC y Nanoplot.  Posteriormente, se eliminan secuencias de baja calidad y secuencias no pertenecientes al gen 16s (basado en el tamaño de la lectura). Para esto, se utiliza el software Fastp \cite{} que permite realizar las tareas mencionadas anteriormente.
-
-Input:
-Output:
-Parámetros:
-
-
-\subsection{FastQC y Nanoplot}
-FastQC y Nanoplot reciben como input el archivo FASTQ a procesar y entrega como output un archivo HTML con el reporte del control de calidad. Este reporte será utilizado para integrar la información de este proceso en el reporte de MultiQC.
-En el flujo de trabajo ambas herramientas se utilizarán dos veces, una vez con el archivo FASTQ raw y otra vez con el archivo FASTQ preprocesado.
-\subsection{Fastp Parametros}
-
-\begin{itemize}
-    \item q 15
-    \item cut\_mean\_quality 15
-    \item length\_required 1000
-    \item length\_limit 2200
-    \item disable\_adapter\_trimming
-    \item disable\_trim\_poly\_g
-\end{itemize}
-
-Fastp recibe como input el archivo FASTQ raw y entrega como output el archivo FASTQ preprocesado. De igual manera, entrega un reporte en formato HTML y un reporte en formato JSON, el cual posteriormente será utilizado para integrar la información de este proceso en el reporte de MultiQC.
-
-\subsection{SEQKIT}
-Seqkit se utilizará para realizar un subsampleo de la muestra y evitar sesgos a la hora de realizar la caracterización por grupos debido a la cantidad de lecturas de cada muestra. Recibe como input el archivo FASTQ preprocesado.
-Posteriormente el archivo subsampleado se transformará a formato FASTA mediante la misma herramienta, y será utilizado para realizar la caracterización de la comunidad microbiana.
-
-
-
-\subsection{Asignación taxónomica}
-Clustering con MMSEQS
-\subsubsection{BLAST}
-Para la asignación taxonómica se utiliza BLAST con la base de datos de 16s de Genbank.
-\begin{itemize}
-    \item -mt\_mode 1
-    \item -outfmt "6 qseqid staxids sscinames evalue length pident qcovs"
-    \item -evalue 0.001
-    \item -max\_target\_seqs 1
-\end{itemize}
-Para asegurar que las secuencias sean asignadas a la taxonomía correcta, se utiliza un evalue de 0.001 y un porcentaje de identidad mayor a \hl{XX}
-EL output de BLAST es un archivo de formato tabular (TSV) que contiene el identificador de la muestra, el id de la taxonomia asociada a la secuencia, el nombre científico de la taxonomía, el valor de evalue, el largo de la secuencia, el porcentaje de identidad y el porcentaje de cobertura de la secuencia.
-
-Mediante TaxonKit se obtiene el linage completo de la taxonomía asignada a la secuencia , y se formatea mediante CSVTk.
-
-\subsubsection{MERGE\_BLAST\_OUT}
-Se desarrollo un script en python para resumir la asignación taxonomica obtenida con BLAST de todas las muestras en un solo archivo. Además, se generan archivos por cantidad de lecturas y porcentaje, y por cada categoria taxonomica.
-
-\subsection{Caracterización de la comunidad microbiana}
-\subsubsection{Stacked Plots}
-Se desarrollo un script en python que grafica las taxonomias en graficos de barras apiladas, permitiendo visualizar la distribución de las taxonomias en las muestras.En caso de que el usuario haya ingresado grupos asignados a cada muestra también se obtendran graficos de barras apiladas de los grupos. Las taxonomías menores a un 1\% (valor por defecto y modificable) se agrupan en una nueva taxonomia llama "Otros" y se muestra en color gris.
-
-\begin{itemize}
-    \item --taxonomy\_input\_file: Archivo en formato \hl{csv} donde las columnas son las muestras, las filas las taxonomicas y el valor de abundancia de cada taxonomia en cada muestra en el \hl{centro}.
-    \item --annotate\_tax: En caso de ser true se anotara el nombre de la taxonomia y el porcentaje en la barra.
-    \item min\_abundance\_annotate: Porcentaje de abundancia maximo para agrupar las taxonomicas en sección de otros
-\end{itemize}
-
-\subsubsection{Core Plot}
-Se desarrollo un script en python que realiza un grafico circular jerarquico de las taxonomias compartidas entre las muestras.
-Este grafico puede realizarse a nivel de grupos (siempre que el usuario hubiera ingresado los grupos en el archivo de metadata), y también se realiza entre todas las muestras.
-Input: CSV de taxonomia a nivel de especie por muestra y archivo de linajes.
-Output: Grafico circular jerarquico de las taxonomias compartidas entre las muestras en formato PDF
-\subsubsection{Indices de diversidad}
-shannon simpson chao
-
-\subsubsection{Prediccion Funcional}
-La predicción funcional se realiza mediante la herramienta PICRUSt2.
-
-Input:
-output:
-Picrust2 + aldex + Lefse
 
 \section{Base de datos}
+\hl{añadir cardinalidad}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/nanotax-db.pdf}
+    \caption{Base de datos}
+    \label{fig:nanotax-db}
+\end{figure}
 
 
-\subsection{Tabla de Usuarios}
-\begin{table}[H]
-    \begin{tabular}{|l|l|l|l|l|}
-        \hline
-        campo              & tipo de dato & descripción       & PK & FK \\ \hline
-        id                 & int          & ID                & Si & No \\ \hline
-        username           & str          & Nombre de usuario & No & No \\ \hline
-        fullname           & str          & Nombre completo   & No & No \\ \hline
-        email              & str          & Email             & No & No \\ \hline
-        hasshed\_password  & str          &                   & No & No \\ \hline
-        is\_active         & bool         &                   & No & No \\ \hline
-        role\_platform\_id & int          &                   & No & Si \\ \hline
-    \end{tabular}
-    \caption{Tabla Users}
-    \label{tab:db-users}
-\end{table}
-\subsection{Roles de la plataforma}
-\begin{table}[H]
-    \begin{tabular}{|l|l|l|l|l|}
-        \hline
-        campo       & tipo de dato & descripción                         & PK & FK \\ \hline
-        id          & int          & ID                                  & Si & No \\ \hline
-        name        & str          & Nombre del rol (admin / basic user) & No & No \\ \hline
-        description & str          & Descripción del rol                 & No & No \\ \hline
-    \end{tabular}
-    \caption{Tabla PlatformRole}
-    \label{tab:db-platformRole}
-\end{table}
-\subsection{Projectos}
+% \subsection{Tabla de Usuarios}
+% \begin{table}[H]
+%     \begin{tabular}{|l|l|l|l|l|}
+%         \hline
+%         campo              & tipo de dato & descripción       & PK & FK \\ \hline
+%         id                 & int          & ID                & Si & No \\ \hline
+%         username           & str          & Nombre de usuario & No & No \\ \hline
+%         fullname           & str          & Nombre completo   & No & No \\ \hline
+%         email              & str          & Email             & No & No \\ \hline
+%         hasshed\_password  & str          &                   & No & No \\ \hline
+%         is\_active         & bool         &                   & No & No \\ \hline
+%         role\_platform\_id & int          &                   & No & Si \\ \hline
+%     \end{tabular}
+%     \caption{Tabla Users}
+%     \label{tab:db-users}
+% \end{table}
+% \subsection{Roles de la plataforma}
+% \begin{table}[H]
+%     \begin{tabular}{|l|l|l|l|l|}
+%         \hline
+%         campo       & tipo de dato & descripción                         & PK & FK \\ \hline
+%         id          & int          & ID                                  & Si & No \\ \hline
+%         name        & str          & Nombre del rol (admin / basic user) & No & No \\ \hline
+%         description & str          & Descripción del rol                 & No & No \\ \hline
+%     \end{tabular}
+%     \caption{Tabla PlatformRole}
+%     \label{tab:db-platformRole}
+% \end{table}
+% \subsection{Projectos}
 
 
-\begin{table}[H]
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-        campo          & tipo de dato          & descripción                                                                                                                       & FK \\ \hline
-        id             & int (PK)              & ID                                                                                                                                & No \\ \hline
-        name           & str                   & Nombre del projecto                                                                                                               & No \\ \hline
-        description    & str                   & Descripción del proyecto                                                                                                          & No \\ \hline
-        samples        & JSON/dict{[}str,any\} & \begin{tabular}[c]{@{}l@{}}Metadata de las muestras. Puede contener como claves: \\ Barcode, Sample, Group, Subgroup\end{tabular} & No \\ \hline
-        colaboration   & str                   & ???                                                                                                                               & No \\ \hline
-        type\_file\_in & str                   & Tipo de archivo a procesar (POD5, FASTQ, CSV, FASTA)                                                                              & No \\ \hline
-        path\_data     & str                   & Ruta en el servidor donde se almacenaran los archivos de entrada                                                                  & No \\ \hline
-        status         & str                   & \begin{tabular}[c]{@{}l@{}}Estado del proyecto en ejecución \\ (upload\_data / running / failed / finish)\end{tabular}            & No \\ \hline
-        note           & JSON/dict{[}str,any\} & \begin{tabular}[c]{@{}l@{}}Información sobre el proyecto \\ (cantidad de muestras total, procesadas y descartadas)\end{tabular}   & No \\ \hline
-        logs           & JSON/dict{[}str,any\} & Logs                                                                                                                              & No \\ \hline
-        owner\_id      & int                   & Id del usuario que sube el proyecto                                                                                               & Si \\ \hline
-    \end{tabular}
-    \caption{Tabla de Proyectos}
-    \label{tab:db-projects}
-\end{table}
+% \begin{table}[H]
+%     \begin{tabular}{|l|l|l|l|}
+%         \hline
+%         campo          & tipo de dato          & descripción                                                                                                                       & FK \\ \hline
+%         id             & int (PK)              & ID                                                                                                                                & No \\ \hline
+%         name           & str                   & Nombre del projecto                                                                                                               & No \\ \hline
+%         description    & str                   & Descripción del proyecto                                                                                                          & No \\ \hline
+%         samples        & JSON/dict{[}str,any\} & \begin{tabular}[c]{@{}l@{}}Metadata de las muestras. Puede contener como claves: \\ Barcode, Sample, Group, Subgroup\end{tabular} & No \\ \hline
+%         colaboration   & str                   & ???                                                                                                                               & No \\ \hline
+%         type\_file\_in & str                   & Tipo de archivo a procesar (POD5, FASTQ, CSV, FASTA)                                                                              & No \\ \hline
+%         path\_data     & str                   & Ruta en el servidor donde se almacenaran los archivos de entrada                                                                  & No \\ \hline
+%         status         & str                   & \begin{tabular}[c]{@{}l@{}}Estado del proyecto en ejecución \\ (upload\_data / running / failed / finish)\end{tabular}            & No \\ \hline
+%         note           & JSON/dict{[}str,any\} & \begin{tabular}[c]{@{}l@{}}Información sobre el proyecto \\ (cantidad de muestras total, procesadas y descartadas)\end{tabular}   & No \\ \hline
+%         logs           & JSON/dict{[}str,any\} & Logs                                                                                                                              & No \\ \hline
+%         owner\_id      & int                   & Id del usuario que sube el proyecto                                                                                               & Si \\ \hline
+%     \end{tabular}
+%     \caption{Tabla de Proyectos}
+%     \label{tab:db-projects}
+% \end{table}
 
-\subsection{Roles del Proyecto}
-\begin{table}[H]
-    \begin{tabular}{|l|l|l|l|}
-        \hline
-        campo       & tipo de dato & descripción                               & FK \\ \hline
-        id          & int (PK)     & ID                                        & No \\ \hline
-        name        & str          & Nombre del rol (leer, escribir, eliminar) & No \\ \hline
-        description & str          & Descripción del rol                       & No \\ \hline
-    \end{tabular}
-    \caption{Tabla de Roles de Proyectos}
-    \label{tab:db-role_projects}
-\end{table}
-\subsection{Roles Projectos y Usuarios}
-\begin{table}[H]
-    \begin{tabular}{|l|l|l|l|}
-    \hline
-    campo       & tipo de dato & descripción                                       & FK \\ \hline
-    user\_id    & int (PK)     & ID del usuario                                    & Si \\ \hline
-    project\_id & int (PK)     & ID del proyecto                                   & Si \\ \hline
-    role\_id    & int (PK)     & Rol del usuario dentro del proyecto en especifico & Si \\ \hline
-    \end{tabular}
-    \caption{Tabla de Roles Proyectos y Usuarios}
-    \label{tab:db-role_projects_users}
-    \end{table}
+% \subsection{Roles del Proyecto}
+% \begin{table}[H]
+%     \begin{tabular}{|l|l|l|l|}
+%         \hline
+%         campo       & tipo de dato & descripción                               & FK \\ \hline
+%         id          & int (PK)     & ID                                        & No \\ \hline
+%         name        & str          & Nombre del rol (leer, escribir, eliminar) & No \\ \hline
+%         description & str          & Descripción del rol                       & No \\ \hline
+%     \end{tabular}
+%     \caption{Tabla de Roles de Proyectos}
+%     \label{tab:db-role_projects}
+% \end{table}
+% \subsection{Roles Projectos y Usuarios}
+% \begin{table}[H]
+%     \begin{tabular}{|l|l|l|l|}
+%     \hline
+%     campo       & tipo de dato & descripción                                       & FK \\ \hline
+%     user\_id    & int (PK)     & ID del usuario                                    & Si \\ \hline
+%     project\_id & int (PK)     & ID del proyecto                                   & Si \\ \hline
+%     role\_id    & int (PK)     & Rol del usuario dentro del proyecto en especifico & Si \\ \hline
+%     \end{tabular}
+%     \caption{Tabla de Roles Proyectos y Usuarios}
+%     \label{tab:db-role_projects_users}
+%     \end{table}
 
-\subsection{Resultados}
-\begin{table}[H]
-    \small
-    \begin{tabular}{|l|l|l|l|}
-    \hline
-    campo                  & tipo de dato           & descripción                                                                                                                                              & FK \\ \hline
-    id                     & int                    & ID                                                                                                                                                       & No \\ \hline
-    taxonomic\_assignament & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Assignación taxonomica por muestra y por nivel taxonómico\\ (especie, genero, familia, orden, clase y filo)\end{tabular}      & No \\ \hline
-    functional\_prediction & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Resultados de la predicción funcional por muestra y \\ por categoría funcional (EC, Pathways, KO)\end{tabular}                & No \\ \hline
-    core                   & JSON/dict{[}str,any{]} & Cantidad de lecturas/porcentaje compartido entre los grupos                                                                                              & No \\ \hline
-    basic\_statistics      & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Estadísticas básicas de las muestras\\ (Total de lecturas procesadas y sin procesar,\\ calidad y largo promedio)\end{tabular} & No \\ \hline
-    diversity              & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Calculo de los indices de diversidad\\ (Shannon, Simpson, Chao2)\end{tabular}                                                 & No \\ \hline
-    config\_run            & JSON/dict{[}str,any{]} & Parámetros personalizados por el usuario                                                                                                                 & No \\ \hline
-    project\_id            & int                    & ID del proyecto                                                                                                                                          & Si \\ \hline
-    \end{tabular}
-    \caption{Tabla de Resultados}
-    \label{tab:db-results}
-    \end{table}
+% \subsection{Resultados}
+% \begin{table}[H]
+%     \small
+%     \begin{tabular}{|l|l|l|l|}
+%     \hline
+%     campo                  & tipo de dato           & descripción                                                                                                                                              & FK \\ \hline
+%     id                     & int                    & ID                                                                                                                                                       & No \\ \hline
+%     taxonomic\_assignament & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Assignación taxonomica por muestra y por nivel taxonómico\\ (especie, genero, familia, orden, clase y filo)\end{tabular}      & No \\ \hline
+%     functional\_prediction & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Resultados de la predicción funcional por muestra y \\ por categoría funcional (EC, Pathways, KO)\end{tabular}                & No \\ \hline
+%     core                   & JSON/dict{[}str,any{]} & Cantidad de lecturas/porcentaje compartido entre los grupos                                                                                              & No \\ \hline
+%     basic\_statistics      & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Estadísticas básicas de las muestras\\ (Total de lecturas procesadas y sin procesar,\\ calidad y largo promedio)\end{tabular} & No \\ \hline
+%     diversity              & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Calculo de los indices de diversidad\\ (Shannon, Simpson, Chao2)\end{tabular}                                                 & No \\ \hline
+%     config\_run            & JSON/dict{[}str,any{]} & Parámetros personalizados por el usuario                                                                                                                 & No \\ \hline
+%     project\_id            & int                    & ID del proyecto                                                                                                                                          & Si \\ \hline
+%     \end{tabular}
+%     \caption{Tabla de Resultados}
+%     \label{tab:db-results}
+%     \end{table}
 
 \newpage
 \section{Aplicación Web}
