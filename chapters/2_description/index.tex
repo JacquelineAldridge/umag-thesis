@@ -8,58 +8,147 @@
 \end{figure}
 \section{Flujo de trabajo}
 Se desarrolló un flujo de trabajo automatizado en Nextflow que permite el análisis y la caracterización de secuencias del gen 16S obtenidas mediante dispositivos de secuenciación de Oxford Nanopore. 
-El pipeline cuenta con los siguientes módulos: Basecalling y demultiplexación (\textit{basecalling}), Control de calidad (\textit{qc}), Asignación taxonómica (\textit{taxonomic\_assignament}), Indices de diversidad (\textit{diversity}) y Predicción funcional (\textit{functional\_predicction}).
+El flujo de trabajo está diseñado de manera modular permitiendo que el usuario pueda personalizar su ejecución, agregando o quitando módulos de análisis mediante un archivo de configuración en formato \textit{YAML}.  
 
-El flujo de trabajo está diseñado de manera modular permitiendo que el usuario pueda personalizar su ejecución, agregando o quitando módulos de análisis mediante un archivo de configuración. 
+El pipeline cuenta con los siguientes módulos: 
+\begin{itemize}
+    \item Basecalling y demultiplexación (\textit{basecalling}): Este módulo se encarga de realizar el basecalling y demultiplexación de las muestras mediante la herramienta \hl{Guppy/dorado}.
+    \item Control de calidad (\textit{qc}): Este módulo se encarga de realizar los filtros y control de calidad de las muestras mediante las herramienta Nanoplot y Fastp.
+    \item Asignación taxonómica (\textit{taxonomic\_assignament}): Este módulo se encarga de realizar la asignación taxonómica de las muestras mediante la herramienta BLAST y la base de datos de 16S Genbank. Previo a la asignación taxonónimca se realiza un subsampleo de las muestras y se convierten los archivos FASTQ a formato FASTA.
+    \item Indices de diversidad (\textit{diversity}): Este módulo se encarga de calcular los índices de diversidad de Shannon, Simpson y Chao1 mediante el paquete vegan de R.
+    \item Predicción funcional (\textit{functional\_predicction}): Este módulo se encarga de realizar la predicción funcional de las muestras mediante la herramienta PICRUSt2 y la búsqueda de vías metabólicas que presenten diferencias significativas entre grupos mediante la herramienta Lefse.
+\end{itemize}
+
+En los módulos de asignación taxonómica, índices de diversidad y predicción funcional mediante scripts en python se resume la información mediantes tablas y se generan gráficos de los resultados obtenidos.
+
+En caso de que el flujo de trabajo se este ejecutando \hl{desde la aplicación web}, se ejecutará ademas un módulo extra que permite escribir los resultados en la base de datos.
+\hl{Debería tener dos versiones porque hay output no necesarios para cuando es local}
 
 \subsection{Archivo de configuración}
-Este archivo permite activar o desactivar cada módulo de manera individual y especificar parámetros para modificar su ejecución. 
+El formato YAML se caracteriza por ser un formato de serialización de datos legible por humanos y fácil de interpretar por máquinas.
+Tiene una estructura jerarquica que permite la representación de datos de manera más clara y concisa que otros formatos como JSON o XML.
+
+Mediante este archivo de configuración se van a especificar los parámetros necesarios para la ejecución del flujo de trabajo.
 Además, el archivo de configuración incluye información sobre los archivos de entrada del flujo de trabajo, nombres de las muestras y grupos asociados, todo en un formato de diccionario.
 
-Para ejecutar el flujo de trabajo se requiere un archivo de configuración en formato YAML que contenga los parámetros necesarios para la ejecución del pipeline. 
-A continuación se presenta un ejemplo de archivo de configuración:
+Para especificar parámetros de un módulo se debe indicar el nombre del modulo seguido por \textit{:} y a continuación el nombre del parámetro a modificar y su valor en formato \textit{clave: valor} en la siguente línea.
+A continuación se detallan los parámetros que se pueden modificar en el archivo de configuración y se presenta un ejemplo de archivo de configuración.%(\ref{verb:config}):
+\begin{itemize}
+    \item run: Permite activar o desactivar el módulo. Los valores posibles son ``ON'' o ``OFF''. 
+    \item qc.min\_length: Permite modificar la longitud mínima requerida de las secuencias. Por defecto es 1000.
+    \item qc.max\_length: Permite modificar la longitud máxima permitida de las secuencias. Por defecto es 2000.
+    \item qc.min\_qscore: Permite modificar la calidad mínima requerida de las secuencias. Por defecto es \hl{10}.
+    \item qc.subsampling: Permite modificar la cantidad de lecturas utilizadas para el subsampleo. Por defecto es 100.000.
+    \item qc.save\_reads: Permite activar o desactivar el guardado de los archivo fastq filtrados en el direcotorio de resultados. Valores posibles True o False. Por defecto False. 
+    \item taxonomic\_assignament.perc\_identity: Porcentaje de posiciones identicas en la secuencia de alineamiento.
+    \item taxonomic\_assignament.evalue: Valor máximo de evalue aceptado.
+    \item taxonomic\_assignament.qcovs: Porcentaje de cobertura mínima de alineamientos con altos puntajes.
+    \item group: Permite ingresar los grupos asociados a las muestras en formato clave:valor.
+    \item input: Permite ingresar el archivo en formato CSV que contiene las columnas samples y fastq.
+    \item outdir: Permite ingresar el directorio donde se guardaran los resultados del flujo de trabajo.
+    \item blast\_db: Permite ingresar la ruta al directorio que contiene la base de datos de 16S de Genbank (ver sección~\ref{pipeline:how_to_run} para más información).
+\end{itemize}
+
+A continuación se presenta un ejemplo de archivo de configuración donde el módulo de basecalling se encuentra desactivado, y los módulos de control de calidad, asignación taxonómica, índices de diversidad y predicción funcional se encuentran activados.
+Además se especifican todos los parámetros por defecto del flujo de trabajo, junto con los grupos asociados a las muestras y la ruta al archivo de metadata.
 
 
+
+% Además se requiere un archivo de configuración en formato YAML que contenga los parámetros necesarios para la ejecución del pipeline. 
+% A continuación se presenta un ejemplo de archivo de configuración:
+
+\begin{verbatim}
+  basecalling:
+    run: 'OFF'
+  qc:
+    max_length: '2000'
+    min_length: '1000'
+    min_qscore: '15'
+    run: 'ON'
+    subsampling: '50000'
+  taxonomic_assignament:
+    run: 'ON'
+    blast_db: /path/to/db
+  diversity:
+    run: 'ON'
+  functional_prediction:
+    run: 'ON'
+  group:
+    K1.1: Control K
+    L1.1: Control L
+    L1.2: Control L
+    P1.1: No impactadas
+    P1.2: No impactadas
+    P7.2: Impactadas
+    P8.1: Impactadas
+  input: samples.csv
+  outdir: results
+\end{verbatim}
+\label{verb:config}
+
+\textit{samples.csv} es un archivo de texto separado por comas (formato CSV) que contiene la información de las muestras a analizar mediante las columnas \textit{samples} y \textit{fastq} \hl{fastq\_2} \hl{group}. 
+La columna samples debe contener el nombre con el que se quiere identificar las muestra y la ruta al archivo de secuenciación en formato \textit{fastq}.
 
 \subsection{Estructura del flujo de trabajo}
 \subsubsection{Basecalling y demultiplexación}
-\hl{hacer}
+Este módulo por defecto se encuentra desactivado y se activa mediante el archivo de configuración.
+La entrada de este módulo son archivos en formato \textit{POD5} que contienen las secuencias obtenidas en la secuenciación.
+El basecalling y demultiplexación se realiza mediante la herramienta Guppy/dorado. Por defecto se realizará el basecalling de alta preción (HAC).
+
+Para ejecutar este módulo el usuario deben ingresar los siguientes parámtros en el archivo de configuración:
+\begin{itemize}
+    \item \textit{pod5\_dir}: Directorio que contiene los archivos de secuenciación en formato POD5.
+    \item \textit{guppy\_basecalling\_config}: Archivo de configuración a utilizar para hacer el basecalling.
+    \item \textit{guppy\_barcoding\_kits}: Kit de barcoding a utilizar para hacer la demultiplexación.
+\end{itemize} 
+
+Por defecto este módulo entrega un archivo HTML con el reporte de la demultiplexación y el basecalling de las muestras (generado con MultiQC), el cual se almacena en la carpeta QC/multiqc\_guppy.html.
+En caso de que el usuario quiera almacenar los archivos demultiplexados, debe activar la opción \textit{basecalling.save\_reads} en el archivo de configuración.
+
+
 \subsubsection{Control de calidad}
-Este módulo siempre se ejecuta  \hl{excepto que..} y es el encargado de realizar los filtros y control de calidad de las muestras.
+Este módulo siempre se ejecuta y es el encargado de realizar los filtros y control de calidad de las muestras.
 La entrada de este módulo son archivos en formato \textit{Fastq}, que pueden ser provenientes del módulo anterior (\textit{basecalling y demultiplexación}) o pueden ser indicados por el usuario a través del archivo de configuración.
 El control de calidad se realiza mediante la herramienta NanoPlot (antes y después de los filtros).
 Los filtros de calidad son llevados a cabo con la herramienta Fastp, utilizando los siguientes parámetros:
 \begin{itemize}
-    \item calidad mínima: por defecto 10 o valor ingresado en el archivo de configuración qc.min\_qscore (\textit{-q 10})
-    \item \textit{--cut\_front} 
-    \item \textit{--cut\_tail} 
-    \item \textit{--cut\_mean\_quality 10} 
+    \item calidad mínima: por defecto \hl{10} o valor ingresado en el archivo de configuración qc.min\_qscore (\textit{-q 10})
+    \item \textit{--cut\_mean\_quality 10}: Permite recortar bases de baja calidad en los extremos de la secuencia (uso en conjunto con \textit{--cut\_front}, \textit{--cut\_tail})
     \item longitud mínima requerida: por defecto 1000 o valor ingresado en el archivo de configuración qc.min\_length (\textit{--length\_required 1000}) 
     \item longitud máxima permitida: por defecto 2000 o valor ingresado en el archivo de configuración qc.max\_length (\textit{--length\_limit 2000})
     \item deshabilitar la eliminación de adaptadores (\textit{--disable\_adapter\_trimming}) (no modificable)
     \item deshabilitar la eliminación de colas poly g (\textit{--disable\_trim\_poly\_g}) (no modificable)
 \end{itemize}
 
-A demás, este módulo cuenta con un script desarrollado en Python que permite graficar la longitud promedio versus la calidad promedio de las muestras después de los filtros \hl{se demora mucho y lo comente, descomentar y ver que onda el plot}.
+Además, este módulo cuenta con un script desarrollado en Python que permite graficar la longitud promedio versus la calidad promedio de las muestras después de los filtros.
 
 El output de este módulo es una carpeta llamada \textit{QC} que contiene los siguientes directorios:
 \begin{itemize}
     \item \textit{fastq\_filtered}: Directorio con archivos FASTQ de las secuencias filtradas (obtenidos con fastp).
     \item \textit{fastp\_reports}: Directorio con los reportes de los filtros de calidad en formato JSON y HTML (obtenidos con fastp).
-    \item \textit{nanoplot\_reports}: Directorio con los reportes de control de calidad de las muestras antes y después de los filtros (obtenidos con NanoPlot).
+    \item \textit{nanoplot\_reports/raw|filtered}: Directorio con los reportes de control de calidad de las muestras antes y después de los filtros (obtenidos con NanoPlot).
     \item \hl{multiqc}
-    \item \hl{quality plot}
+    \item \textit{quality\_plot.pdf}: Gráfico de la longitud promedio versus la calidad promedio de las muestras después de los filtros en una ventana de las posiciones de 1400 a 1600 pares de bases.
 \end{itemize}
 
+A continuación se presenta un ejemplo del gráfico de calidad y longitud promedio de las muestras generado por el pipeline (Figura~\ref{fig:pipeline-quality_plot}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/pipeline/quality_plot.pdf}
+    \caption{Gráfico de calidad vs longitud promedio. En el eje X esta la longitud de las lecturas, mientras en el eje Y se encuentra la calidad promedio.}
+    \label{fig:pipeline-quality_plot}
+\end{figure}
 \subsubsection{Asignación taxonómica}
-Este módulo se ejecuta siempre que el parámetro de asignación taxonómica sea ``ON'' en el archivo de configuración.\hl{deberia ser siempre no xD}.
+Este módulo se ejecuta siempre que el parámetro de asignación taxonómica sea ``ON'' en el archivo de configuración. 
+La ruta a la base de datos debe ser especificada mediante el parámetro \texit{taxonomic\_assignament.blast\_db}.
 La entrada de este módulo son archivos en formato \textit{FASTQ} que provienen del módulo anterior (\textit{control de calidad}).
 
 Previo a la asignación taxonómica, se realiza un subsampleo de las muestras con la herramienta Seqkit para evitar sesgos en la caracterización de la comunidad microbiana debido a alguna desproporción en la cantidad de lecturas de las muestra.
 La cantidad de lecturas utilizadas para el subsampling por defecto es 100.000 o el valor ingresado por el usuario en el archivo de configuración \textit{qc.subsampling}.
 Posterior a ello se convierten los archivos FASTQ a formato FASTA mediante la herramienta Seqkit.
 
-La asignación taxonómica se realiza mediante la herramienta BLAST con la base de datos de 16S de Genbank.\hl{parámetros}
+La asignación taxonómica se realiza mediante la herramienta BLAST con la base de datos de 16S de Genbank. 
+Para aceptar un match con la base de datos se requiere un valor de identidad mayor al 97\%, una cobertura mayor al 85\% y un evalue menor a 1e-6.
 
 Posterior a la asignación taxonómica, mediante la herramienta TaxonKit se obtiene el linaje completo de todas las especies asignadas con Blast, este resultado se formatea mediante la herramienta CSVTk. 
 Esto se realiza con el objetivo de poder graficar todas las categorías taxonómicas tanto en los gráficos de barras apilas como en el gráfico circular jerárquico.
@@ -73,7 +162,7 @@ Una vez que se identifican, se suman las lecturas asignadas a cada taxonomía en
 
 El output de este módulo es una carpeta llamada \textit{taxonomic\_assignament} que contiene los siguientes directorios:
 \begin{itemize}
-\item blast\_out
+\item \hl{blast\_out}
 \item plots: Este directorio contiene los siguientes directorios:
 \begin{itemize}
     \item taxonomy\_plots: Directorio con los gráficos de barras apiladas de las taxonomías. Contiene cuatro tipos de graficos: 
@@ -86,8 +175,22 @@ El output de este módulo es una carpeta llamada \textit{taxonomic\_assignament}
     \item core\_plot: Directorio con los gráficos circulares jerárquicos de las taxonomías compartidas entre las muestras utilizando el número de lecturas. Habrá un gráfico general que busca las similitudes en todas las muestras, y un gráfico por cada grupo ingresado (en caso de ingresar grupos)(Figura~\ref{fig:pipeline-core}).
 \end{itemize}
  \end{itemize}
+A continuación se presentan ejemplos de los gráficos generados en este módulo. La figura~\ref{fig:pipeline-stacked-sample} presenta un gráfico de barras apiladas por muestra utilizando el valor porcentual y la categoría de clase, mientras que la figura~\ref{fig:pipeline-stacked-group} muestra un gráfico de barras apiladas por grupos utilizando el valor porcentual.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth,height=0.4\textheight]{images/pipeline/class_samples_percentage.pdf}
+    \caption{Gráfico de barras apiladas por muestra utilizando el valor porcentual y la categoría de clase}
+    \label{fig:pipeline-stacked-sample}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth,height=0.4\textheight]{images/pipeline/class_grouped_percentage.pdf}
+    \caption{Gráfico de barras apiladas por grupos utilizando el valor porcentual y la categoría de clase}
+    \label{fig:pipeline-stacked-group}
+\end{figure}
 
- \begin{figure}[H]
+La figura~\ref{fig:pipeline-core} presenta un gráfico circular jerárquico generado para el grupo de muestras categorizadas como No impactadas.
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{images/pipeline/core_Impactadas.pdf}
     \caption{Gráfico jerárquico generado para el grupo de muestras categorizadas como No impactadas}
@@ -103,14 +206,24 @@ La entrada de este módulo es el archivo resumen de blastn obtenido en el módul
 Además del archivo resumen de blast, este módulo requiere los grupos asociados a las muestras en formato diccionario (proveniente del archivo de configuración).
 
 Mediante la función \textit{diversity} se calculan los índices de Simpson y Shannon, y mediante la función \textit{estimateR} se calcula el índice de Chao1.
-El output de este módulo es una carpeta llamada \textit{diversity} que contiene un archivo csv con los valores de los índices de diversidad calculados para cada muestra y grupo ingresado (\textit{diversity\_index.csv}). 
-Mediante ggplot se representa la información de los índices de diversidad en un gráfico de cajas y bigotes (\textit{boxplot.pdf}).
+Utilizando la librería ggplot se representa la información de los índices de diversidad en un gráfico de cajas y bigotes.
+Para el calculo de los indices solo se considerarán aquellos grupos con al menos 3 muestras.
+
+El output de este módulo es una carpeta llamada \textit{diversity} que contiene un archivo csv con los valores de los índices de diversidad calculados para cada muestra y grupo ingresado (\textit{diversity\_index.csv}), junto con el gráfico de cajas y bigotes generado \textit{diversity\_boxplot.pdf}
+
+A continuación se presenta un ejemplo del gráfico de cajas y bigotes generado por el pipeline (Figura~\ref{fig:pipeline-diversity_boxplot}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/pipeline/diversity_boxplot.pdf}
+    \caption{Gráfico de cajas y bigotes de los índices de diversidad calculados para cada grupo ingresado}
+    \label{fig:pipeline-diversity_boxplot}
+\end{figure}
 
 \subsubsection{Predicción funcional}
 Este módulo solo se ejecutara si el parámetro \textit{functional\_prediction.run} es ``ON'' en el archivo de configuración. 
 Para poder ejecutar la diferenciación entre grupos se requiere que el usuario haya ingreado esta información en el archivo de metadata.
 
-La predicción funcinoal se realizará mediante la herramienta PICRUSt2. 
+La predicción funcional se realizará mediante la herramienta PICRUSt2. 
 Para disminuir los tiempos de ejecucción, se realizará la predicción por muestra y luego mediante un script en python se unirán los resultados en un solo archivo.
 Para la búsqueda de vías metabólicas que presenten diferencias significativas entre grupos se utilizará la herramienta Lefse (\hl{valor de normalización}).
 
@@ -127,126 +240,32 @@ El output de este módulo es una carpeta llamada \textit{functional\_prediction}
     \item \textit{Pathways.csv}: Archivo resumen con los resultados de la predicción de las vías metabólicas para todas las muestras.
     \item Gráfico de barras con vías metabólicas que presentan diferencias significativas entre grupos
     \end{itemize}
-\subsubsection{Ejecución del flujo de trabajo}
+
+
+    \begin{figure}[H]
+        \includegraphics[width=1\linewidth]{images/pipeline/lefse_plot.pdf}
+        \caption{Barra de navegación}
+        \label{fig:pipeline-lefse}
+    \end{figure}
+\subsubsection{Ejecución del flujo de trabajo}\label{pipeline:how_to_run}
+Para ejecutar el flujo de trabajo se debe descargar el ejecutable de Nextflow desde su página oficial\footnote{https://www.nextflow.io/}. 
+Además se requiere tener instalado conda para gestionar la instalación de paquetes y herramientas.
+
+Para ejecutar el flujo de trabajo se debe ingresar el siguiente comando en la terminal:
+\begin{verbatim}
+    nextflow run nanotax-pipeline -profile conda -params-file params.yml
+
+\end{verbatim}
+La descarga de la base de datos de 16S de Genbank se puede realizar mediante el FTP de NCBI\footnote{ftp://ftp.ncbi.nlm.nih.gov/blast/db/16S\_ribosomal\_RNA.tar.gz}.
+
+Se recomienda usar la opción \textit{-resume} para reanudar la ejecución en caso de que se haya interrumpido.
 
 \subsubsection{Escritura en la base de datos}
 archivo que hace params
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=1\linewidth]{images/pipeline.pdf}
-%     \caption{Bioinformatics pipeline}
-%     \label{fig:pipeline}
-% \end{figure}
-
-
 \hl{Desarrollo de contenedores o conda enviroments}
 Para la reproducibilidad del flujo de trabajo se cuenta con dos \hl{executers}: Conda y \hl{Singularity}    .
 
-\section{Base de datos}
-\hl{añadir cardinalidad}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\linewidth]{images/nanotax-db.pdf}
-    \caption{Base de datos}
-    \label{fig:nanotax-db}
-\end{figure}
-
-
-% \subsection{Tabla de Usuarios}
-% \begin{table}[H]
-%     \begin{tabular}{|l|l|l|l|l|}
-%         \hline
-%         campo              & tipo de dato & descripción       & PK & FK \\ \hline
-%         id                 & int          & ID                & Si & No \\ \hline
-%         username           & str          & Nombre de usuario & No & No \\ \hline
-%         fullname           & str          & Nombre completo   & No & No \\ \hline
-%         email              & str          & Email             & No & No \\ \hline
-%         hasshed\_password  & str          &                   & No & No \\ \hline
-%         is\_active         & bool         &                   & No & No \\ \hline
-%         role\_platform\_id & int          &                   & No & Si \\ \hline
-%     \end{tabular}
-%     \caption{Tabla Users}
-%     \label{tab:db-users}
-% \end{table}
-% \subsection{Roles de la plataforma}
-% \begin{table}[H]
-%     \begin{tabular}{|l|l|l|l|l|}
-%         \hline
-%         campo       & tipo de dato & descripción                         & PK & FK \\ \hline
-%         id          & int          & ID                                  & Si & No \\ \hline
-%         name        & str          & Nombre del rol (admin / basic user) & No & No \\ \hline
-%         description & str          & Descripción del rol                 & No & No \\ \hline
-%     \end{tabular}
-%     \caption{Tabla PlatformRole}
-%     \label{tab:db-platformRole}
-% \end{table}
-% \subsection{Projectos}
-
-
-% \begin{table}[H]
-%     \begin{tabular}{|l|l|l|l|}
-%         \hline
-%         campo          & tipo de dato          & descripción                                                                                                                       & FK \\ \hline
-%         id             & int (PK)              & ID                                                                                                                                & No \\ \hline
-%         name           & str                   & Nombre del projecto                                                                                                               & No \\ \hline
-%         description    & str                   & Descripción del proyecto                                                                                                          & No \\ \hline
-%         samples        & JSON/dict{[}str,any\} & \begin{tabular}[c]{@{}l@{}}Metadata de las muestras. Puede contener como claves: \\ Barcode, Sample, Group, Subgroup\end{tabular} & No \\ \hline
-%         colaboration   & str                   & ???                                                                                                                               & No \\ \hline
-%         type\_file\_in & str                   & Tipo de archivo a procesar (POD5, FASTQ, CSV, FASTA)                                                                              & No \\ \hline
-%         path\_data     & str                   & Ruta en el servidor donde se almacenaran los archivos de entrada                                                                  & No \\ \hline
-%         status         & str                   & \begin{tabular}[c]{@{}l@{}}Estado del proyecto en ejecución \\ (upload\_data / running / failed / finish)\end{tabular}            & No \\ \hline
-%         note           & JSON/dict{[}str,any\} & \begin{tabular}[c]{@{}l@{}}Información sobre el proyecto \\ (cantidad de muestras total, procesadas y descartadas)\end{tabular}   & No \\ \hline
-%         logs           & JSON/dict{[}str,any\} & Logs                                                                                                                              & No \\ \hline
-%         owner\_id      & int                   & Id del usuario que sube el proyecto                                                                                               & Si \\ \hline
-%     \end{tabular}
-%     \caption{Tabla de Proyectos}
-%     \label{tab:db-projects}
-% \end{table}
-
-% \subsection{Roles del Proyecto}
-% \begin{table}[H]
-%     \begin{tabular}{|l|l|l|l|}
-%         \hline
-%         campo       & tipo de dato & descripción                               & FK \\ \hline
-%         id          & int (PK)     & ID                                        & No \\ \hline
-%         name        & str          & Nombre del rol (leer, escribir, eliminar) & No \\ \hline
-%         description & str          & Descripción del rol                       & No \\ \hline
-%     \end{tabular}
-%     \caption{Tabla de Roles de Proyectos}
-%     \label{tab:db-role_projects}
-% \end{table}
-% \subsection{Roles Projectos y Usuarios}
-% \begin{table}[H]
-%     \begin{tabular}{|l|l|l|l|}
-%     \hline
-%     campo       & tipo de dato & descripción                                       & FK \\ \hline
-%     user\_id    & int (PK)     & ID del usuario                                    & Si \\ \hline
-%     project\_id & int (PK)     & ID del proyecto                                   & Si \\ \hline
-%     role\_id    & int (PK)     & Rol del usuario dentro del proyecto en especifico & Si \\ \hline
-%     \end{tabular}
-%     \caption{Tabla de Roles Proyectos y Usuarios}
-%     \label{tab:db-role_projects_users}
-%     \end{table}
-
-% \subsection{Resultados}
-% \begin{table}[H]
-%     \small
-%     \begin{tabular}{|l|l|l|l|}
-%     \hline
-%     campo                  & tipo de dato           & descripción                                                                                                                                              & FK \\ \hline
-%     id                     & int                    & ID                                                                                                                                                       & No \\ \hline
-%     taxonomic\_assignament & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Assignación taxonomica por muestra y por nivel taxonómico\\ (especie, genero, familia, orden, clase y filo)\end{tabular}      & No \\ \hline
-%     functional\_prediction & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Resultados de la predicción funcional por muestra y \\ por categoría funcional (EC, Pathways, KO)\end{tabular}                & No \\ \hline
-%     core                   & JSON/dict{[}str,any{]} & Cantidad de lecturas/porcentaje compartido entre los grupos                                                                                              & No \\ \hline
-%     basic\_statistics      & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Estadísticas básicas de las muestras\\ (Total de lecturas procesadas y sin procesar,\\ calidad y largo promedio)\end{tabular} & No \\ \hline
-%     diversity              & JSON/dict{[}str,any{]} & \begin{tabular}[c]{@{}l@{}}Calculo de los indices de diversidad\\ (Shannon, Simpson, Chao2)\end{tabular}                                                 & No \\ \hline
-%     config\_run            & JSON/dict{[}str,any{]} & Parámetros personalizados por el usuario                                                                                                                 & No \\ \hline
-%     project\_id            & int                    & ID del proyecto                                                                                                                                          & Si \\ \hline
-%     \end{tabular}
-%     \caption{Tabla de Resultados}
-%     \label{tab:db-results}
-%     \end{table}
 
 \newpage
 \section{Aplicación Web}
@@ -289,7 +308,22 @@ En caso de que los datos sean incorrectos se mostrará un mensaje de error \text
 \end{figure}
 
 \hl{Registrarse - vista}
-\subsection{Navbar?}
+\subsection{Navbar}
+Una vez que el usuario inicia sesión, va a poder visualizar la barra de navegación de la plataforma en la parte superior de la página. 
+% La plataforma cuenta con las siguientes secciones en la barra de navegación:
+% \begin{itemize}
+%     \item \textit{Results}
+%     \item \textit{New analyses}
+%     \item \textit{Change password}: Cambiar contraseña
+%     \item \textit{Log out}: Cerrar sesión en la plataforma
+% \end{itemize}
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/navbar.png}
+    \caption{Barra de navegación}
+    \label{fig:app-nabvar}
+\end{figure}
+
+A continuación se describen las funcionalidades de cada una de las secciones de la barra de navegación:
 
 \subsection{Cambio de contraseña}
 Una vez que el usuario validó sus credenciales va a poder acceder a la vista de cambio de contraseña a través de la barra de navegación (Figura~\ref{fig:app-change-psw_default}).
@@ -552,7 +586,7 @@ Una vez que el pipeline haya finalizado su ejecución, la plataforma permitirá 
 Esta sección cuenta con 5 subsecciones, cada una con información específica del análisis realizado. 
 En caso de que al ingresar el proyecto el usuario no seleccione todos los análisis, solo se mostrarán las secciones indicadas por el usuario.
 
-\subsubsection{Información básica de las muestras}
+\subsection{Información básica de las muestras}
 %Esta sección se mostrará siempre que el usuario empiece con archivos POD5 o FastQ, es decir, ya sea comenzando el análisis desde el basecalling o desde el control de calidad. \hl{Igual si es que solo se hace asignaicón taxonomica}.
 \hl{Esta sección se desplegará siempre en la plataforma} y cuenta en el lado izquierdo con una tabla con información básica de las muestras y en el lado derecho un gráfico que representa la calidad y tamaño promedio de las lecturas.
 La tabla esta compuesta por los siguientes elementos:
@@ -633,6 +667,16 @@ Ambos componentes, la tabla y el gráfico de barras apiladas se ajustan automát
     \caption{Estadisticas básicas (resultados)}
     \label{fig:app-results-taxonomicAssig-group-perc}
 \end{figure}
+
+
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{images/app/results/taxonomy_others.pdf}
+    % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+    % \captionsetup{width=0.45\linewidth}
+    \caption{Estadisticas básicas (resultados)}
+    \label{fig:app-results-taxonomicAssig-others}
+\end{figure}
 \subsection{Similitud entre las muestras}
 \hl{la info es la suma de todo?}
 
@@ -663,13 +707,13 @@ En la parte inferior del gráfico, al lado derecho de la leyenda se puede visual
 \end{figure}
 
 \hl{En caso de que un grupo no tenga taxonomías compartidas entre si, se desplegará un mensaje indicando esto.}
-\subsubsection{Indices de diversidad}
+\subsection{Indices de diversidad}
 \hl{hacer}
 
 En caso de que el usuario hubiera ingresado grupos al inicio del proyecto, se podrá visualizar tres gráficos boxplot, uno por cada indice de diversidad (Shannon, Simpson y Chao2). En caso de que el usuario no haya ingresado grupos, esta sección no se desplegará en la plataforma.
 
 
-\subsubsection{Predicción funcional}
+\subsection{Predicción funcional}
 Al igual que en la sección de asignación taxonómica, en la parte superior se pueden visualizar tres pestañas \textit{EC, KO y Pathways} que representan cada categoría funcional. Por defecto se presenta la información para la categoría de \textit{Pathways}.
 
 En la parte inferior izquierda se puede visualizar una tabla con la información de la predicción funcional obtenida mediante PICRUSt2 (EC, KO y Pathways) para cada muestra. 
@@ -701,14 +745,55 @@ A continuación se detallan los archivos:
     \item \hl{Archivo de texto con la información del pipeline (versión, parámetros, etc)}
 \end{itemize}
 
+
 \begin{figure}[H]
-    \includegraphics[width=1\linewidth]{images/app/results/downloadbutton.png}
+    \includegraphics[width=1\linewidth]{images/app/donwload_button.png}
     % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
 
     % \captionsetup{width=0.45\linewidth}
-    \caption{Botón de descarga de resultados(resultados)}
-    \label{fig:app-results-download}
+    \caption{Gráfico de similitud: Tooltip asociado a las muestras (resultados)}
+    \label{fig:app-download-button}
 \end{figure}
+
+% \begin{figure}[H]
+%     \includegraphics[width=1\linewidth]{images/app/results/downloadbutton.png}
+%     % \captionsetup{justification=raggedright, width=0.45\linewidth, singlelinecheck=off}
+
+%     % \captionsetup{width=0.45\linewidth}
+%     \caption{Botón de descarga de resultados(resultados)}
+%     \label{fig:app-results-download}
+% \end{figure}
+
+\subsection{Integración del flujo de trabajo y aplicación web}
+
+Se diseño una base de datos no relacional utilizando PostgreSQL.
+Esta base de datos permite almacenar la información de los proyectos subidos por el usuario en la plataforma web y los resultados obtenidos en la ejecución del flujo de trabajo.
+La base de datos funciona como intermedio entre el flujo de trabajo y la base de datos, permitiendo que la aplicación web escriba la metadata asociada al proyecto para que el flujo de trabajo pueda ejecutarse, y permitiendo además que la aplicación web pueda leer los resultados escritos por el flujo de trabajo, para poder convertir esta información en tablas y gráficos que permitan al usuario visualizar los resultados de manera sencilla.
+
+La base de datos esta compuesta por seis tablas:
+\begin{itemize}
+    \item PlatformRoles: Almacena los roles de la plataforma (admin, basic user).
+    \item Users: Almacena la información de los usuarios registrados en la plataforma.
+    \item Projects: Almacena la información de los proyectos subidos por los usuarios.
+    \item ProjectRoles: Almacena los roles de los usuarios dentro de los proyectos. Esto permite que un projecto y sus resultados puedan ser visualizados por varios usuarios a la vez.
+    \item ProjectRolesUsers: Almacena la relación entre los usuarios y los roles de los proyectos. Permitiendo a los usuarios tener diferentes roles en diferentes proyectos (solo lectura, edición, eliminar).
+    \item Results: Almacena los resultados obtenidos en la ejecución del flujo de trabajo.
+    \item PipelineDefaultParams: Almacena los parámetros por defecto de cada versión del flujo de trabajo.
+\end{itemize}
+\hl{añadir cardinalidad}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{images/nanotax-db.pdf}
+    \caption{Base de datos}
+    \label{fig:nanotax-db}
+\end{figure}
+
+Las tablas de Resultados y Proyectos estan compuestas por campos JSONB que permiten almacenar datos en formato JSON mediante una representación binaria permitiendo que los datos sean indexados y consultados de manera eficiente. 
+
+Para la ejecución del flujo de trabajo se desarrollo un script en Python que escribe el archivo \textit{params.yml} con la información del proyecto y los parámetros ingresados por el usuario en la plataforma (y guardados en la base de datos).
+Una vez que el pipeline finaliza su ejecucción mediante un script en Python se almacenan los resultados en la base de datos.
+
+\hl{backend}
 \subsection{Documentación}
 En esta sección se despliega la documentación del pipeline, la cual cuenta con la información de los módulos, parámetros y herramientas utilizadas en el pipeline. La documentación se encuentra dividida por cada módulo, donde se muestra la versión de la herramienta utilizada y los parámetros por defecto y modificables por el usuario.
 \subsubsection{Basecalling y demultiplexación}
