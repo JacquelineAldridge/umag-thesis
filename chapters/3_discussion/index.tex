@@ -1,38 +1,67 @@
 \chapter{Discusión/Conclusiones}
+\section{Conclusiones}
+El trabajo desarrollado en este tesis cuenta con dos componentes principales: un flujo de trabajo para el análisis de datos de secuenciación del gen 16S, y una plataforma web para visualización de los resultados obtenidos que le permite al usuario abstraerse de contar con capacidad de cómputo para la ejecución del flujo de trabajo, y de conocimientos de línea de comando para ejecutar el flujo de trabajo.
 
-\section{Trabajos futuros}
+El pipeline esta desarrollado con Nextflow, un lenguaje de programación específico para la creación de pipelines de bioinformática, y con nf-core, un framework que permite la creación de pipelines siguiendo buenas prácticas de la comunidad. 
+
+El pipeline desarrollado cuenta con una serie de pasos para el análisis y la caracterización de datos de secuenciación del gen 16S. Partiendo por la eliminación de secuencias de baja calidad y secuencias de longitudes no concordantes con el gen 16S, asegurandonos de contar con secuencias de alta calidad para los análisis posteriores.
+Continuando con la asignación taxonómica de las secuencias, caracterizando la comunidad microbiana de las muestras y eliminado matches poco confiables con la base de datos, permitiendo además la obtención de los resultados por muestra o por grupo.
+Los resultados se pueden visualizar en gráficos de barras apiladas o en gráficos circulares que permiten destacar las similitudes de las muestras a lo largo de los grupos.
+Finalmente se incluyeron análisis posteriores a la asignación taxónomica, como el cálculo de índices de diversidad y los gráficos correspondientes a éstos, y la predición funcional de los datos, caracterizando vías metabólicas que presentan diferencias significativas entre los grupos.
+
+El flujo de trabajo permite la ejecución de los procesos de manera paralela, permitiendo reducir los tiempos de ejecución en el caso de contar con un servidor o un cluster de alto cómputo.
+Las dependencias son manejadas por conda, permitiendo la instalación de las herramientas necesarias para la ejecución del flujo de trabajo de manera automática a la hora de ejecutar el pipeline, evitando problemas al instalar las herramientas como incompatibilidades entre versiones.
+
+El flujo de trabajo esta pensando para ser utilizado por usuarios con conocimientos básicos de línea de comando y de bioinformática.
+Para aquellos que no cuentan con los recursos computacionales para ejecutar el flujo de trabajo, o no cuentan con conocimientos suficientes para su ejecución, se desarrollo la plataforma web. 
+
+La plataforma cuenta con una interfaz amigable e intuitiva para el usuario, haciendo que el ingreso de datos y la visualización de los resultados sea sencillo y rápido.
+Los resultados son presentados en secciones, permitiendo al usuario visualizar los resultados de manera ordenada y clara. 
+Además la visualización de resultados se presenta tanto en tablas como en gráficos interactivos, permitiendo al usuario explorar los datos de manera más detallada pudiendo enfocarse en taxonómias específicas o en muestras específicas.
+La plataforma cuenta con la posibilidad de descargar los resultados y datos de las tablas en formato CSV, permitiendo al usuario trabajar con los datos en caso de requerir análisis más especificos.
+
+
+En la actualidad existen diferentes flujos de trabajo y herramientas que permiten la caracterización de comunidades microbianas a partir de datos de secuenciación, sin embargo, la mayoría de estos flujos de trabajo requieren que el usuario cuente con recursos computacionales y cuentan la mayoria solamente con etapas de control de calidad y asignación taxonómica.
+Por lo que NanoTax destaca por contar con análisis posteriores a la asignación taxonómica y por contar con una plataforma web que permite al usuario visualizar los resultados de manera interactiva y sencilla.
+
+\subsection{Trabajos futuros}
+El flujo de trabajo y plataforma web desarrollados en este trabajo de tesis, se encuentran en una etapa temprana de desarrollo, por lo que existen varias áreas de mejora y trabajos futuros que se pueden realizar. 
+Algunas de las mejoras y trabajos futuros que se pueden realizar se describen a continuación:
 \begin{itemize}
-    \item Validación de los resultados obtenidos con los datos de cultivos de bacterias secuenciados
-    \item clustering
-    \item contan con cultivo de bacterias secuenciados que me permitan hacer validación del metodo
-    % \item Terminar de implementar las buenas normas de nf-core
-    \item Gestión de cuentas
-    \item Creación de cuentas
+    \item Validación de los resultados obtenidos con los datos de cultivos de bacterias secuenciados y comparación con herramientas del estado del arte
+    % \item 
+    % \item contan con cultivo de bacterias secuenciados que me permitan hacer validación del metodo
+    \item Abrir la plataforma a la comunidad y permitir la creación de cuentas
+    \item Implementar una metodología de clustering previo a la asignación taxonómica para disminui los recursos computacioneles
+    \item Integración de bases de datos como Silva
+    % % \item Terminar de implementar las buenas normas de nf-core
+    % \item Gestión de cuentas
+    % \item Creación de cuentas
     % \item Graficos cuando son mas de 30 muestras
     % \item gestionar la unión de proyectos y metadata
     % \item hacer documentación
     % \item se ve mal la app con algunos zooms 
-    \item clustering con la nueva química   
+    % \item clustering con la nueva química   
 \end{itemize}
-\hl{glosario}
-\begin{itemize}
-    \item PCR (Polymerase chain reaction o reacción en cadena de la polimerasa): Técnica de la biología molecular para hacer muchas copias a partir de un fragmento de ADN.
-    \item lecturas
-    \item phread
-    \item pares de bases
-    \item API (application programming interface o interfaz de programaciónn de aplicaciones),
-    \item JSON
-    \item ORM (Object-Relational Mapping)
-    \item UMAP
-    \item FASTQ
-    \item POD5
-    \item FASTA
-    \item CSV
-    \item evalue: The statistical significance threshold for reporting matches against database sequences
-    \item min coverage: Minimum horizontal coverage for a query sequence to be considered a match
-    \item Min identity: Minimum proportion of identical bases between the query and the subject sequence
-    \item Max target sequences: Number of aligned sequences to keep for each query
-    \item througput
-    \item raw
-    \item profundidad: Multiples lecturas en una misma región
-\end{itemize}
+% \hl{glosario}
+% \begin{itemize}
+%     \item amplicón: Fragmento de ADN amplificado por PCR
+%     \item PCR (Polymerase chain reaction o reacción en cadena de la polimerasa): Técnica de la biología molecular para hacer muchas copias a partir de un fragmento de ADN.
+%     \item \textit{reads} (lecturas): Fragmento de secuencia de ADN obtenido en la secuenciación
+%     \item Phred: Calidad de la secuencia. 
+%     \item Pares de bases (pb): Unidad de medida que consta de dos bases nitrogenadas unidas por un enlace de hidrógeno.
+%     \item API (application programming interface o interfaz de programaciónn de aplicaciones),
+%     \item JSON: Formato para la especificación de datos, se usa habitualmente en aplicaciones y plataformas web.
+%     \item ORM (Object-Relational Mapping)
+%     \item POD5: Formato de archivos para almacenar datos de ADN de nanopore durante la secuenciación de una manera fácilmente accesible.
+%     \item FASTQ: Formato de archivos para almacenar datos de secuenciación de ADN junto con sus puntajes de calidad codificados.
+%     \item FASTA: Formato de archivos para almacenar secuencias de ADN o proteínas sin sus puntajes de calidad.
+%     \item CSV: Formato de archivos para almacenar datos separados por coma.
+%     \item evalue: The statistical significance threshold for reporting matches against database sequences
+%     \item min coverage: Minimum horizontal coverage for a query sequence to be considered a match
+%     \item Min identity: Minimum proportion of identical bases between the query and the subject sequence
+%     \item Max target sequences: Number of aligned sequences to keep for each query
+%     \item througput
+%     \item raw
+%     \item profundidad: Multiples lecturas en una misma región
+% \end{itemize}
