@@ -1,16 +1,20 @@
 \chapter{Marco teórico y estado del arte}
 %% leer https://www.cd-genomics.com/blog/introduce-to-16s-rrna-and-16s-rrna-sequencing/
 
-Esta tesis busca presentar una nueva alternativa para la caracterización de comunidades microbianas utilizando secuenciación de tercera generación. Para ello se  desarrolló un flujo de trabajo automatizado que permite realizar el procesamiento de los datos de secuenciación (control de calidad, asignación taxonómica, análisis de diversidad, predicción funcional y caracterización de grupos). 
+%Esta tesis busca presentar una 
+En el presente trabajo de tesis se presenta una nueva alternativa para la caracterización de comunidades microbianas utilizando secuenciación de tercera generación. Para ello se  desarrolló un flujo de trabajo automatizado que permite realizar el procesamiento de los datos de secuenciación (control de calidad, asignación taxonómica, análisis de diversidad, predicción funcional y caracterización de grupos). 
 
-Debido a que la ejecución de pipelines bioinformaticos requiere conocimiento de línea de comando y contar con recursos computacionales, se desarrolló una aplicación que permite al usuario abstraerse del conocimiento computacional requerido al analizar datos. Una vez que el usuario sube sus datos a la plataforma web, ésta envia los datos, ejecuta el flujo de trabajo y presenta los resultados en forma de gráficos y tablas en la plataforma.
+Debido a que la ejecución de pipelines bioinformáticos requiere conocimiento más avanzados informáticos, como por ejemplo el uso de línea de comando, además de requerir recursos computacionales, se desarrolló una aplicación que permite al usuario abstraerse del conocimiento computacional requerido al analizar datos. Una vez que el usuario sube sus datos a la plataforma web, ésta envia los datos, ejecuta el flujo de trabajo y presenta los resultados en forma de gráficos y tablas en la plataforma.
 
 % Para usar la plataforma el usuario debe llenar un formulario con la metadata de la secuenciación, subir los archivos e indicar los análisis a realizar, con esto la plataforma web enviará los datos de secuenciación a la plataforma de alto rendimiento y ejectará el flujo de trabajo, una vez finalizado, los resultados se presentarán en la plataforma web.
 
-A continación se presenta el marco teórico y estado del arte de los conceptos necesarios para el desarrollo de esta tesis, como qué es la microbiota, el gen 16S rRNA, tecnologías de secuenciación y sus usos, las diferentes herramientas bioinformáticas para el análisis de datos y herramientas para el desarrollo de la aplicación web.
-\section{Estudio de microbiota a traves del gen 16S y tecnologías de secuenciacion}
+A continación se presenta el marco teórico y estado del arte de los conceptos necesarios para el desarrollo de esta tesis. % como qué es 
+Se abarcaran conceptos como la microbiota, el gen 16S rRNA, tecnologías de secuenciación y sus usos, las diferentes herramientas bioinformáticas para el análisis de datos y herramientas para el desarrollo de la aplicación web.
+\section{Estudio de microbiota a traves del gen 16S y tecnologías de secuenciación}
 \subsection{Microbiota}
-La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos~\cite{gilbert2018current}, animales~\cite{bahrndorff2016microbiome} o plantas~\cite{berendsen2012rhizosphere}, y también en ambientes naturales como el océano~\cite{doi:10.1126/science.aac8455} y el suelo~\cite{banerjee2023soil}. 
+%La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos~\cite{gilbert2018current}, animales~\cite{bahrndorff2016microbiome} o plantas~\cite{berendsen2012rhizosphere}, y también en ambientes naturales como el océano~\cite{doi:10.1126/science.aac8455} y el suelo~\cite{banerjee2023soil}. 
+
+La microbiota es el conjunto de microorganismos (bacterias, virus, arqueas, u hongos) que habitan en un ambiente, ya sea en organismos multicelulares como humanos, animales o plantas, y también en ambientes naturales como el océano y el suelo. 
 Estos organismos que componen la microbiota se encuentran en un estado de simbiosis junto con el huesped, contribuyendo en funciones vitales como la homeostasis, regulación del sistema inmune, digestión de alimentos, producción de vitaminas, protección ante enfermedades y agentes patógenos~\cite{marco2021defining,fijan2014microorganisms,altvecs2020interaction,hou2022microbiota}. 
 Sin embargo, una disbiosis o una baja diversidad en la microbiota se puede asociar a una desregulación en el organismo huesped, incluyendo diversos tipos de enfermedades, fallas en el sistema inmune, falta de vitaminas, trastornos como depresión, estrés, e incluso diferentes tipos de cáncer en el caso del ser humano~\cite{altvecs2020interaction,hou2022microbiota}.
 
@@ -19,7 +23,7 @@ La composición de la microbiota va cambiando dependiendo del área de estudio, 
 %Se estima que en el ser humano habitan más de 10 billones de microorganismos~\cite{sender2016revised}, es decir, poseemos cerca de 350 billones de celulas microbioanas~\cite{fijan2014microorganisms,ley2006ecological} , siendo este número al menos 10 veces mayor que el número de células humanas que poseemos.
 
 En la naturaleza los microorganismos cumplen un rol fundamental en los ciclos bioquímicos del nitrógeno, carbono y fósforo~\cite{bitton1994role, gougoulias2014role}, como también en los procesos de desnitrificación, nitrificación y mineralización~\cite{bitton1994role, gougoulias2014role}. 
-Dependiendo del tipo de ambiente, los microorganismos también varian, en el caso del suelo por ejemplo, cambian dependiendo del tipo de suelo en el que están (agrícolas, forestales, humedales, pastos o suelos desérticos~\cite{jiao2021linking}) y de las características de éste como la temperatura, hidaratación, profundidad, cantidad de carbono~\cite{bickel2020soil}.
+Dependiendo del tipo de ambiente, los microorganismos también varían, en el caso del suelo por ejemplo, cambian dependiendo del tipo de suelo en el que están (agrícolas, forestales, humedales, pastos o suelos desérticos~\cite{jiao2021linking}) y de las características de éste como la temperatura, hidratación, profundidad, cantidad de carbono~\cite{bickel2020soil}.
 En el caso de las plantas, se ha demostrado que la microbiota presente ayuda a la adquisición de nutrientes~\cite{hu2017probiotic}, crecimiento, salud y resistencia a enfermedaddes~\cite{lemanceau2017let,hardoim2015hidden,vorholt2012microbial,COMPANT201929}.
 
 
@@ -39,7 +43,7 @@ Este conocimiento ayuda modular nutrición, salud y enfermedad a través del est
 %% seleccion region
 %% https://search.brave.com/search?q=16s+gene+what+are+constant+and+variables+reigon&source=desktop
 El ARN ribosomal 16S es un gen perteneciente a la subunidad menor 30S que codifica el rRNA bacteriano y se encuentra en todas las bacterías. 
-Esta compuesto por 1542 pares de bases aproximadamente, divididas en 9 regiones hipervariables entrelazadas con regiones constantes~\cite{clarridge2004impact}.
+La figura~\ref{fig:16S_structure} presenta la estructur del gen 16S, el cual esta compuesto por 1542 pares de bases aproximadamente, divididas en 9 regiones hipervariables entrelazadas con regiones constantes~\cite{clarridge2004impact}.
 Las regiones constantes son compartidas por todas las bacterias, mientras las regiones variables presentan cierto grado de variabilidad entre las especies. 
 
 
@@ -70,8 +74,9 @@ Las regiones variables permiten llevar a cabo la caracterización de los microor
 
 
 
-El gold standard para la identifición de bacterias durante muchos años fue el cultivo convencional en laboratorio, sin embargo, el cultivo puede durar desde días a semanas o incluso meses, y en algunos casos, hay bacterias que no se logran cultivar en laboratorio~\cite{didelot2012transforming}. 
-Es por esto, que las tecnologías de secuenciación de nueva generación se presentaron como una buena alternativa y se empezaron a usar masivamente para secuenciar el gen 16S y caracterizar comunidades al permitir secuenciar comunidades complejas (y no solo aislados) y al permitir secuenciar millones de lecturas al mismo tiempo~\cite{reller2007detection}, haciendo que la forma de caracterizar bacterias sea más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. 
+El gold standard para la identificación de bacterias durante muchos años fue el cultivo convencional en laboratorio, sin embargo, el cultivo puede durar desde días a semanas o incluso meses, y en algunos casos, hay bacterias que no se logran cultivar en laboratorio~\cite{didelot2012transforming}. 
+Es por esto, que las tecnologías de secuenciación de nueva generación se presentaron como una buena alternativa y se empezaron a usar masivamente para secuenciar el gen 16S al permitir secuenciar comunidades complejas (y no sólo aislados) y al permitir secuenciar millones de lecturas al mismo tiempo~\cite{reller2007detection}, haciendo que la forma de caracterizar bacterias sea más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. 
+%Es por esto, que las tecnologías de secuenciación de nueva generación se presentaron como una buena alternativa y se empezaron a usar masivamente para secuenciar el gen 16S y caracterizar comunidades al permitir secuenciar comunidades complejas (y no sólo aislados) y al permitir secuenciar millones de lecturas al mismo tiempo~\cite{reller2007detection}, haciendo que la forma de caracterizar bacterias sea más estándar y abordable al día de hoy~\cite{woo2008then, tanner1994impact}. 
 %El estudio de comunidades microbianas mediante el gen 16S rRNA se ha vuelto una herramienta poderosa tanto en ambientes clínicos como ambientales, permitiendo obtener información de la diversidad de una muestra de manera más rápida y económica que con los métodos tradicionales~\cite{buscar}.
 %Las tecnologías de secuenciación  permiten la identificación de bacterias a través de  \hl{signatures/firmas} únicas 
 
@@ -83,14 +88,15 @@ Es por esto, que las tecnologías de secuenciación de nueva generación se pres
 
 %Las regiones constantes se utilizan para el diseño de primers a utilizar durante la amplificación (PCR), LAS REGIONES hipervariales se utilizan para la identificación de diversidad en procariontes~\cite{chakravorty2007detailed}.
 \subsection{Secuenciación de ADN}
-Todo ser vivo cuenta con una molécula de ADN que contiene la información genética del individuo. Ésta información se códifica a través de bases nitrogenadas: adenina (A),timina (T), guanina (G) y citosina (C)~\cite{watson1953molecular}. 
+Todo ser vivo cuenta con una molécula de ADN que contiene la información genética del individuo. 
+Esta información se códifica a través de bases nitrogenadas: adenina (A), timina (T), guanina (G) y citosina (C).%~\cite{watson1953molecular}. 
 Para determinar esta secuencia de nucleótidos se han desarrollado diferentes técnicas las que se conocen como secuenciación de ADN. 
 
 Las tecnologías de secuenciación se pueden dividir en tres generaciones, cada una con diferentes características, como los largos de las moleculas a secuenciar, porcentaje de error, costo y cantidad de información que secuencian (\textit{throughput}).
 Las tecnologías de secuenciación de nueva generación (NGS) involucran las tecnologías de segunda y tercera generación (short-reads y long-reads respectivamente) y se diferencian de la primera generación de secuenciación por la cantidad de información que permiten obtener en la secuenciación, y por haber reducido notablemente los costos y tiempos de secuenciación, pero presentando un porcentaje de error mayor~\cite{kumar2024next}. 
 
 Independiente de la tecnología de secuenciación a utilizar, el proceso de secuenciación de ADN se puede dividir en tres etapas: preparación de librería, secuenciación y análisis de las datos. Durante la preparación de las librerias el ADN se fragmenta en tamaños manejables para el secuenciador que luego son secuenciados. El resultado de la secuenciación es un conjunto de secuencias de nucleótidos conocidas como \textit{read} o lectura.
-Debido a las diferentes caracterisitcas de cada generación, al analizar las secuencias los análisis bioinformáticos y herramientas a utilizar también cambian dependiendo principalmente de la precisión del secuenciador utilizado y el tamaño de las lecturas producidas~\cite{bierman2014understanding}.
+Debido a las diferentes caracterísitcas de cada generación, al analizar las secuencias los análisis bioinformáticos y herramientas a utilizar también cambian dependiendo principalmente de la precisión del secuenciador utilizado y el tamaño de las lecturas producidas~\cite{bierman2014understanding}.
 
 %La precisión de estas tecnologías se puede medir mediante la precisión de la lectura raw (precisión al leer un sólo fragmento de ácido nucleico a la vez) o la precisión de los ensamblajes mediante consensos (reconstrucción de genomas completos).
 
@@ -114,7 +120,7 @@ Debido a su alta precisión, al secuenciar el gen 16S con Sanger se permite la c
 Esto limita su uso en comunidades complejas o infecciones polibacterianas ~\cite{lamoureux2022prospective}, donde para identificar la comunidad se deben usar tecnologías de secuenciación de nueva generación.
 \subsubsection{Segunda generación: Secuenciación de lecturas cortas}
 Las tecnologías de secuenciación de segunda generación más importantes son Illumina, IonTorrent y Roche 454. Éstas utilizan el principio de síntesis de cadena complementaria y una señal asociada al nucleótido incorporado (que puede ser fluorescencia, iones cargados, entre otros). %al unirse con la hebra complementaria. 
-Esta generación de secuenciadores se caracteriza por ser rápida, de bajo costo, y por permitir obtener simultaneamente millones de moleculas de ADN mediante amplificación clonal o \textit{bridge} PCR, generado en paralelo millones de fragmentos cortos de ADN, de entre 35 a 600 pares de bases, con una precisión de 99.9\%.%, mediante una secuenciación rápida y de bajo costo~\cite{kumar2024next}.
+Esta generación de secuenciadores se caracteriza por ser rápida, de bajo costo, y por permitir obtener simultaneamente millones de moleculas de ADN mediante amplificación clonal o \textit{bridge} PCR, generando en paralelo millones de fragmentos cortos de ADN, de entre 35 a 600 pares de bases, con una precisión de 99.9\%.%, mediante una secuenciación rápida y de bajo costo~\cite{kumar2024next}.
 
 
 Las principales metodologías de secuenciación de segunda generación son secuenciación por síntesis, utilizada principalmente por Illumina, y secuenciación por ligación utilizada por Roche 454~\cite{mardis2008next}.
@@ -129,8 +135,9 @@ Algunas de las plataformas de secuenciación de segunda generación utilizan sec
 Dentro de las principales ventajas de las tecnologías de lecturas cortas se encuentra su bajo porcentaje de error, bajo costo, y la gran cantidad de herramientas bioinformáticas ya desarrolladas para trabajar con este tipo de datos~\cite{heather2016sequence}. Por otro lado, el tamaño de los fragmentos secuenciados es su mayor limitante, haciendo más compleja o imposible la resolución de regiones repetitivas o análisis más complejos como el ensamblaje de genomas.
 
 
-La caracterización de comunidades microbianas con Illumina se ha convertido en el estándar, debido a su bajo costo,througput y alta precisión. Sin embargo las tecnologías de lecturas cortas permiten secuenciar solo una parte del gen 16S rRNA, debido al tamaño de las moleculas que secuencian (lecturas de entre 200 a 400pb)~\cite{salipante2014performance}. 
-Diversos estudios se han realizado para analizar qué región permite obtener la mayor diversidad posible y de manera más precisa~\cite{liu2008accurate,schloss2011reducing}. También se ha determinado que existen grupos taxonómicos que se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}. De igual forma se ha determinado que al realizar una secuenciación parcial del gen 16S la resolución taxonómica es menor, llegandose a identificar solo hasta el nivel de género~\cite{liu2008accurate}.
+La caracterización de comunidades microbianas con Illumina se ha convertido en el estándar, debido a su bajo costo, througput y alta precisión. 
+Sin embargo, las tecnologías de lecturas cortas permiten secuenciar solo una parte del gen 16S rRNA, debido al tamaño de las moleculas que secuencian (lecturas de entre 200 a 400pb)~\cite{salipante2014performance}. 
+Diversos estudios se han realizado para analizar qué región permite obtener la mayor diversidad posible y de manera más precisa~\cite{liu2008accurate,schloss2011reducing}. También se ha determinado que existen grupos taxonómicos que se identifican de mejor manera al utilizar cierta regiones hipervariables~\cite{he2013comparison,claesson2010comparison}. De igual forma se ha determinado que al realizar una secuenciación parcial del gen 16S la resolución taxonómica es menor, llegandose a identificar sólo hasta el nivel de género~\cite{liu2008accurate}.
  
 Es por esto, que las tecnologías de tercera generación, Oxford Nanopore y PacBio se presentan como opciones prometedoras para la secuenciación del gen 16S rRNA, debido a su bajo costo y su capacidad de secuenciar el gen completo en un solo \textit{read}, lo que permite una mayor resolución taxonómica a nivel de especie o incluso de cepa~\cite{szoboszlay2023nanopore,10.1186/s13742}.%~\cite{urban2021freshwater,delahaye2021sequencing}. \hl{revisar estas citas}
 
@@ -148,7 +155,8 @@ Es por esto, que las tecnologías de tercera generación, Oxford Nanopore y PacB
 
 \subsubsection{Tercera generación: Secuenciación de lecturas largas}
 Las tecnologías de secuenciación de tercera generación buscan superar las limitaciones de las tecnologías de secuenciación de lecturas cortas, permitiendo obtener información genómica más completa y detallada. % que las tecnologías de secuenciación de segunda generación.
-Llegaron a presentarse como una alternativa innovadora y prometedora al poder generar lecturas desde unas pocas kilobases hasta megabases~\cite{amarasinghe2020opportunities}. Junto con su capacidad de secuenciar sin amplificación y en tiempo real. 
+Llegaron a presentarse como una alternativa innovadora y prometedora al permitir secuenciar en tiempo real y su capacidad de poder generar lecturas desde unas pocas kilobases hasta megabases~\cite{amarasinghe2020opportunities}. 
+%Junto con su capacidad de secuenciar sin amplificación y en tiempo real. 
 Secuenciación de genomas completos, secuenciación de regiones repetitivas, estudios de metilación y bases modificadas son ahora posible de manera más sencilla gracias a la secuenciación de lecturas largas. 
 Dentro de esta categoría de plataformas se encuentran Pacific Biosciences (PacBio) y Oxford Nanopore Technologies (ONT).
 
@@ -156,8 +164,8 @@ Mientras PacBio realiza secuenciación por síntesis de moleculas largas, %, don
 Oxford Nanopore secuencia mediante la medición de las variaciones de corriente mientras las moleculas de ADN pasan a través de nanoporos, utilizando la diferencia de potencial para determinar la secuencia de nucleótidos.
 
 
-Su principal ventaja frente a las tecnologías de primera y segunda generación es la obtención de lecturas largas de mas de 1kb, llegando incluso a obtener lecturas de 1.5Mb en el caso de Oxford Nanopore y 200kb en el caso de PacBio, lo que permite la resolución de regiones repetitivas o complejas, como también la identificación de variantes estructurales e identificación de modificaciones epigeneticas de manera mucho más sencilla que al utilizar \textit{short-reads}. 
-Dentro de sus principales desventajas se encuentra el porcentaje de error generado por estas plataformas, qué mediante mejoras en la química ha ido disminuyendo pasando de cerca de un 15\% ~\cite{deamer2016three} a menos 1\% para Oxford Nanopore con su nueva química Q20+\footnote{https://nanoporetech.com/accuracy}~\cite{cuber2023comparing} y menor a 0.1\% para PacBio~\cite{cuber2023comparing}.
+Su principal ventaja frente a las tecnologías de primera y segunda generación es la obtención de lecturas largas de mas de 1kb, llegando incluso a obtener lecturas de 1.5Mb en el caso de Oxford Nanopore y 200kb en el caso de PacBio, lo que permite la resolución de regiones repetitivas o complejas, como también la identificación de variantes estructurales e identificación de modificaciones epigenéticas de manera mucho más sencilla que al utilizar \textit{short-reads}. 
+Dentro de sus principales desventajas se encuentra el porcentaje de error generado por estas plataformas, qué mediante mejoras en la química ha ido disminuyendo pasando de cerca de un 15\% ~\cite{deamer2016three} a menos 1\% para Oxford Nanopore con su nueva química Q20+ lanzada en el año 2022\footnote{https://nanoporetech.com/accuracy}~\cite{cuber2023comparing} y menor a 0.1\% para PacBio~\cite{cuber2023comparing}.
 
 %Debido a que las tecnologías de tercera generación generan lecturas más largas que las tecnologías de segunda generación, las herramientas utilizadas para caracterizar las comunidades microbianas con las tecnologías cortas son diferentes, ya que no se deben realizar el mismo procesamientos de las secuencias. 
 %La cantidad de reads en una posición determinada (ya sea en una referencia o alineadas entre las mismas lecturas) de conoce como \textit{depth} o profundidad, y permite determinar la confianza o precisión de la secuencia~\cite{kumar2024next}.
@@ -248,22 +256,127 @@ donde:
     \item $F_2$ es el número de especies observadas que se encuentran exactamente dos veces (doubletons).
 \end{itemize}
 \section{Herramientas}
-El desarrollo de un flujo de trabajo automatizado para la caracterización de comunidades microbionas requiere el uso de diferentes herramientas bioinformáticas para el procesamiento de las secuencias, control de calidad, asignación taxonómica con base de datos, análisis de diversidad, caracterización funcional, etc. Por otro lado, el desarrollo de la aplicación web que estará enlazada al flujo de trabajo, requiere del uso diferentes tecnologías web, librerías y de bases de datos para el almacenamiento de la información, generación de gráficos, y procesamiento de información. A continuación se presentan las principales herramientas a utilizar durante esta tesis.
+El desarrollo de un pipeline automatizado para la caracterización de comunidades microbionas requiere el uso de diferentes herramientas bioinformáticas para el procesamiento de las secuencias, control de calidad, asignación taxonómica con base de datos, análisis de diversidad, caracterización funcional, etc. 
+
+Por otro lado, el desarrollo de una plataforma web que estará enlazada al flujo de trabajo, requiere del uso diferentes tecnologías web, librerías y de bases de datos para el procesamiento y almacenamiento de la información y la generación de gráficos. A continuación se presentan las principales herramientas a utilizar durante esta tesis.
 \subsection{Asignación taxónomica}
-La asignación taxonómica en el contexto de secuenciación del gen 16S, es el proceso donde dada una secuencia de ADN, se busca identificar a qué organismo pertenece.
+La asignación taxonómica en el contexto de secuenciación del gen 16S, es el proceso donde dada una secuencia de ADN, se busca identificar a qué organismo pertenece, es decir identificar la taxonomía asociada a la lectura.
 Con la secuenciación del gen 16S rRNA se obtiene un conjunto de lecturas (secuencias de nucleótidos), donde cada lectura pertenece a una bacteria presente en la muestra. 
 Estas lecturas se procesan y se comparan con bases de datos existentes para poder realizar la asignación taxonómica y poder identificarla. 
-Finalmente lo que se obtiene es un perfil de toda la comunidad bacteriana de la muestra, es decir, todas las bacterias presentes que las herramientas bioinformáticas pudieron detectar, junto con su abundancia relativa.
+Finalmente, lo que se obtiene es un perfil de toda la comunidad bacteriana de la muestra, es decir, todas las bacterias presentes que las herramientas bioinformáticas pudieron detectar, junto con su abundancia relativa.
 
 
-La metodología a utilizar para realizar la asignación va a depender de la tecnología de secuenciación que se haya utilizado.% para Sanger se suele realizar una asignación directa de la lectura que se obtuvo con alguna base de datos como refseq, mientras que para las tecnologías de segunda generación al ser secuencias parciales del gen 16S
+La metodología a utilizar para realizar la asignación va a depender de la tecnología de secuenciación que se haya utilizado. % para Sanger se suele realizar una asignación directa de la lectura que se obtuvo con alguna base de datos como refseq, mientras que para las tecnologías de segunda generación al ser secuencias parciales del gen 16S
 Para las tecnologías de tercera generación lo más común es utilizar la base de datos de RefSeq para buscar la secuencia más parecida en la base de datos mediante alguna herramienta de alineamiento como blast.
 Algunas metodologías exploran también la corrección de errores de estas secuencias, algoritmos de maximización de expectativas o clustering de las mismas secuencias para aminorizar el porcentaje de error y mejorar la asignación taxonómica. 
 %Existen diferentes herramientas para hacer asignación taxonómica de secuencias, algunas incluyen una asignación taxonómica directa a los datos luego del control de calidad, mientras otras herramientas buscan minimizar el error de Oxford Nanopore mediante metodologías de clustering o de algoritmos de maximización de expectativas. 
 
-Algunas de las más utilizadas para trabajar con datos de Oxford Nanopore se presentan a continuación:
+Algunas de las más utilizadas para realizar asignación taxonómica se presentan a continuación:
 %Hoy en día no hay establecidas buenas practicas para el procesamiento del gen 16S rRNA secuenciado mediante Oxford Nanopore, tanto al hablar de la herramienta para hacer asignación taxonómica, como al hablar de la base de datos al utilizar.\hl{leer para ver si citar https://academic.oup.com/femsec/article/97/3/fiab001/6098400}
 
+% \subsubsection{EzBioCloud Microbial Taxonomic Profiling (MTP) pipeline and the PKSSU4.0 database}
+% En algunos estudios se ha utilizado % https://www.mdpi.com/2076-2607/11/3/804#B1-microorganisms-11-00804 , 
+% \subsubsection{VSEARCH [35] against the EzBioCloud 16S database.?}
+
+\subsubsection{BLAST}
+BLAST (Basic Local Alignment Search Tool)  es una suite de herramientas bioinformáticas para la comparación de secuencias con bases de datos ya existentes o personalizadas.
+Mediante un algorimto basado en la búsqueda coincidencias exactas de subsequencias pequeñas, que luego son extendidas al encontrar hits se realiza la comparación de secuencias de ADN, ARN o proteínas con la base de datos utilizada.
+\subsubsection{kraken2}
+
+%\subsection{Herramientas bioinformáticas}
+%Existen diferentes herramientas bioinformáticas que se pueden utilizar para el análisis y manipulación de datos de secuenciación, a continuación se presentan algunas de las más relevantes para este trabajo:
+
+
+\subsection{Control de calidad y manipulación de secuencias}
+% \subsubsection{Guppy}
+% Guppy es una suite de herramientas provista por Oxford Nanopore para realizar procesamientos de datos de secuenciación básicos. Permite realizar basecalling y demultiplexación, alineamiento, detección de bases modificadas, etc.
+\subsubsection{Nanoq y nanofilt para quedarnos con las mejores reads}
+\subsubsection{FastQC}
+FastQC\cite{andrews2010fastqc} permite visualizar la calidad de los datos mediante métricas estándar de calidad, contenido GC, distribución de tamaños, niveles de duplicación  y contenido de adaptadores.
+
+
+Genera un reporte en formato html de fácil visualización separado por módulos, donde cada módulo presenta un estado de Aprobado, Fallido o Advertencia (dependiendo de la calidad de los datos). 
+Se desarrolló pensando en tecnología de secuenciación de lecturas cortas, las cuales poseen un porcentaje de error mucho más bajo (menor al 0.1\%) que las tecnologías de secuenciación de tercera generación y en análisis de genoma completo, por lo que algunos módulos pueden mostrarse como fallidos debido a la naturaleza de los datos de Oxford Nanopore, sin ser datos de baja calidad.
+\subsubsection{NanoPlot}
+NanoPlot~\cite{10.1093/bioinformatics/btad311} es una herramienta para la evaluación de calidad de datos de secuenciación de lecturas largas, permite visualizar la información de calidad, largo de lecturas y distribución de éstas mediantes gráficos interactivos.
+
+Genera un reporte en formato html y gráficos interáctivos que permiten visualizar la calidad de los datos, longitud de las lecturas, distribución de la calidad y longitud, entre otros.
+\subsubsection{Fastp}
+
+Fastp\cite{chen2018fastp} es una herramienta de alto rendimiento diseñada para el procesamiento de archivos de secuenciación con calidad (fastq), permite realizar filtrado de secuencias (por calidad, largo), recortar extremos de baja calidad, recortar adaptadores, eliminar colas polyA, etc.
+\subsubsection{MultiQC}
+MultiQC \cite{ewels2016multiqc} es una herramienta que permite resumir la información obtenida por diferentes herramientas bioinformáticas en un sólo informe final. 
+También permite integrar varias muestras en un solo reporte, y multiples pasos de análisis en un solo archivo html.
+
+% Permite una visualización interactiva de los graficos, mediante la cual se puede hacer zoom o quitar muestras de los 
+
+\subsubsection{Seqkit}
+SeqKit~\cite{shen2016seqkit} es una herramienta de línea de comando desarrollada para la manipulación y análisis eficiente de secuencias biológicas. 
+Tiene subcomandos que permiten obtener estadistícas básicas, extraer muestreos aleatórios, filtrar secuencias por id, comparar secuencias, entre otras.
+
+\subsection{Análisis de diversidad y predicción funcional}
+\subsubsection{PICRUSt2}
+PICRUSt2~\cite{douglas2020picrust2} es una herramienta para la predicción funcional utilizando secuencias marcadoras de genes.
+Generalmente se utiliza el gen 16S rRNA para realizar la predicción, pero también se pueden usar otros genes marcadores.
+
+El output entrega archivos separado por comas con la abundancia de los genes ortólogos, la clasificación de las enzimas y las vías metabólicas predichas en cada muestra.
+
+\subsubsection{LEfSe}
+LEfSe (Linear discriminant analysis Effect Size)~\cite{segata2011metagenomic}  determina las características que permiten explicar las diferencias entre diferentes clases o grupos al combinar pruebas estándar de significancia estadística junto con pruebas que codifican la consistencia biológica y relevancia del efecto encontrado. 
+\subsubsection{Vegan}
+Vegan~\cite{dixon2003vegan} es un paquete desarrollado para R que permite realizar análisis de la ecología comunitaria descriptiva. Contiene funciones de análisis de diversidad,  metodos de ordenación comunitaria, análisis de disimilitud, funciones para vegetación y ecólogos comunitarios.
+
+% Tiene como objetivo el desarrollo 
+
+
+\subsubsection{Taxonkit}
+Taxonkit~\cite{SHEN2021844} permite la manipulación de información taxónomica de registros de NCBI de una manera eficiente. Dado un identificador taxonómico o un nombre de especie se puede obtener el linage completo de ésta.
+
+\subsubsection{csvtk}
+csvtk es una herramienta multiplataforma, eficiente y práctica para la manipulación de archivos separados por comas y tabuladores (formato CSV y TSV). 
+Esta herramienta está desarrollada para utilizarse en conjunto con otras suites de herramientas como TaxonKit, permitiendo obtener resultados de taxonomía de fácil visualización y manipulación para la integración en flujos de trabajo o scripts.
+\subsection{Lenguajes de programación y Frameworks}
+\subsubsection{Nextflow}
+Nextflow~\cite{di2017nextflow} es un framework open source para el desarrollo de flujos de trabajo, el cual permite la ejecución de estos en diferentes entornos computacionales, ya sea en un computador personal, una plataforma de cómputo de alto rendimiento o en la nube. También permite la ejecución de flujos de trabajo de manera paralela, manejando los recursos computacionales de manera eficiente, y sencilla para el usuario.
+ Al permitir el desarrollo de flujos de trabajo escalables y reproducibles es una buena alternativa que ha ganado popularidad debido a su facilidad de uso.
+
+Cuenta con una comunidad llamada nf-core que se encarga de desarrollar flujos de trabajo para el análisis de datos biológicos, los cuales son revisados por la comunidad y publicados en su repositorio. Esto permite contar con una gran cantidad de flujos de trabajo disponibles, los cuales pueden ser ejecutados de manera sencilla por los usuarios, pero cabe destacar que hay que tener conocimientos de línea de comando para poder ejecutarlos.
+
+
+
+\subsubsection{FastAPI}
+Framework rápido  y ligero para el desarrollo de APIs modernas de manera ágil utilizando Python y basado en sus anotaciones de tipo estandar.
+Utiliza pydantic para la validación de los datos de entrada y salida y starlette para el manejo de las peticiones HTTP. %\hl{no estoy 100\% segura}
+\subsubsection{SQLalchemy}
+Librería de Python que permite la comunicación con base de datos no relacionales de manera sencilla, transformando los registros de la base de datos en objetos utilizables mediante Python. Gestiona la creación de modelos y consultas de forma sencilla.
+\subsubsection{Vue.js}
+Vue es un framework para la construcción de interfaces de usuario. Se basa en JavaScript, HTML y CSS para proporcionar un modelo de programación declarativo y basado en componentes que permite desarrollar interfaces de manera eficiente.
+\subsubsection{TypeScript}  
+TypeScript~\cite{bierman2014understanding} es un lenguaje de programación basado en JavaScript, el cual añade sintaxis adicional a JavaScript (o frameworks basados en JS) para soportar la integración de tipado de datos. Al especificar los tipos de datos, TypeScript tiene la capacidad de validarlos e informar errores cuando estos no correspondan.
+\subsubsection{Vuetify}
+Vuetify es un proyecto de código abierto para la construcción de interfaces utilizando los componentes de Vue. Permite la personalización de los componentes con SASS y SCSS, cuenta con un diseño responsivo, y una gran cantidad de componentes ya predefinidos.
+\subsubsection{PostgreSQL}
+PostgreSQL es un sistema de gestión de bases de datos relacionales de código abierto que se presentó como la continuación de POSTGRES. Permite el uso de tipos de datos complejos realizar consultas tanto relacionales (SQL) y no relacionales (JSON).
+
+\subsection{Gestores de paquetes}
+\subsubsection{Conda}
+Conda~\cite{anaconda}  es una herramienta de código abierto, multiplataforma  que permite la gestión de paquetes, dependencias y entornos de desarrollo de manera sencilla. Permite aislar entornos virtuales con características específicas, lo que facilita la reproducibilidad de los análisis y la portabilidad de los mismos.
+\subsubsection{Apptainer}
+Apptainer (antes llamado Singularity~\cite{kurtzer2017singularity}) simplifica la creación y ejecución de contenedores, asegurando el encapsulamiento de los componentes de softwares necesarios para su reproducibilidad y portabilidad.  
+
+
+\section{Estado del arte}
+
+
+\subsection{Herramientas para la asignación taxonómica}
+NanoTax es un pipeline bioinformático y una plataforma web que permite realizar la caracterización de secuencias del gen 16S secuenciadas por tecnologías de tercera generación.
+La caracterización de comunidades implica una etapa prevía de control de calidad,  asignación taxonómica de las secuencias, identificando taxonomías compartidas entre grupos, cálculo de índices de la diversidad y predicción funcional.
+
+En otras palabras NanoTax es una plataforma que integra un pipeline bioinformático compuesto por la unión de diferentes herramientas ya existentes para la manipulación y procesamiento de datos de secuenciación.
+
+Existen diferentes herramientas que permiten realizar la asignación taxonómica de datos de secuenciación, algunas de ellas permiten realizar pasos previos a la asignación taxonómica como control de calidad, algunas presentan la información en forma de gráficos, mientras otras solo presentan la información en forma de tablas.
+
+A continuación se describen algunas de las herramientas o pipelines más utilizadas para la asignación taxonómica de secuencias de Oxford Nanopore.
 \subsubsection{Epi2me}
 Plataforma desarrollada por Oxford Nanopore para el análisis de datos secuenciación obtenidos mediante sus dispositivos. 
 Integra flujos de trabajo para realizar basecalling y demultiplexación, alineamiento, ensamblaje de SARS-CoV-2, asignación taxonómica de gen 16S, 18S, ITS, y metagenómca, variant calling, entre otros.
@@ -284,14 +397,20 @@ Para la asignación taxónomica del gen 16S utiliza la herramienta blast con la 
 %     \item Porcentaje de identidad mínimo: 77\%
 %     \item max target sequences:
 % \end{itemize}
-Esta herramienta entrega un archivo en formato CSV con la información de la lectura, asignación taxonómica a nivel de especie, porcentaje de identidad de la asignación, entre otras.
+Esta herramienta entrega un archivo separado por comas con la información de la lectura, asignación taxonómica a nivel de especie, porcentaje de identidad de la asignación, entre otras.
+
+\subsubsection{Epi2melabs: Pipeline wf-16s}
+
 \subsubsection{NanoCLUST}
-Nanoclust~\cite{10.1093/bioinformatics/btaa900} es un flujo de trabajo desarrollado en Nextflow para la clasificación de amplicones del gen 16s obtenidos mediante secuenciación de Oxford Nanopore. Incluye pasos previos a la asignación taxonomica, como el basecalling, demultiplexación y control de calidad. Destaca por utilizar un clustering no supervisado (UMAP) y un paso exhaustivo de corrección de lecturas basada en los clusters obtenidos previo a la asignación taxonómica.
+Nanoclust~\cite{10.1093/bioinformatics/btaa900} es un flujo de trabajo desarrollado en Nextflow para la clasificación de amplicones del gen 16s obtenidos mediante secuenciación de Oxford Nanopore. 
+Incluye pasos previos a la asignación taxonómica, como el basecalling, demultiplexación y control de calidad. 
+Destaca por utilizar un clustering no supervisado (UMAP) y un paso exhaustivo de corrección de lecturas basada en los clusters obtenidos previo a la asignación taxonómica.
 Utiliza la base de datos de Genbank para realizar la asignación taxonómica.
 
 Cabe destacar que este flujo de trabajo se encuentra descontinuado ya que fue desarrollado utiilzando Nextflow DSL1 (estándar deprecado en la version 22.10). Además, debido a que la herramienta ha dejado de recibir soporte por parte de los desarrolladores, no se han actualizado las versiones de los software ni se han realizado mejoras.
 
-Esta herramienta entrega un archivo csv por cada categoría taxonómica (filo, clase, orden, familia, género, especie) con la cantidad de lecturas asignadas a cada taxonomía. De igual forma, se generan graficos de barra con las asignaciones, y un gráfico de la separación de los clusters. 
+Esta herramienta entrega un archivo separado por comas por cada categoría taxonómica (filo, clase, orden, familia, género, especie) con la cantidad de lecturas asignadas a cada taxonomía. 
+De igual forma, se generan gráficos de barra con las asignaciones, y un gráfico de la separación de los clusters. 
 \subsubsection{NanoRTax}
 
 NanoRTax~\cite{RODRIGUEZPEREZ20225350} es un flujo de trabajo desarrollado en Nextflow que cuenta con una interfaz web que permite al usuario visualizar el progreso y resultados del pipeline.
@@ -299,84 +418,14 @@ Recibe como entrada los archivos FASTQ, a los cuales se les hace un control de c
 
 Al igual que NanoCLUST, NanoRTax utiliza DSL1 por lo que no es comptabile con versiones nuevas de Nextflow.
 \subsubsection{EMU}
-EMU~\cite{curry2022emu} busca realizar una corrección de errores y mejorar el error de Oxford Nanopore mediante un enfoque basado en algoritmos de maximización de expectativas para generar perfiles taxonómicos de la comunidad microbiona. Permite realizar estos perfiles utilizando diferentes bases de datos, como, la base de datos de Genbank,  RDP y Silva v.138. En el caso de realizar analisis de la región ITS, permite integrar las base de datos de UNITE de fungi y eucariotas.
+EMU~\cite{curry2022emu} busca realizar una corrección de errores y mejorar el error de Oxford Nanopore mediante un enfoque basado en algoritmos de maximización de expectativas para generar perfiles taxonómicos de la comunidad microbiona. Permite realizar estos perfiles utilizando diferentes bases de datos, como, la base de datos de Genbank,  RDP y Silva v.138. En el caso de realizar análisis de la región ITS, permite integrar las base de datos de UNITE de fungi y eucariotas.
 
 El output de esta herramienta es un archivo en formato TSV con los perfiles taxonómicos encontrados en cada muestra, es decir, el identificador del taxón, abundancia, especie y la información de todas las categorías taxonómicas. 
 
-% \subsubsection{EzBioCloud Microbial Taxonomic Profiling (MTP) pipeline and the PKSSU4.0 database}
-% En algunos estudios se ha utilizado % https://www.mdpi.com/2076-2607/11/3/804#B1-microorganisms-11-00804 , 
-% \subsubsection{VSEARCH [35] against the EzBioCloud 16S database.?}
 
+\subsection{----}
+Las herramientas descritas anteriormente requieren en su mayoría (excluyendo Epi2Me) de conocimientos informáticos para poder realizar la asignación taxonómica, y de contar con recursos computacionales.
+Ninguna de estas herramientas realiza análisis posteriores a la asignación taxonómica como lo hace NanoTax, por lo que el usuario debe realizar estos análisis por separado utilizando las herramientas de manera independiente.
 
-\subsection{Herramientas bioinformáticas}
-Existen diferentes herramientas bioinformáticas que se pueden utilizar para el análisis y manipulación de datos de secuenciación, a continuación se presentan algunas de las más relevantes para este trabajo:
-
-% \subsubsection{Guppy}
-% Guppy es una suite de herramientas provista por Oxford Nanopore para realizar procesamientos de datos de secuenciación básicos. Permite realizar basecalling y demultiplexación, alineamiento, detección de bases modificadas, etc.
-\subsubsection{FastQC}
-FastQC\cite{andrews2010fastqc} permite visualizar la calidad de los datos mediante métricas estándar de calidad, contenido GC, distribución de tamaños, niveles de duplicación  y contenido de adaptadores.
-
-
-Genera un reporte en formato html de fácil visualización separado por módulos, donde cada módulo presenta un estado de Aprobado, Fallido o Advertencia (dependiendo de la calidad de los datos). Se desarrollo pensando en tecnología de secuenciación de lecturas cortas, las cuales poseen un porcentaje de error mucho más bajo (menor al 0.1\%) que las tecnologías de secuenciación de tercera generación y en análisis de genoma completo, por lo que algunos módulos pueden mostrarse como fallidos debido a la naturaleza de los datos de Oxford Nanopore, sin ser datos de baja calidad.
-\subsubsection{NanoPlot}
-NanoPlot~\cite{10.1093/bioinformatics/btad311} es una herramienta para la evaluación de calidad de datos de secuenciación de lecturas largas, permite visualizar la información de calidad, largo de lecturas y distribución de estas mediantes gráficos interactivos.
-
-Genera un reporte en formato html y gráficos interáctivos que permiten visualizar la calidad de los datos, longitud de las lecturas, distribución de la calidad y longitud, entre otros.
-\subsubsection{Fastp}
-
-Fastp\cite{chen2018fastp} es una herramienta de alto rendimiento diseñada para el procesamiento de archivos de secuenciación con calidad (fastq), permite realizar filtrado de secuencias (por calidad, largo), recortar extremos de baja calidad, recortar adaptadores, eliminar colas polyA, etc.
-\subsubsection{MultiQC}
-MultiQC \cite{ewels2016multiqc} es una herramienta que permite resumir la información obtenida por diferentes herramientas bioinformaticas en un solo informe final. También permite integrar varias muestras en un solo reporte, y multiples pasos de analisis en un solo archivo html.
-
-% Permite una visualización interactiva de los graficos, mediante la cual se puede hacer zoom o quitar muestras de los 
-
-\subsubsection{Seqkit}
-
-\subsubsection{PICRUSt2}
-PICRUSt2~\cite{douglas2020picrust2} es una herramienta para la predicción funcional utilizando secuencias marcadoras de genes.
-Generalmente se utiliza el gen 16S rRNA para realizar la predicción, pero también se pueden usar otros genes marcadores.
-
-El output entrega archivos en formato CSV con la abundancia de los genes ortologos, la clasificación de las enzimas y las vías metabolicas predichos en cada muestra.
-
-\subsubsection{LEfSe}
-LEfSe (Linear discriminant analysis Effect Size)~\cite{segata2011metagenomic}  determina las caracteristicas que permiten explicar las diferencias entre diferentes clases o grupos al combinar pruebas estándar de significancia estadistica junto con pruebas que codifican la consistencia biologica y relevancia del efecto encontrado. 
-\subsubsection{vegan package}
-Vegan~\cite{dixon2003vegan} es un paquete desarrollado para R que permite realizar análisis de la ecología comunitaria descriptiva. Contiene funciones de análisis de diversidad,  metodos de ordenación comunitaria, análisis de disimilitud, funciones para vegetación y ecologos comunitarios.
-
-% Tiene como objetivo el desarrollo 
-
-
-\subsubsection{Taxonkit}
-Taxonkit~\cite{SHEN2021844} permite la manipulación de información taxónomica de registros de NCBI de una manera eficiente. Dado un identificador taxonómico o un nombre de especie se puede obtener el linage completo de esta.
-
-\subsubsection{csvtk}
-csvtk es una herramienta multiplataforma, eficiente y practica para la manipulación de archivos en formato CSV y TSV. Esta herramienta esta desarrollada para utilizarse en conjunto con otras suites de herramientas como TaxonKit, permitiendo obtener resultados de taxonómia de fácil visualización y manipulación para la integración en flujos de trabajo o scripts.
-\subsection{Lenguajes de programación y Frameworks}
-\subsubsection{Nextflow}
-Nextflow~\cite{di2017nextflow} es un framework open source para el desarrollo de flujos de trabajo, el cual permite la ejecución de éstos en diferentes entornos computacionales, ya sea en un computador personal, una plataforma de cómputo de alto rendimiento o en la nube. También permite la ejecución de flujos de trabajo de manera paralela, manejando los recursos computacionales de manera eficiente, y sencilla para el usuario.
- Al permitir el desarrollo de flujos de trabajo escalables y reproducibles es una buena alternativa que ha ganado popularidad debido a su facilidad de uso.
-
-Cuenta con una comunidad llamada nf-core que se encarga de desarrollar flujos de trabajo para el análisis de datos biologicos, los cuales son revisados por la comunidad y publicados en su repositorio. Esto permite contar con una gran cantidad de flujos de trabajo disponibles, los cuales pueden ser ejecutados de manera sencilla por los usuarios, pero cabe destacar que hay que tener conocimientos de linea de comando para poder ejecutarlos.
-
-
-
-\subsubsection{FastAPI}
-Framework rápido  y ligero para el desarrollo de APIs modernas de manera ágil utilizando Python y basado en sus anotaciones de tipo estandar.
-Utiliza pydantic para la validación de los datos de entrada y salida y starlette para el manejo de las peticiones HTTP. %\hl{no estoy 100\% segura}
-\subsubsection{SQLalchemy}
-Librería de Python que permite la comunicación con base de datos no relacionales de manera sencilla, transformando los registros de la base de datos en objetos utilizables mediante Python. Gestiona la creación de modelos y consultas de forma sencilla.
-\subsubsection{Vue.js}
-Vue es un framework para la construcción de interfaces de usuario. Se basa en JavaScript, HTML y CSS para proporcionar un modelo de programación declarativo y basado en componentes que permite desarrollar interfaces de manera eficiente.
-\subsubsection{TypeScript}  
-TypeScript~\cite{bierman2014understanding} es un lenguaje de programación basado en JavaScript, el cual añade sintaxis adicional a JavaScript (o frameworks basados en JS) para soportar la integración de tipado de datos. Al especificar los tipos de datos, TypeScript tiene la capacidad de validarlos e informar errores cuando estos no correspondan.
-\subsubsection{Vuetify}
-Vuetify es un proyecto de código abierto para la construcción de interfaces utilizando los componentes de Vue. Permite la personalización de los componentes con SASS y SCSS, cuenta con un diseño responsivo, y una gran cantidad de componentes ya predefinidos.
-\subsubsection{PostgreSQL}
-PostgreSQL es un sistema de gestión de bases de datos relacionales de código abierto que se presentó como la continuación de POSTGRES. Permite el uso de tipos de datos complejos realizar consultas tanto relacionales (SQL) y no relacionales (JSON).
-
-\subsection{Gestores de paquetes}
-\subsubsection{Conda}
-Conda~\cite{anaconda}  es una herramienta de código abierto, multiplataforma  que permite la gestión de paquetes, dependencias y entornos de desarrollo de manera sencilla. Permite aislar entornos virtuales con caracteristicas especificas, lo que facilita la reproducibilidad de los análisis y la portabilidad de los mismos.
-\subsubsection{Apptainer}
-Apptainer (antes llamado Singularity~\cite{kurtzer2017singularity}) simplifica la creación y ejecución de contenedores, asegurando el encapsulamiento de los componentes de softwares necesarios para su reproducibilidad y portabilidad.  
-
+De las herramientas mencionadas anteriormente Epi2Me es la única que permite al usuario realizar el análisis de manera interactiva, sin necesidad de contar con recursos computacionales, ni de conocimientos avanzadados. 
+Sin embargo, no permite la integración de análisis posteriores a la asignación taxonómica.
