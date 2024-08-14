@@ -1,6 +1,6 @@
 \chapter{Marco teórico y estado del arte}
 %% leer https://www.cd-genomics.com/blog/introduce-to-16s-rrna-and-16s-rrna-sequencing/
-
+\hl{Genomic sequencing is important for understanding biological systems and human genetics.}
 %Esta tesis busca presentar una 
 En el presente trabajo de tesis se presenta una nueva alternativa para la caracterización de comunidades microbianas utilizando secuenciación de tercera generación. Para ello se  desarrolló un flujo de trabajo automatizado que permite realizar el procesamiento de los datos de secuenciación (control de calidad, asignación taxonómica, análisis de diversidad, predicción funcional y caracterización de grupos). 
 
@@ -39,6 +39,11 @@ La interacción con el medio ambiente también influye, habiendo estudios que id
 Conocer la diversidad microbiana asociada a organismos multicelulares permite ahondar en la relación existente entre microbios y la salud de los seres vivos, asi como conocer microorganismos patógenos que causan enfermedades infecciosas, ayuda al diagnóstico y permite tomar acciones oportunas. 
 Este conocimiento ayuda modular nutrición, salud y enfermedad a través del estudio del microbioma tomando en consideración los distintos factores asociados al estilo de vida.
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6009232/
+
+
+
+\hl{There is recently an increasing interest in the potential role of bacteria in the development of oral cancer (1). Such a trend is driven by the existing evidence on association between certain bacterial species and some types of cancer. The etiological role of Helicobacter pylori in gastric adenocarcinomas and lymphomas is a classic example (2). Other examples include the association of Chlamydia trachomatis with cervical cancer (3), Salmonella typhi with gallbladder cancer (4), and Bacteroides fragilis and Fusobacteria with colon cancer (5, 6). Mechanisms by which bacteria are thought to contribute to the development of cancer include induction of chronic inflammation, interference with eukaryotic cell cycle, or/and production of carcinogenic substances (7). Actually, the oral microbiota has been demonstrated to produce carcinogenic levels of acetaldehyde (8).}
+\hl{Robust species taxonomy assignment algorithm for 16S rRNA NGS reads: application to oral carcinoma samples}
 \subsection{ARN Ribosomal 16S}
 %% seleccion region
 %% https://search.brave.com/search?q=16s+gene+what+are+constant+and+variables+reigon&source=desktop
@@ -83,7 +88,9 @@ Es por esto, que las tecnologías de secuenciación de nueva generación se pres
 %Existen diferentes bases de datos que contienen la información de las secuencias del gen 16S para las diferentes bacterias, como 16S en bases de datos como RDP (Ribosomal Database Project~\cite{cole2014ribosomal}), 16S RefSeq~\cite{}, Greengenes~\cite{desantis2006greengenes}, Silva~\cite{} y el proyecto de microbioma humano (HMP)~\cite{}.
 
 
-
+% Leer https://www.upemor.edu.mx/posgrados/documentos/tesis/T.4315-Gutiérrez-Millán-Everardo.pdf
+%https://blog.microbiomeinsights.com/16s-rrna-sequencing-guide
+\hl{ there are regions of the 16S rRNA gene that are highly variable, making them useful for differentiating between individual species and strains of bacteria and archaea}
 %añadir: GEN 16S RRNA ES el gold standar para analisis filogeneticos~\cite{boers2019understanding}.
 
 %Las regiones constantes se utilizan para el diseño de primers a utilizar durante la amplificación (PCR), LAS REGIONES hipervariales se utilizan para la identificación de diversidad en procariontes~\cite{chakravorty2007detailed}.
@@ -277,12 +284,17 @@ Algunas de las más utilizadas para realizar asignación taxonómica se presenta
 % \subsubsection{EzBioCloud Microbial Taxonomic Profiling (MTP) pipeline and the PKSSU4.0 database}
 % En algunos estudios se ha utilizado % https://www.mdpi.com/2076-2607/11/3/804#B1-microorganisms-11-00804 , 
 % \subsubsection{VSEARCH [35] against the EzBioCloud 16S database.?}
-
+\hl{Hablar sobre asignación por alineamiento y por clustering?}
 \subsubsection{BLAST}
 BLAST (Basic Local Alignment Search Tool)  es una suite de herramientas bioinformáticas para la comparación de secuencias con bases de datos ya existentes o personalizadas.
 Mediante un algorimto basado en la búsqueda coincidencias exactas de subsequencias pequeñas, que luego son extendidas al encontrar hits se realiza la comparación de secuencias de ADN, ARN o proteínas con la base de datos utilizada.
-\subsubsection{kraken2}
 
+Varios flujos de trabajo para la asignación taxonómica utilizan BLAST para comparar las secuencias de ADN obtenidas con bases de datos de secuencias de referencia.
+Su mayor desventaja es el incremento de los tiempos de ejecución al aumentar el conjunto de datos o tamaño de la bases.
+
+
+\subsubsection{Clustering }
+Una metodología conocida al secuenciar el gen 16S con illumina es generar unidades taxonomicas (OTUs) mediante clustering de las secuencias, donde se agrupan las secuencias similares en un mismo grupo y posterior a ellos se asigna una taxonomía mediante una base de datos de referencia.
 %\subsection{Herramientas bioinformáticas}
 %Existen diferentes herramientas bioinformáticas que se pueden utilizar para el análisis y manipulación de datos de secuenciación, a continuación se presentan algunas de las más relevantes para este trabajo:
 
@@ -290,7 +302,15 @@ Mediante un algorimto basado en la búsqueda coincidencias exactas de subsequenc
 \subsection{Control de calidad y manipulación de secuencias}
 % \subsubsection{Guppy}
 % Guppy es una suite de herramientas provista por Oxford Nanopore para realizar procesamientos de datos de secuenciación básicos. Permite realizar basecalling y demultiplexación, alineamiento, detección de bases modificadas, etc.
-\subsubsection{Nanoq y nanofilt para quedarnos con las mejores reads}
+\subsubsection{Nanoq}
+Nanoq~\cite{steinig2022nanoq} es una herramienta que permite evaluar de manera rápida y precisa datos obtenidos mediante Oxford Nanopore. 
+Además permite realizar filtros de calidad y de largo de las secuencias de Oxford Nanopore. 
+
+\subsubsection{Filtlong}
+Filtlong es una herramienta para filtrar lecturas por calidad y tamaño. 
+Permite realizar un muestreo de las lecturas, considerando solo aquellas con la mejor longitud y calidad. 
+Para ello se pueden indicar el porcentaje de lecturas o indicar la cantidad de bases que se desea obtener luego del muestreo.
+Por defecto, el algoritmo le da una ponderación a la calidad y al largo de las lecturas, siendo la misma ponderación para ambas variables
 \subsubsection{FastQC}
 FastQC\cite{andrews2010fastqc} permite visualizar la calidad de los datos mediante métricas estándar de calidad, contenido GC, distribución de tamaños, niveles de duplicación  y contenido de adaptadores.
 
@@ -366,9 +386,11 @@ Apptainer (antes llamado Singularity~\cite{kurtzer2017singularity}) simplifica l
 
 
 \section{Estado del arte}
+% Si bien esta tesis propone la integración de diferentes herramientas bioinformáticas para la caracterización de comunidades microbianas, integrando pasos desde el basecalling hasta los análisis posteriores a la asignación taxonómica, existen diferentes flujos de trabajo y herramientas que permiten realizar la caracterización de comunidades microbianas. 
+% Algunas de ellas permiten realizar análisis posteriores, mientras otras solo permiten realizar la asignación taxonómica.
 
+% A continuación se presentan algunas de las herramientas más utilizadas para la caracterización de comunidades microbianas con Oxford Nanopore.
 
-\subsection{Herramientas para la asignación taxonómica}
 NanoTax es un pipeline bioinformático y una plataforma web que permite realizar la caracterización de secuencias del gen 16S secuenciadas por tecnologías de tercera generación.
 La caracterización de comunidades implica una etapa prevía de control de calidad,  asignación taxonómica de las secuencias, identificando taxonomías compartidas entre grupos, cálculo de índices de la diversidad y predicción funcional.
 
@@ -400,7 +422,14 @@ Para la asignación taxónomica del gen 16S utiliza la herramienta blast con la 
 Esta herramienta entrega un archivo separado por comas con la información de la lectura, asignación taxonómica a nivel de especie, porcentaje de identidad de la asignación, entre otras.
 
 \subsubsection{Epi2melabs: Pipeline wf-16s}
+Pipeline bioinformático desarrollado en nextflow que permite realizar la asignación taxononica mediante el el uso de Minimap2 con la base de datos de Genbank de 16S y 18S, o mediante la herramienta Kraken con su base de datos especifica.
 
+Como resultado entrega un archivo en formato TSV con la información de la asignación taxonómica por muestra y la cantidad de lecturas asignadas a cada taxonomia.
+De igual manera se genera un reporte en formato HTML que integra información de calidad y asignación taxonómica por muestra. Además inlcuye metricas de alfa diversidad
+
+
+
+% Cabe destacar que este flujo de trabajo solo permite realizar la asignacion taxonómica a nivel de género y no de especie.
 \subsubsection{NanoCLUST}
 Nanoclust~\cite{10.1093/bioinformatics/btaa900} es un flujo de trabajo desarrollado en Nextflow para la clasificación de amplicones del gen 16s obtenidos mediante secuenciación de Oxford Nanopore. 
 Incluye pasos previos a la asignación taxonómica, como el basecalling, demultiplexación y control de calidad. 
@@ -425,7 +454,16 @@ El output de esta herramienta es un archivo en formato TSV con los perfiles taxo
 
 \subsection{----}
 Las herramientas descritas anteriormente requieren en su mayoría (excluyendo Epi2Me) de conocimientos informáticos para poder realizar la asignación taxonómica, y de contar con recursos computacionales.
-Ninguna de estas herramientas realiza análisis posteriores a la asignación taxonómica como lo hace NanoTax, por lo que el usuario debe realizar estos análisis por separado utilizando las herramientas de manera independiente.
+Solo el pipeline wf-16s integra análisis posteriores a la asignación taxonomica, para todas las demas el usuario debe realizar estos análisis por separado utilizando las herramientas de manera independiente.
 
 De las herramientas mencionadas anteriormente Epi2Me es la única que permite al usuario realizar el análisis de manera interactiva, sin necesidad de contar con recursos computacionales, ni de conocimientos avanzadados. 
 Sin embargo, no permite la integración de análisis posteriores a la asignación taxonómica.
+
+
+\subsection{Plataforma computacional}
+La plataforma web fue montada en un servidor con las siguientes características:
+\hl{caracteristicas server}
+
+
+Los experimentos y el flujo de trabajo fueron ejecutados en el cluster de alto computado del equipo de bioinformática, el cual tiene las siguientes carácteristicas:
+\hl{caracteristicas ulem}

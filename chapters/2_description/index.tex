@@ -12,9 +12,9 @@ El flujo de trabajo está diseñado de manera modular permitiendo que el usuario
 
 El pipeline cuenta con los siguientes módulos: 
 \begin{itemize}
-    \item Basecalling y demultiplexación (\textit{basecalling}): Este módulo se encarga de realizar el basecalling y demultiplexación de las muestras mediante la herramienta Guppy.
-    \item Control de calidad (\textit{qc}): Este módulo se encarga de realizar los filtros y control de calidad de las muestras mediante las herramienta Nanoplot y Fastp.
-    \item Asignación taxonómica (\textit{taxonomic\_assignament}): Este módulo se encarga de realizar la asignación taxonómica de las muestras mediante la herramienta BLAST y la base de datos de 16S Genbank. Previo a la asignación taxonómica se realiza un subsampleo de las muestras y se convierten los archivos FASTQ a formato FASTA.
+    \item Basecalling y demultiplexación (\textit{basecalling}): Este módulo se encarga de realizar el basecalling y demultiplexación de las muestras mediante la herramienta \hl{Guppy}.
+    \item Control de calidad (\textit{qc}): Este módulo se encarga de realizar los filtros y control de calidad de las muestras mediante las herramienta Nanoplot y Nanoq.
+    \item Asignación taxonómica (\textit{taxonomic\_assignament}): Este módulo se encarga de realizar la asignación taxonómica de las muestras mediante la herramienta BLAST y la base de datos de 16S Genbank. Previo a la asignación taxonómica se realiza un subsampleo de las muestras y un clustering y se convierten los archivos FASTQ a formato FASTA.
     \item Índices de diversidad (\textit{diversity}): Este módulo se encarga de calcular los índices de diversidad de Shannon, Simpson y Chao1 mediante el paquete vegan de R.
     \item Predicción funcional (\textit{functional\_predicction}): Este módulo se encarga de realizar la predicción funcional de las muestras mediante la herramienta PICRUSt2 y la búsqueda de vías metabólicas que presentan diferencias significativas entre grupos mediante la herramienta Lefse.
 \end{itemize}
@@ -23,6 +23,141 @@ En los módulos de asignación taxonómica, índices de diversidad y predicción
 
 En caso de que el flujo de trabajo se esté ejecutando desde la aplicación web, se ejecutará además un módulo extra que permite escribir los resultados en la base de datos.
 
+\subsection{Diseño del flujo de trabajo}
+\subsubsection{Bascalling y demultiplexación}
+\hl{Me suena más a marco teorico}
+Los algoritmos de basecalling desarrollados por Oxford Nanopore Technologies (ONT) permiten determinar la secuencia de nucleótidos a partir de las señales eléctricas generadas por los poros utilizando algoritmos basados en redes neuronales.
+Una caracteristica relevante de las redes neuronales es su capacidad de aprender y mejorar sus predicciónes mediante el entrenamiento de la red.
+En el caso de los algoritmos de basecalling provistos por Oxford Nanopore sevutilizó un gran volumen de datos de secuenciación de alta calidad y de diferentes organismos incluyendo plantas, animales, bacterias y virus para generar modelos que permitan obtener resultados precisos y confiables\footnote{https://nanoporetech.com/platform/technology/basecalling}.
+
+
+El entrenamiento de una red neuronal permite obtener módelos que luego se pueden utilizar al ingresar nueevos datos a la red.
+En este caso, los algoritmos de basecalling de Oxford Nanopore ofrecen tres modelos diferentes para realizar el bascaling: módelo rapido (FAST), módelo de alta precisión (HAC) y el módelo super preciso (SUP).
+El módelo a utilizar durante el basecalling define la configuración utilizada para realizar el basecalling por lo que influye notoramiente en los resultados a obtener, permitiendo utilizar modelos más rápidos y que requieren menos recursos computacionales pero menos precisos, como lo es el modelo fast o modelos mas exhautivos\hl{??} en recursos computacioneles y tiempo requerido pero más precisos, como el modelo SUP.
+
+
+Actualmente la herramienta Dorado es la herramienta oficial de Oxford Nanopore para realizar el basecalling y la demultiplexación de las muestras, por lo que se utilizará esta herramienta con el modelo SUP para realizar el basecalling y la demultiplexación de las muestras.
+\subsubsection{Control de calidad}
+Realizar un correcto control de calidad  de las secuencias es un paso fundamental en cualquier análisis bioinformático, esto permite eliminar secuencias de baja calidad, eliminando posibles sesgos producidos por el porcentaje de error permitiendonos obtener resultados más precisos
+
+
+La calidad de una base se representa mediante puntajes de calidad denomiandos \textit{q-score}, los cuales se pueden calular mediante la siguiente formula:
+\begin{equation}
+    Q = -10 \log_{10}(P)
+    % Q = -10log10(e)
+\end{equation}
+Al realizar filtros o control de calidad se suele resumir la calidad de la secuencia mediante un número que representa la calidad promedio de la secuencia a lo largo de todas las bases. 
+
+Herramientas clásicas como  FastQC y Fastp primero promedian los puntajes de calidad de cada base y luego aplican la formula de calidad sobre el valor obtenido, lo que puede llevar a errores en el cálculo de la calidad de las secuencias cuando los valores de qscore varian mucho a lo largo de la secuencia como en el caso de secuenciaciones de Oxford Nanopore.
+En el caso de tecnologías de lecturas cortas como Illumina donde la calidad no varia mucho a lo largo de la secuencia, este método es aceptable, pero en el caso de secuenciaciones de Oxford Nanopore donde la calidad varia mucho a lo largo de la secuencia, este método puede llevar a obtener valores de calidad más altos de los que realmente son.
+
+Es por esto que se decidió utilizar NanoPlot para el control de calidad y Nanoq para los filtros de calidad ya que el cálculo de calidad es más adecuado para la tecnología de secuenciación que se esta utilizando.%calculan la probabilidad de error por cada base y luego promedian los valores obtenidos, lo que permite obtener resultados más precisos y confiables en el cálculo de la calidad de las secuencias con Oxford Nanopore.
+% NanoPlot y Nanoq a diferencia de herramientas ampliamente utilizadas en bioinformática como Fastp y FastQC, estan pensadas para ser utilizadas con datos de secuenciación de Oxford Nanopore, teniendo en consideración algunas caracteristicas relevantes a la hora de procesar lecturas largas como lo es la variabilidad en los puntajes de calidad a lo largo de la secuencia.
+% NanoPlot y Nanoq calculan la probabilidad de error por cada base y luego promedian los valores obtenidos, lo que permite obtener resultados más precisos y confiables en el cálculo de la calidad de las secuencias con Oxford Nanopore.
+
+
+%ya que calculan el error de la secuencia primero promediando los puntajes de calidad de cada base y luego aplicando la formula de calidad sobre el valor obtenido, lo que puede llevar a errores en el cálculo de la calidad de la secuencia cuando los valores de qscore varian mucho a lo largo de la secuencia como en el caso de secuenciaciones de Oxford Nanopore.
+%Existen diferentes herramientas como Fastp y FastQC que utilizan la primera metodología para el cálculo de calidad, mientras que herramientas como  Nanoplot y Nanoq utiliza la segunda metodología. 
+%Se decidió utilizar NanoPlot y Nanoq para realizar el control y filtros de calidad de las secuencias debido a que calculan la probabilidad de error por cada base y luego promedian los valores obtenidos, lo que permite obtener resultados más precisos y confiables en el cálculo de la calidad de las secuencias.
+
+
+Para los filtros de calidad se dicidió utilizar una calidad promedio de \hl{15-16} lo que implica una precisión del \hl{96.8-97.4\%}
+
+
+
+
+% y en filtros de calidad (Fastp y Nanoq) para determinar cuál de ellas se ajusta mejor a las necesidades del análisis de secuencias de Oxford Nanopore.
+
+
+
+
+
+
+
+
+% La mayoría de las herramientas bioinformáticas desarrolladas para esta tarea utilizan alguna de las siguientes metodologías:
+% \begin{itemize}
+%     \item Cálculo de calidad en base a un promedio de los puntajes de calidad: Se promedían los puntajes de calidad de cada base y luego se calcula el puntaje de calidad y probabilidad de error de la secuencia aplicando el logaritmo de la formula de calidad.
+%     \item Cálculo de calidad utilizando una conversión previa de los puntajes de calidad a probabilidades: Los puntajes de calidad de cada base se convierten primero a probabilidad de error mediante la formula de calidad y luego se promedian los porcenajes de error  obtenidos y se calcula el puntaje de calidad de la secuencia.
+% \end{itemize}
+
+% ----------------
+
+Para reducir los costos computacionales en el paso de asignación taxónomica se decidió hacer un subsampling de las muestras con un valor por defecto de 100.000 lecturas. 
+Como se sabe que la calidad de las lecturas es un factor importante en la asignación taxonómica e influye directamente en la precisión de la asignación, se decidió realizar este muestro seleccionando las mejores lecturas en base a la calidad obtenida, para ello se utilizó la herramienta Filtlong.
+
+Este muestreo no es aleatorio, es basado en la calidad de las lecturas utilizando la herramienta filtlong. 
+Por defecto Filtlong realiza esta selección de las mejores lecturas ponderando de igual manera la calidad y la longitud de las lecturas, en este caso, considerando que se secuenció el amplicon completo del gen 16S y que se realizó un filtro previo para eliminar lecturas que no se encuentren en el rango deseado (entre 1000 y 2000 pares de bases), se decidió realizar el filtro de las lecturas ponderando la calidad de las lecturas con un valor de 10 y el largo de las lecturas con un valor de \hl{0}. 
+
+
+\begin{itemize}
+    \item Nanoq y nanoplot calculan la calidad de la manera correcta , fastq y faspt no
+    \item se filtro por una calidad de 15 lo que es un 96.8\% de precisión
+    \item entre 1000 a 2000
+    \item filtros se hicieron en base a las mejores secuencias (mejor = calidad)
+\end{itemize}
+\subsubsection{Asignación taxonomica}
+Para la asignación taxonómica se decidió utilizar Blast junto con la base de datos de 16S de Genbank, 
+
+\begin{itemize}
+    \item pq un clustering al 95\% de identidad
+    \item tiempos de ejecucion blast solo, mmseqs + blast rep, emu, minimap2 (nanopre), krekaaen
+    \item similitud de resultados entre las diferentes herramientas
+    \item porque el valor del  subsampling (debería hacer experimentos con diferentes valores?)
+
+\end{itemize}
+Para realizar la asignación taxonómica se propone realizar un clustering utilizar la herramienta BLAST con la base de datos de 16S de Genbank.
+clusterng con diferentes calidades y porcentajes de identidad \hl{boxplot de cantidad de especies que se pierden o grafico de puntos de cantidad de especies detectadas vs en el eje x el valor del subsampling (tal vez un jitter)}
+
+
+
+\hl{emu / kraken / minimap / blast / blast con clustering}
+
+%% comparacion con emu https://www.nature.com/articles/s41592-022-01520-4
+----------------- o -----------------
+\hl{explicar que el clustering elige una secuencia representativa}
+
+Se evalúo el impacto de la calidad de las muestras al realizar el clustering evaluando la cantidad de clusters generados, cantidad de cluster con menos de 10 secuencias (0.01\% de las secuencias) y el porcentaje de identidad de las secuencias del cluster con la secuencia representativa del cluster.
+
+
+Para esto se realizó el clustering de las muestras con diferentes valores de calidad (Q10-Q12-Q14-Q16-Q18) y un porcentaje de identidad de \hl{XX}, se observó que al aumentar la calidad de las muestras se reducía la cantidad de clusters generados, \hl{lo que indica que las muestras de baja calidad generan clusters con mayor cantidad de secuencias, lo que puede llevar a una asignación taxonómica incorrecta.-- hablar del porcentaje de identidad entre cluster}
+
+%, el porcentaje de secuencias que se asignan en un primer hit. En caso de las secuencias que no el primer hit no corresponde al mismo hit que
+
+
+\subsubsubsection{Comparación de herramientas de asignación taxonómica}
+Apart from the misclassification of the XXX reads, the Nanopore results were close to the composition of the mock community 
+
+clustering sea version alternativa / experimental
+
+
+
+Para definir el número de lecturas óptimo para realizar el muestreo aleatorio se comparaon los resultados a nivel de especie utilizando valores desde 10.000 a 100.000 lecturas en un rago de 10.000 en 10.000. 
+Para el experimento se utilizo una calidad de 15 y clustering con un valor de 95\% de identidad.
+Los resultados se presentan en la figura:
+\subsubsection{Caracterización de grupos}
+The functional inference of microbiota was investigated based on PICRUSt2 software.
+
+The polished representative sequence of clusters derived from NanoCLUST was used for functional inference analysis using PICRUSt270. 
+The abundance of predicted pathways based on MetaCyc annotation
+
+
+El índice de Chao1 permite estimar la riqueza de especies en una muestra, es decir el número total de especies. A diferencia del índice de Chao2 el cual requiere información de presencia o ausencia de un taxon el índice de Chao1 utiliza los valores de abundancias de cada especie para la estimación.
+Se decidió incluir este índice por su  por su capacidad para estimar la riqueza de especies de manera precisa, incluso en muestras incompletas o donde hay un alto numero de especies raras\hl{citas}
+ mientras que los índices de Shannon y Simpson permiten estimar la diversidad de especies en una muestra.
+
+
+Dentro de las diferentes herramientas que se pueden utilizar para la prediccón funcional se encuentra PICRUSt2, Tax4Fun,  PanFp
+. 
+For example, LEfSe5 is a popular method for identifying differentially abundant taxa that first converts read counts to percentages. Accordingly, read count tables are often rarefied before being input into this tool so that variation in sample read depth does not bias analyses. Without addressing the variation in depth across samples by some approach, the richness can drastically differ between samples due to read depth alone.
+
+
+The rarefied feature table was first converted into LEfSe format using the LEfSe script format_input.py5. We then ran LEfSe on the formatted table using the run_lefse.py script with default settings and no subclass specifications. Briefly, this command first normalized the data using total sum scaling, which divides each feature count by the total library size. Then it performed a Kruskal-Wallis (which in our two-group case reduces to the Wilcoxon rank-sum) hypothesis test to identify potential differentially abundant features, followed by linear discriminant analysis (LDA) of class labels on abundances to estimate the effect sizes for significant features. From these, only those features with scaled LDA analysis scores above the threshold score of 2.0 (default) were called as differentially abundant. This key step is what distinguished LEfSe from the Wilcoxon test approach based on relative abundances that we also ran. In addition, no multiple-test correction was performed on the raw LEfSe output as only the p-values of significant features above-threshold LDA scores are returned by this tool.
+%https://www.nature.com/articles/s41467-022-28034-z
+
+lefse 1Millones (galaxy) 
+%http://galaxy.biobakery.org
+leer hilo de google %https://groups.google.com/g/lefse-users/c/zGPzu9o3ct8
 \subsection{Archivo de configuración} \label{subsection:conf_file}
 El formato YAML se caracteriza por ser un formato de serialización de datos legible por humanos y fácil de interpretar por máquinas.
 Tiene una estructura jerárquica que permite la representación de datos de manera más clara y concisa que otros formatos como JSON o XML.
